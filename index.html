@@ -896,6 +896,62 @@ main.container{ padding-bottom: 90px; }
 @media (prefers-reduced-motion: reduce){
   *{ animation: none !important; transition: none !important; }
 }
+/* =========================
+   PERF PATCH (iPhone/Android)
+   - matikan blur berat di mobile
+   - matikan animasi background di mobile
+   - ringankan efek hover
+========================= */
+
+html{ scroll-behavior: auto; } /* jangan dobel sama JS */
+
+@media (max-width: 820px){
+  /* matikan backdrop blur (biang lag #1 di iOS) */
+  .glass,
+  #topNav .nav-inner,
+  #mobileMenu,
+  .modal,
+  .modal-overlay,
+  .menu-overlay,
+  .qris-view,
+  .qris-box,
+  .modal-footer{
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* tetap terlihat “glass”, tapi ringan */
+  .glass,
+  #topNav .nav-inner,
+  .modal,
+  #mobileMenu{
+    background: rgba(10,14,30,.78) !important;
+  }
+
+  /* ringankan shadow + hover transform */
+  .card, .btn, .faq-btn, .f-social a{
+    box-shadow: 0 10px 24px rgba(0,0,0,.35) !important;
+  }
+  .card:hover, .btn:hover, .faq-btn:hover, .f-social a:hover{
+    transform: none !important;
+  }
+
+  /* matikan animasi background besar (repaint terus saat scroll) */
+  body{
+    animation: none !important;
+    background-size: 100% 100% !important;
+  }
+
+  /* kurangi FX overlay (partikel + shimmer bikin berat) */
+  .fx-overlay{ display:none !important; }
+}
+
+/* kalau user reduce motion, matikan semua anim */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+  .fx-overlay{ display:none !important; }
+}
+
 </style>
 </head>
 
@@ -1403,8 +1459,16 @@ main.container{ padding-bottom: 90px; }
   </div>
 
 <script>
+/* =========================
+   FINAL SCRIPT (FIXED + SMOOTH)
+   - perbaiki semua template string & return
+   - smooth scroll pakai offset nav (anti “nyangkut”)
+   - sidebar & modal lock scroll rapi
+========================= */
+
 /* ========= helpers ========= */
 const qs = (q) => document.querySelector(q);
+const qsa = (q) => [...document.querySelectorAll(q)];
 const normalize = (str) => (str ?? "").toString().toLowerCase().trim();
 const requireVal = (v) => (v || "").toString().trim();
 
@@ -1418,37 +1482,10 @@ const formatRupiah = (n) => {
 };
 const todayISO = () => {
   const d = new Date();
-  const mm = String(d.getMonth()+1).padStart(2,"0");
-  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
   return `${d.getFullYear()}-${mm}-${dd}`;
 };
-
-/* ========= Scroll Lock ========= */
-function lockScroll(){
-  document.documentElement.style.overflow = "hidden";
-  document.body.style.overflow = "hidden";
-}
-function unlockScroll(){
-  document.documentElement.style.overflow = "";
-  document.body.style.overflow = "";
-}
-
-/* ========= NAV scroll perf patch ========= */
-(() => {
-  let ticking = false;
-  const nav = qs("#topNav");
-  function apply(){
-    if (!nav) return;
-    if (window.scrollY > 6) nav.classList.add("scrolled");
-    else nav.classList.remove("scrolled");
-  }
-  window.addEventListener("scroll", () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => { apply(); ticking = false; });
-  }, { passive: true });
-  apply();
-})();
 
 /* ========= typing effect ========= */
 (function typingLoop(){
@@ -1488,40 +1525,6 @@ function unlockScroll(){
   tick();
 })();
 
-/* ========= FX overlay ========= */
-(() => {
-  const rand = (a,b)=>Math.random()*(b-a)+a;
-  function build(wrap){
-    const isMobile = (innerWidth||360) <= 720;
-    const count = isMobile ? 36 : 18;
-    const colors = ["rgba(117,83,255,.35)","rgba(0,210,255,.28)","rgba(0,255,200,.22)","rgba(255,255,255,.18)"];
-    for(let i=0;i<count;i++){
-      const p=document.createElement("span"); p.className="fx-p";
-      p.style.setProperty("--s",(isMobile?rand(7,18):rand(8,20))+"px");
-      p.style.setProperty("--b",rand(0,2.2)+"px");
-      p.style.setProperty("--x",rand(2,98).toFixed(2)+"%");
-      p.style.setProperty("--y",rand(2,98).toFixed(2)+"%");
-      p.style.setProperty("--dx",rand(-18,18).toFixed(0)+"px");
-      p.style.setProperty("--dy",(-rand(40,isMobile?95:75)).toFixed(0)+"px");
-      p.style.setProperty("--d",rand(isMobile?6.5:8, isMobile?11:13).toFixed(2)+"s");
-      p.style.setProperty("--o",rand(0.18,isMobile?0.42:0.34).toFixed(2));
-      p.style.setProperty("--c",colors[Math.floor(rand(0,colors.length))]);
-      p.style.animationDelay = rand(-10,0).toFixed(2)+"s";
-      wrap.appendChild(p);
-    }
-  }
-  function mount(){
-    if(document.querySelector(".fx-overlay")) return;
-    const o=document.createElement("div"); o.className="fx-overlay";
-    const s=document.createElement("div"); s.className="fx-shimmer";
-    const p=document.createElement("div"); p.className="fx-particles";
-    o.appendChild(s); o.appendChild(p);
-    document.body.prepend(o);
-    build(p);
-  }
-  addEventListener("DOMContentLoaded", mount, { passive:true });
-})();
-
 /* ========= FAQ accordion ========= */
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".faq-btn");
@@ -1532,7 +1535,60 @@ document.addEventListener("click", (e) => {
   if (ico) ico.textContent = isOpen ? "−" : "+";
 }, { passive:true });
 
-/* ========= Sidebar Mobile ========= */
+/* ========= Smooth anchor (offset nav) + close sidebar ========= */
+function navOffset(){
+  const nav = qs("#topNav");
+  const h = nav ? nav.getBoundingClientRect().height : 0;
+  return Math.round(h + 18);
+}
+function smoothTo(el){
+  const y = window.scrollY + el.getBoundingClientRect().top - navOffset();
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = a.getAttribute("href");
+  if (!id || id === "#") return;
+
+  const target = qs(id);
+  if (!target) return;
+
+  e.preventDefault();
+
+  // tutup sidebar kalau terbuka
+  if (mobileMenu?.classList.contains("open")) closeMenu();
+
+  // scroll setelah sidebar nutup dikit
+  setTimeout(() => {
+    smoothTo(target);
+    history.pushState(null, "", id);
+  }, 60);
+}, { passive:false });
+
+/* ========= Scroll lock (anti jitter iOS) ========= */
+let scrollTopBeforeLock = 0;
+
+function lockScroll(){
+  scrollTopBeforeLock = window.scrollY || document.documentElement.scrollTop || 0;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollTopBeforeLock}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+}
+function unlockScroll(){
+  const top = parseInt(document.body.style.top || "0", 10) || 0;
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+  window.scrollTo(0, Math.abs(top));
+}
+
+/* ========= Sidebar ========= */
 const hamburger  = qs("#hamburger");
 const mobileMenu = qs("#mobileMenu");
 const menuOverlay= qs("#menuOverlay");
@@ -1550,7 +1606,11 @@ function closeMenu(){
   mobileMenu.classList.remove("open");
   menuOverlay.classList.remove("show");
   hamburger.setAttribute("aria-expanded", "false");
-  unlockScrollIfNothingOpen();
+
+  // kalau tidak ada modal lain terbuka baru unlock
+  if (!buyModal?.classList.contains("show") && !payModal?.classList.contains("show") && !qrisView?.classList.contains("show")){
+    unlockScroll();
+  }
 }
 
 hamburger?.addEventListener("click", () => {
@@ -1559,42 +1619,6 @@ hamburger?.addEventListener("click", () => {
 
 menuOverlay?.addEventListener("click", closeMenu, { passive:true });
 mobileClose?.addEventListener("click", closeMenu, { passive:true });
-
-/* ========= Smooth anchor (offset nav) + close sidebar ========= */
-(() => {
-  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-  function navOffset(){
-    const nav = qs("#topNav");
-    const h = nav ? nav.getBoundingClientRect().height : 0;
-    return Math.round(h + 18);
-  }
-  function smoothTo(el){
-    const y = window.pageYOffset + el.getBoundingClientRect().top - navOffset();
-    if (prefersReduce) return window.scrollTo(0, y);
-    window.scrollTo({ top: y, behavior: "smooth" });
-  }
-
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-
-    const id = a.getAttribute("href");
-    if (!id || id === "#") return;
-
-    const target = document.querySelector(id);
-    if (!target) return;
-
-    e.preventDefault();
-
-    // tutup sidebar kalau open
-    if (mobileMenu?.classList.contains("open")) closeMenu();
-
-    // scroll setelah sidebar nutup dikit
-    setTimeout(() => smoothTo(target), 60);
-    history.pushState(null, "", id);
-  }, { passive:false });
-})();
 
 /* ========= DATA PRODUK ========= */
 const products = [
@@ -1624,7 +1648,7 @@ const products = [
   { brand:"youtube", label:"YOUTUBE", name:"YouTube Premium Indplan", duration:"1 Bulan", price:15000, stock:10, tag:"Populer", img:"img/youtube.png" },
 
   { brand:"alight",  label:"ALIGHT",  name:"Alight Motion Private", duration:"1 Tahun", price:10000, stock:100, tag:"Populer", img:"img/alightmotion.png" },
-  { brand:"Tutor AM", label:"Tutor AM", name:"Tutor Alight Motion", duration:"Seumurhidup", price:80000, stock:100, tag:"Populer", img:"img/tutoram.png" },
+  { brand:"tutor am", label:"Tutor AM", name:"Tutor Alight Motion", duration:"Seumurhidup", price:80000, stock:100, tag:"Populer", img:"img/tutoram.png" },
 
   { brand:"wink",  label:"WINK", name:"Wink Premium Private Android", duration:"7 Hari", price:10000, stock:10, tag:"Populer", img:"img/wink.png" },
   { brand:"viu",  label:"VIU", name:"Viu Premium Private", duration:"3 Bulan", price:13000, stock:20, tag:"Original", img:"img/viu.png" },
@@ -1721,8 +1745,8 @@ searchClear?.addEventListener("click", () => setSearchValue(""), { passive:true 
 
 /* ========= BUY modal ========= */
 const buyModal = qs("#buyModal");
-const closeModal = qs("#closeModal");
-const cancelModal = qs("#cancelModal");
+const closeModalBtn = qs("#closeModal");
+const cancelModalBtn = qs("#cancelModal");
 const buyForm = qs("#buyForm");
 const mPreview = qs("#mPreview");
 const f_tgl = qs("#f_tgl");
@@ -1756,15 +1780,6 @@ function detectType(productName, brand) {
 let selectedOrder = { product:"", brand:"", price:0, duration:"", type:"" };
 let waFinalMessage = "";
 
-function unlockScrollIfNothingOpen(){
-  const anyOpen =
-    qs("#payModal")?.classList.contains("show") ||
-    qs("#buyModal")?.classList.contains("show") ||
-    qs("#qrisView")?.classList.contains("show") ||
-    qs("#mobileMenu")?.classList.contains("open");
-  if (!anyOpen) unlockScroll();
-}
-
 function openBuyModal({ product, brand, price, duration }) {
   const type = detectType(product, brand);
   selectedOrder = {
@@ -1790,13 +1805,16 @@ function openBuyModal({ product, brand, price, duration }) {
 }
 
 function closeBuyModal() {
-  if (!buyModal.classList.contains("show")) return;
+  if (!buyModal?.classList.contains("show")) return;
   buyModal.classList.remove("show");
   buyModal.setAttribute("aria-hidden", "true");
-  buyForm.reset();
+  buyForm?.reset();
   selectedOrder = { product:"", brand:"", price:0, duration:"", type:"" };
   waFinalMessage = "";
-  unlockScrollIfNothingOpen();
+
+  if (!payModal?.classList.contains("show") && !qrisView?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
+    unlockScroll();
+  }
 }
 
 document.addEventListener("click", (e) => {
@@ -1810,8 +1828,8 @@ document.addEventListener("click", (e) => {
   });
 });
 
-closeModal?.addEventListener("click", closeBuyModal, { passive:true });
-cancelModal?.addEventListener("click", closeBuyModal, { passive:true });
+closeModalBtn?.addEventListener("click", closeBuyModal, { passive:true });
+cancelModalBtn?.addEventListener("click", closeBuyModal, { passive:true });
 buyModal?.addEventListener("click", (e) => { if (e.target === buyModal) closeBuyModal(); }, { passive:true });
 
 /* ========= PAYMENT modal ========= */
@@ -1834,12 +1852,13 @@ function resetPayUI(){
   if (paidNotif) paidNotif.style.display = "none";
   if (sendPaid){
     sendPaid.textContent = "Kirim";
-    sendPaid.disabled = !(paidYes?.checked === true);
+    sendPaid.disabled = true;
   }
 }
 function syncSendPaidState(){
   const isPaid = (paidYes?.checked === true);
   if (!waReadyToOpen && sendPaid) sendPaid.disabled = !isPaid;
+
   if (!isPaid){
     waReadyToOpen = false;
     if (paidNotif) paidNotif.style.display = "none";
@@ -1866,13 +1885,16 @@ function openPayModal(){
   lockScroll();
 }
 function closePayModal(){
-  if (!payModal.classList.contains("show")) return;
+  if (!payModal?.classList.contains("show")) return;
   payModal.classList.remove("show");
   payModal.setAttribute("aria-hidden", "true");
   if (paidNo) paidNo.checked = true;
   resetPayUI();
   syncSendPaidState();
-  unlockScrollIfNothingOpen();
+
+  if (!buyModal?.classList.contains("show") && !qrisView?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
+    unlockScroll();
+  }
 }
 
 closePay?.addEventListener("click", closePayModal, { passive:true });
@@ -1887,8 +1909,7 @@ backToForm?.addEventListener("click", () => {
 
 askStockBtn?.addEventListener("click", () => {
   if (!selectedOrder.product) return alert("Pilih produk dulu.");
-  const msg =
-`Halo admin, saya mau tanya stok dulu ya ✅
+  const msg = `Halo admin, saya mau tanya stok dulu ya ✅
 
 Produk: ${selectedOrder.product}
 Durasi: ${selectedOrder.duration}
@@ -1914,8 +1935,7 @@ sendPaid?.addEventListener("click", () => {
     return;
   }
 
-  const finalMsg =
-`${waFinalMessage}
+  const finalMsg = `${waFinalMessage}
 
 🔔 *Konfirmasi pembayaran:* SUDAH BAYAR
 ⏳ Status: Menunggu admin proses..`.trim();
@@ -1930,13 +1950,12 @@ buyForm?.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const type = selectedOrder.type || "sharing";
-  const tgl = requireVal(f_tgl.value);
-  const durasi = requireVal(f_durasi.value);
+  const tgl = requireVal(f_tgl?.value);
+  const durasi = requireVal(f_durasi?.value);
   if (!tgl || !durasi) return alert("Harap isi tgl order & durasi (*)");
 
   const hargaTxt = formatRupiah(selectedOrder.price);
-  const basePayNote =
-`⚠️ Sebelum bayar: *tanyakan stok ke admin dulu!*
+  const basePayNote = `⚠️ Sebelum bayar: *tanyakan stok ke admin dulu!*
 Metode pembayaran: *QRIS*
 Nominal: *${hargaTxt}*`;
 
@@ -1947,8 +1966,7 @@ Nominal: *${hargaTxt}*`;
     const lokasi = requireVal(qs("#n_lokasi")?.value);
     const tipe = requireVal(qs("#n_tipe")?.value);
     if (!merk || !lokasi || !tipe) return alert("Harap isi semua field wajib (*)");
-    msg =
-`*Format Netflix*
+    msg = `*Format Netflix*
 
 *🐣* produk : ${selectedOrder.product}
 *🐣* tgl order : ${tgl}
@@ -1965,8 +1983,7 @@ ${basePayNote}`;
     const pass = requireVal(qs("#y_pass")?.value);
     if (!plan || !email) return alert("Harap isi semua field wajib (*)");
     if (plan === "indplan" && !pass) return alert("Indplan wajib isi password");
-    msg =
-`•┈  *format youtube* ┈•
+    msg = `•┈  *format youtube* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -1981,8 +1998,7 @@ ${basePayNote}`;
     const email = requireVal(qs("#c_email")?.value);
     const design = requireVal(qs("#c_design")?.value);
     if (!email || !design) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈  *format canva* ┈•
+    msg = `•┈  *format canva* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -1997,8 +2013,7 @@ ${basePayNote}`;
     const email = requireVal(qs("#sp_email")?.value);
     const pass = requireVal(qs("#sp_pass")?.value);
     if (!plan || !email || !pass) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈  *format spotify* ┈•
+    msg = `•┈  *format spotify* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2013,8 +2028,7 @@ ${basePayNote}`;
     const pass = requireVal(qs("#a_pass")?.value);
     const note = requireVal(qs("#a_note")?.value);
     if (!pass) return alert("Harap isi password (*)");
-    msg =
-`•┈  *format alightmotion* ┈•
+    msg = `•┈  *format alightmotion* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2030,8 +2044,7 @@ ${basePayNote}`.trim();
     const apk = requireVal(qs("#p_apk")?.value);
     const ket = requireVal(qs("#p_ket")?.value);
     if (!apk || !ket) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈ *format app private*┈•
+    msg = `•┈ *format app private*┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2049,8 +2062,7 @@ ${basePayNote}`;
     const lokasi = requireVal(qs("#s_lokasi")?.value);
     const ket = requireVal(qs("#s_ket")?.value);
     if (!apk || !device || !lokasi || !ket) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈  *format app sharing* ┈•
+    msg = `•┈  *format app sharing* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2083,14 +2095,21 @@ function openQrisView(){
   lockScroll();
 }
 function closeQrisView(){
-  if (!qrisView.classList.contains("show")) return;
+  if (!qrisView?.classList.contains("show")) return;
   qrisView.classList.remove("show");
   qrisView.setAttribute("aria-hidden","true");
-  unlockScrollIfNothingOpen();
+
+  if (!buyModal?.classList.contains("show") && !payModal?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
+    unlockScroll();
+  }
 }
 closeQrisBtn?.addEventListener("click", closeQrisView, { passive:true });
 qrisView?.addEventListener("click", (e)=>{ if(e.target === qrisView) closeQrisView(); }, { passive:true });
-qrisHref?.addEventListener("click", (e) => { e.preventDefault(); openQrisView(); }, { passive:false });
+
+qrisHref?.addEventListener("click", (e) => {
+  e.preventDefault();
+  openQrisView();
+}, { passive:false });
 
 /* ========= ESC ========= */
 document.addEventListener("keydown", (e) => {
@@ -2108,5 +2127,6 @@ document.addEventListener("DOMContentLoaded", () => {
   applySearch("");
 }, { passive:true });
 </script>
+
 </body>
 </html>
