@@ -29,7 +29,7 @@
 
 *{ box-sizing:border-box; }
 html{
-  scroll-behavior: auto; /* JANGAN smooth di CSS (kita handle via JS biar offset nav beres) */
+  scroll-behavior:smooth;
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
 }
@@ -50,6 +50,7 @@ body{
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-overflow-scrolling: touch;
   touch-action: manipulation;
 }
 header, main{ position:relative; z-index:1; }
@@ -113,11 +114,6 @@ a, button{ -webkit-tap-highlight-color: transparent; }
   display:flex; align-items:center; justify-content:space-between;
   gap:12px; padding:12px 14px; border-radius:999px; min-width:0;
 }
-#topNav.scrolled .nav-inner{
-  border-color: rgba(255,255,255,.12);
-  background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
-}
-
 .brand{ display:flex; align-items:center; gap:10px; padding-left:6px; font-weight:900; flex: 1 1 auto; min-width:0; }
 .brand-name{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .logo-wrap{
@@ -222,6 +218,7 @@ h1{ margin:14px 0 10px; font-size: clamp(30px, 4vw, 44px); line-height:1.1; lett
 section{ padding:18px 0 24px; }
 .section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:14px; }
 .section-head h2{ margin:0; font-size:22px; letter-spacing:-.2px; }
+.section-head p{ margin:6px 0 0; color: var(--muted); max-width:64ch; line-height:1.6; font-size:14px; font-weight:700; }
 
 /* Produk grid */
 .grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
@@ -230,10 +227,10 @@ section{ padding:18px 0 24px; }
   .grid{ grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 720px){
-  .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px; }
+  .grid{ grid-template-columns: repeat(2, 1fr); gap:12px; }
 }
 @media (max-width: 380px){
-  .grid{ grid-template-columns: 1fr; gap:10px; }
+  .grid{ gap:10px; }
 }
 
 .card{
@@ -281,13 +278,13 @@ section{ padding:18px 0 24px; }
   font-size:12px; font-weight:900; white-space:nowrap;
 }
 .product-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
-.product-sub{ margin:0 0 8px; color: rgba(255,255,255,.72); font-size:12px; font-weight:900; white-space:nowrap; }
+.product-sub{ margin:0 0 8px; color: rgba(255,255,255,.72); font-size:12px; font-weight:900; }
 .card h3{ margin:8px 0 6px; font-size:16px; letter-spacing:-.2px; }
 .card p{ margin:0 0 12px; color: var(--muted); font-size:13px; line-height:1.6; }
 
 .price-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
 .price{ font-weight:900; letter-spacing:.2px; }
-.tiny{ color: var(--muted); font-size:12px; margin-left:8px; font-weight:800; white-space:nowrap; }
+.tiny{ color: var(--muted); font-size:12px; margin-left:8px; font-weight:800; }
 
 .btn-buy{
   width:100%; margin-top:12px; border-radius:12px; height:40px;
@@ -306,126 +303,27 @@ section{ padding:18px 0 24px; }
 
 @media (max-width: 720px){
   .card{ padding: 12px; border-radius: 16px; }
-  .product-thumb{ height: 128px; border-radius: 14px; }
-  .thumb-brand{ font-size: 14px; left: 12px; bottom: 10px; }
-  .stock-badge{ top: 10px; right: 10px; padding: 5px 8px; font-size: 11px; border-radius: 10px; }
-  .tag{ font-size: 11px; padding: 5px 8px; }
-  .product-sub{ font-size: 11px; }
-  .card h3{ font-size: 14px; line-height: 1.25; }
+  .product-thumb{ height: 120px; border-radius: 14px; }
+  .thumb-brand{ font-size: 15px; }
+  .card h3{ font-size: 14px; }
   .card p{ font-size: 12px; margin-bottom: 10px; }
   .btn-buy{ height: 38px; }
 }
+@media (max-width: 380px){
+  .product-thumb{ height: 110px; }
+}
 
-/* MENU OVERLAY (1x aja, jangan dobel) */
+/* MENU OVERLAY (IMPORTANT: biar sidebar ga “aneh”) */
 .menu-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.18); /* bening */
+  background: rgba(0,0,0,.55);
   display: none;
   z-index: 9998;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .menu-overlay.show{ display:block; }
-
-/* SIDEBAR */
-#mobileMenu{
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: min(360px, 88vw);
-  height: 100vh;
-  z-index: 9999;
-
-  background: rgba(8, 10, 22, .48);
-  -webkit-backdrop-filter: blur(20px) saturate(155%);
-  backdrop-filter: blur(20px) saturate(155%);
-
-  border-left: 1px solid rgba(255,255,255,.14);
-  box-shadow: -22px 0 80px rgba(0,0,0,.72);
-
-  padding: 14px;
-  padding-top: calc(14px + var(--safeTop));
-  padding-bottom: calc(14px + var(--safeBot));
-  border-radius: 0;
-
-  transform: translateX(112%) translateZ(0);
-  transition: transform .32s cubic-bezier(.16,1,.3,1);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow: hidden;
-  overscroll-behavior: contain;
-
-  will-change: transform;
-}
-#mobileMenu.open{ transform: translateX(0) translateZ(0); }
-
-#mobileMenu .mobile-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding: 10px 10px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-#mobileMenu .mobile-title{
-  font-weight: 900;
-  font-size: 16px;
-  letter-spacing: -.2px;
-}
-#mobileMenu .mobile-close{
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.92);
-  font-size: 20px;
-  cursor:pointer;
-}
-#mobileMenu .mobile-links{
-  padding: 8px 6px;
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-#mobileMenu .mobile-links a{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding: 14px 14px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.12);
-  font-weight: 900;
-  font-size: 15px;
-}
-#mobileMenu .mobile-links a .arrow{
-  width: 36px;
-  height: 36px;
-  border-radius: 14px;
-  display:grid;
-  place-items:center;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.12);
-  font-weight: 900;
-}
-#mobileMenu .mobile-actions{
-  padding: 12px 6px 6px;
-  border-top: 1px solid rgba(255,255,255,.10);
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-#mobileMenu .mobile-actions .btn{
-  width: 100%;
-  border-radius: 16px;
-  min-height: 46px;
-  justify-content:center;
-  font-weight: 900;
-}
 
 /* MODAL */
 .modal-overlay{
@@ -486,7 +384,16 @@ section{ padding:18px 0 24px; }
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
-.modal-body p{ margin: 10px 0; color: rgba(255,255,255,.78); font-size: 14px; }
+.modal-body, .modal-body *{
+  line-height:1.6;
+  letter-spacing:.1px;
+  word-break: break-word;
+}
+.modal-body p{
+  margin: 10px 0;
+  color: rgba(255,255,255,.78);
+  font-size: 14px;
+}
 
 .modal-footer{
   flex: 0 0 auto;
@@ -510,10 +417,13 @@ section{ padding:18px 0 24px; }
   white-space: nowrap;
   line-height: 1;
 }
+#cancelModal{ flex: .9 1 0; }
+#sendBtn{ flex: 1.1 1 0; }
 
-/* Form */
+/* Form grid */
 .form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 600px){ .form-grid{ grid-template-columns: 1fr; } }
+
 .field{ margin-top: 12px; }
 .field label{
   display:block;
@@ -542,32 +452,70 @@ section{ padding:18px 0 24px; }
   border-color: rgba(255,255,255,.22);
   box-shadow: 0 0 0 3px rgba(117,83,255,.20);
 }
+.field select{
+  cursor:pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,.85) 50%),
+    linear-gradient(135deg, rgba(255,255,255,.85) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+}
 .field select option{ color:#111; background:#fff; }
 .field input:disabled{
   opacity: 1;
   cursor: not-allowed;
+  color: rgba(255,255,255,.82);
   -webkit-text-fill-color: rgba(255,255,255,.82);
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: none;
 }
 .req{ color:#ff6b6b; }
 
 /* RADIO */
-.radio-row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:6px; }
+.radio-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-top:6px;
+}
 .radio-item{
-  display:inline-flex; align-items:center; gap:10px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
   min-height:40px;
   padding:10px 12px;
   border-radius:12px;
   border:1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.04);
 }
-.radio-item input[type="radio"]{ width:18px; height:18px; accent-color:#7b5bff; }
-.radio-item label{ margin:0; font-weight:900; font-size:14px; color:rgba(255,255,255,.86); white-space:nowrap; }
+.radio-item input[type="radio"]{
+  width:18px;
+  height:18px;
+  accent-color:#7b5bff;
+}
+.radio-item label{
+  margin:0;
+  font-weight:900;
+  font-size:14px;
+  color:rgba(255,255,255,.86);
+  white-space:nowrap;
+  word-break:normal;
+}
 .radio-item:has(input[type="radio"]:checked){
   border-color: rgba(117,83,255,.45);
   background: rgba(117,83,255,.12);
 }
 @media (max-width: 640px){
-  .radio-item{ flex: 0 0 calc(50% - 6px); min-width: 0; }
+  .radio-item{ flex: 0 0 calc(50% - 6px); min-width: 0; justify-content:flex-start; }
 }
 @media (max-width: 380px){
   .radio-item{ flex: 0 0 100%; }
@@ -593,7 +541,7 @@ section{ padding:18px 0 24px; }
 .pk-chat:hover{ transform: translateY(-2px); }
 .pk-chat .wa-ico{ width: 26px; height: 26px; color: #fff; }
 
-/* FX overlay */
+/* FX Overlay */
 .fx-overlay{
   position: fixed;
   inset: 0;
@@ -654,7 +602,7 @@ section{ padding:18px 0 24px; }
   .fx-shimmer, .fx-p{ animation: none !important; }
 }
 
-/* HERO - floating app icons */
+/* HERO - FLOATING SMALL APP ICONS */
 .hero-card{ position:relative; overflow:hidden; }
 .app-float-wrap{
   position:absolute;
@@ -701,11 +649,22 @@ section{ padding:18px 0 24px; }
 @media (prefers-reduced-motion: reduce){ .app-float{ animation:none!important; } }
 
 /* SERVICE + FAQ + FOOTER */
-.service-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
-@media (max-width: 980px){ .service-grid{ grid-template-columns: 1fr; } }
-
-.faq-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
-@media (max-width: 980px){ .faq-grid{ grid-template-columns: 1fr; } }
+.service-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:14px;
+}
+@media (max-width: 980px){
+  .service-grid{ grid-template-columns: 1fr; }
+}
+.faq-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+}
+@media (max-width: 980px){
+  .faq-grid{ grid-template-columns: 1fr; }
+}
 .faq-item{ padding:0; }
 .faq-btn{
   width:100%;
@@ -722,6 +681,15 @@ section{ padding:18px 0 24px; }
   color: var(--text);
   font-weight:900;
   text-align:left;
+  transition: transform .18s cubic-bezier(.16,1,.3,1),
+              background .18s ease,
+              border-color .18s ease;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.faq-btn:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
 }
 .faq-ico{
   width:34px; height:34px;
@@ -732,20 +700,37 @@ section{ padding:18px 0 24px; }
   flex:0 0 auto;
   font-weight:900;
 }
-.faq-panel{ display:none; padding: 0 14px 14px 14px; color: var(--muted); line-height:1.65; font-weight:800; }
+.faq-panel{
+  display:none;
+  padding: 0 14px 14px 14px;
+  color: var(--muted);
+  line-height:1.65;
+  font-weight:800;
+}
 .faq-item.open .faq-panel{ display:block; }
-.faq-item.open .faq-ico{ background: rgba(117,83,255,.14); border-color: rgba(117,83,255,.35); }
+.faq-item.open .faq-ico{
+  background: rgba(117,83,255,.14);
+  border-color: rgba(117,83,255,.35);
+}
 
 /* FOOTER */
-.footer-wrap{ margin-top: 28px; padding: 18px; border-radius: var(--radius2); }
+.footer-wrap{
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: var(--radius2);
+}
 .footer-top{
   display:grid;
   grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   gap:18px;
   align-items:start;
 }
-@media (max-width: 980px){ .footer-top{ grid-template-columns: 1fr 1fr; } }
-@media (max-width: 640px){ .footer-top{ grid-template-columns: 1fr; gap:14px; } }
+@media (max-width: 980px){
+  .footer-top{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px){
+  .footer-top{ grid-template-columns: 1fr; gap:14px; }
+}
 .f-brand{ display:flex; gap:12px; align-items:flex-start; }
 .f-logo{
   width:44px; height:44px;
@@ -774,8 +759,16 @@ section{ padding:18px 0 24px; }
   border-radius: 10px;
   transition: .2s ease;
 }
-.f-links a:hover{ color: var(--text); background: rgba(255,255,255,.05); padding-left: 10px; }
-.footer-line{ margin:14px 0; height:1px; background: rgba(255,255,255,.10); }
+.f-links a:hover{
+  color: var(--text);
+  background: rgba(255,255,255,.05);
+  padding-left: 10px;
+}
+.footer-line{
+  margin:14px 0;
+  height:1px;
+  background: rgba(255,255,255,.10);
+}
 .footer-bottom{
   display:flex;
   align-items:center;
@@ -785,7 +778,12 @@ section{ padding:18px 0 24px; }
   color: rgba(255,255,255,.72);
   font-weight:900;
 }
-.footer-badges{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.footer-badges{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
 .f-badge{
   display:inline-flex;
   align-items:center;
@@ -804,7 +802,11 @@ section{ padding:18px 0 24px; }
   border:1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.04);
 }
-.f-social{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+.f-social{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
 .f-social a{
   display:flex;
   align-items:center;
@@ -819,6 +821,8 @@ section{ padding:18px 0 24px; }
               background .18s ease,
               border-color .18s ease;
   min-height:44px;
+  will-change: transform;
+  transform: translateZ(0);
 }
 .f-social a:hover{
   transform: translateY(-1px);
@@ -826,9 +830,203 @@ section{ padding:18px 0 24px; }
   border-color: rgba(255,255,255,.18);
   color: var(--text);
 }
-.f-social .ico{ width:28px; height:28px; border-radius:10px; overflow:hidden; display:grid; place-items:center; }
+.f-social .ico{
+  width:28px; height:28px;
+  border-radius:10px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+}
 .f-social .ico img{ width:100%; height:100%; object-fit: contain; display:block; }
 @media (max-width: 360px){ .f-social{ grid-template-columns: 1fr; } }
+
+/* SIDEBAR (GLASS) */
+.menu-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.18);  /* BENING: halaman belakang masih keliatan */
+  display: none;
+  z-index: 9998;
+ backdrop-filter: none;
+-webkit-backdrop-filter: none;
+}
+.menu-overlay.show{ display:block; }
+
+#mobileMenu{
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(360px, 88vw);
+  height: 100vh;
+  z-index: 9999;
+
+  background: rgba(8, 10, 22, .48);
+  -webkit-backdrop-filter: blur(20px) saturate(155%);
+  backdrop-filter: blur(20px) saturate(155%);
+
+  border-left: 1px solid rgba(255,255,255,.14);
+  box-shadow: -22px 0 80px rgba(0,0,0,.72);
+
+  padding: 14px;
+  padding-top: calc(14px + var(--safeTop));
+  padding-bottom: calc(14px + var(--safeBot));
+  border-radius: 0;
+
+  transform: translateX(112%);
+  transition: transform .32s cubic-bezier(.16,1,.3,1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+
+  will-change: transform;
+  transform: translateX(112%) translateZ(0);
+}
+#mobileMenu::before{
+  content:"";
+  position:absolute;
+  inset:-25%;
+  pointer-events:none;
+  background:
+    radial-gradient(620px 380px at 18% 16%, rgba(117,83,255,.26), transparent 62%),
+    radial-gradient(560px 360px at 92% 22%, rgba(0,210,255,.18), transparent 64%),
+    radial-gradient(560px 420px at 70% 92%, rgba(0,255,200,.12), transparent 66%),
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0));
+  opacity: .9;
+  filter: blur(2px);
+}
+#mobileMenu::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%, rgba(0,0,0,.10));
+  opacity:.55;
+}
+#mobileMenu > *{ position:relative; z-index:1; }
+#mobileMenu.open{ transform: translateX(0) translateZ(0); }
+
+#mobileMenu .mobile-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding: 10px 10px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+#mobileMenu .mobile-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: -.2px;
+  color: rgba(255,255,255,.92);
+  text-shadow: 0 10px 28px rgba(0,0,0,.35);
+}
+#mobileMenu .mobile-close{
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  font-size: 20px;
+  cursor:pointer;
+  transition: .2s ease;
+}
+#mobileMenu .mobile-close:hover{
+  background: rgba(255,255,255,.10);
+  transform: translateY(-1px);
+}
+#mobileMenu .mobile-links{
+  padding: 8px 6px;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#mobileMenu .mobile-links a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding: 14px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: -.1px;
+  transition: transform .18s cubic-bezier(.16,1,.3,1),
+              background .18s ease,
+              border-color .18s ease;
+  position:relative;
+  overflow:hidden;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  transform: translateZ(0);
+}
+#mobileMenu .mobile-links a::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(260px 140px at 0% 50%, rgba(117,83,255,.22), transparent 55%),
+    radial-gradient(260px 140px at 100% 50%, rgba(0,210,255,.16), transparent 55%);
+  opacity: .22;
+  transition: opacity .2s ease;
+}
+#mobileMenu .mobile-links a span{ position:relative; z-index:1; }
+#mobileMenu .mobile-links a .arrow{
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  display:grid;
+  place-items:center;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.12);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  line-height: 1;
+  opacity:.95;
+  transform: translateX(0);
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+#mobileMenu .mobile-links a:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.07);
+}
+#mobileMenu .mobile-links a:hover::before{ opacity: .9; }
+#mobileMenu .mobile-links a:hover .arrow{
+  transform: translateX(2px);
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+}
+#mobileMenu .mobile-actions{
+  padding: 12px 6px 6px;
+  border-top: 1px solid rgba(255,255,255,.10);
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#mobileMenu .mobile-actions .btn{
+  width: 100%;
+  border-radius: 16px;
+  min-height: 46px;
+  justify-content:center;
+  font-weight: 900;
+}
+#mobileMenu .mobile-actions .btn.primary{
+  border-color: rgba(117,83,255,.55);
+  background: linear-gradient(135deg, rgba(117,83,255,.36), rgba(0,210,255,.22));
+  box-shadow: 0 16px 50px rgba(117,83,255,.20);
+}
 
 /* QRIS OVERLAY */
 .qris-view{
@@ -865,6 +1063,7 @@ section{ padding:18px 0 24px; }
   line-height: 1;
   cursor: pointer;
 }
+.qris-x:hover{ background: rgba(255,255,255,.08); }
 .qris-img-big{
   width: 100%;
   height: auto;
@@ -874,82 +1073,139 @@ section{ padding:18px 0 24px; }
   background: rgba(255,255,255,.03);
 }
 
-/* biar card ga ketutup tombol WA */
-main.container{ padding-bottom: 90px; }
-
-/* PERF MOBILE: blur itu bikin “ngerem” di iOS/Android, jadi dimatiin */
-@media (max-width: 768px){
-  .glass,
-  #mobileMenu,
-  .modal-overlay,
-  .modal-footer,
-  .qris-view{
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-  }
-  .glass{ background: rgba(12, 16, 34, .72) !important; }
-  #mobileMenu{ background: rgba(12, 16, 34, .78) !important; }
-  .card{ box-shadow: 0 10px 24px rgba(0,0,0,.35) !important; }
-}
-
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce){
-  *{ animation: none !important; transition: none !important; }
+  *{ animation: none !important; transition: none !important; scroll-behavior:auto !important; }
 }
+/* ===== FIX MOBILE 2 KOLUM BIAR GA ANCUR ===== */
+@media (max-width: 720px){
+  /* pastikan grid bener2 2 kolom & ga bikin item “nge-press” */
+  .grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .card{ min-width: 0; } /* penting biar isi card boleh mengecil */
+
+  /* gambar di atas jangan terlalu tinggi */
+  .product-thumb{ height: 128px; border-radius: 14px; }
+
+  /* tulisan brand di gambar kecilin biar ga numpuk */
+  .thumb-brand{ font-size: 14px; left: 12px; bottom: 10px; }
+
+  /* badge READY kecilin */
+  .stock-badge{
+    top: 10px; right: 10px;
+    padding: 5px 8px;
+    font-size: 11px;
+    border-radius: 10px;
+  }
+
+  /* tag + durasi jangan pecah */
+  .product-sub{ white-space: nowrap; font-size: 11px; }
+  .tag{ font-size: 11px; padding: 5px 8px; }
+
+  /* judul produk biar rapih */
+  .card h3{ font-size: 14px; line-height: 1.25; }
+  .card p{ font-size: 12px; line-height: 1.55; }
+
+  /* baris harga biar "Rp.. /1 bulan" ga kepotong */
+  .price-row > div{
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+  .tiny{ white-space: nowrap; margin-left: 0; }
+
+  /* tombol beli tetap enak dipencet */
+  .btn-buy{ height: 38px; border-radius: 12px; }
+}
+
+/* layar super kecil, otomatis 1 kolom */
+@media (max-width: 380px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+/* biar card ga ketutup tombol WA */
+main.container{ padding-bottom: 90px; }
 /* =========================
-   PERF PATCH (iPhone/Android)
-   - matikan blur berat di mobile
-   - matikan animasi background di mobile
-   - ringankan efek hover
+   MOBILE PERF LITE (FINAL)
+   - hilangkan "ngerem/stop" iPhone & Android
 ========================= */
 
-html{ scroll-behavior: auto; } /* jangan dobel sama JS */
+html{ scroll-behavior: auto !important; } /* jangan dobel smooth */
+body{ overflow-x:hidden; }
 
-@media (max-width: 820px){
-  /* matikan backdrop blur (biang lag #1 di iOS) */
+/* Matikan blur/animasi berat khusus mobile */
+@media (max-width: 768px){
+
+  /* 1) Matikan ANIMASI background besar (ini biang stutter paling sering) */
+  body{
+    animation: none !important;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+    background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0% !important;
+  }
+
+  /* 2) Matikan FX overlay (shimmer + particles) */
+  .fx-overlay{ display:none !important; }
+
+  /* 3) Matikan blur di elemen fixed/sticky/modal/sidebar/overlay */
   .glass,
-  #topNav .nav-inner,
+  #topNav,
+  .nav-inner,
   #mobileMenu,
-  .modal,
-  .modal-overlay,
   .menu-overlay,
+  .modal-overlay,
+  .modal,
+  .modal-footer,
   .qris-view,
-  .qris-box,
-  .modal-footer{
+  .qris-box{
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
 
-  /* tetap terlihat “glass”, tapi ringan */
+  /* 4) Ganti "glass" jadi transparan solid (tetap keren tapi enteng) */
   .glass,
-  #topNav .nav-inner,
-  .modal,
-  #mobileMenu{
-    background: rgba(10,14,30,.78) !important;
+  .nav-inner{
+    background: rgba(10,14,30,.82) !important;
+    border-color: rgba(255,255,255,.14) !important;
   }
 
-  /* ringankan shadow + hover transform */
-  .card, .btn, .faq-btn, .f-social a{
+  /* Sidebar juga jangan blur */
+  #mobileMenu{
+    background: rgba(8,10,22,.92) !important;
+  }
+
+  /* 5) Ringankan shadow besar */
+  .card,
+  .nav-inner,
+  #mobileMenu,
+  .modal,
+  .footer-wrap{
     box-shadow: 0 10px 24px rgba(0,0,0,.35) !important;
   }
-  .card:hover, .btn:hover, .faq-btn:hover, .f-social a:hover{
+
+  /* 6) Matikan hover transform (mobile ga butuh) */
+  .card:hover,
+  .btn:hover,
+  .faq-btn:hover,
+  .f-social a:hover{
     transform: none !important;
   }
 
-  /* matikan animasi background besar (repaint terus saat scroll) */
-  body{
-    animation: none !important;
-    background-size: 100% 100% !important;
+  /* 7) Kurangi will-change yang kebanyakan (Safari kadang ngelag) */
+  .card, .btn, .faq-btn, #mobileMenu, .modal{
+    will-change: auto !important;
   }
 
-  /* kurangi FX overlay (partikel + shimmer bikin berat) */
-  .fx-overlay{ display:none !important; }
+  /* 8) Matikan animasi icon melayang di hero */
+  .app-float{ animation: none !important; }
 }
 
-/* kalau user reduce motion, matikan semua anim */
+/* Reduce motion juga aman */
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
-  .fx-overlay{ display:none !important; }
 }
 
 </style>
@@ -1057,7 +1313,7 @@ html{ scroll-behavior: auto; } /* jangan dobel sama JS */
         <div><h2>Produk Premium</h2></div>
         <a class="btn" href="#faq">Cara beli?</a>
       </div>
-      <div id="productGrid" class="grid"></div>
+     <div id="productGrid" class="grid"></div> 
     </section>
 
     <!-- SERVICE -->
@@ -1197,7 +1453,7 @@ html{ scroll-behavior: auto; } /* jangan dobel sama JS */
     <!-- Floating WA -->
     <a class="pk-chat" href="https://wa.me/6288221694607" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
       <svg class="wa-ico" viewBox="0 0 448 512" aria-hidden="true">
-        <path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 222-99.6 222-222 0-59.3-25.2-115-67.1-156.9z"/>
+        <path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 222-99.6 222-222 0-59.3-25.2-115-67.1-156.9zM224 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.2-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-82.8 184.6-184.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z"/>
       </svg>
     </a>
   </main>
@@ -1413,7 +1669,7 @@ html{ scroll-behavior: auto; } /* jangan dobel sama JS */
             <img id="qrisImg" alt="QRIS"
               style="width:100%;max-width:340px;display:block;margin:0 auto;border-radius:12px;">
             <div style="margin-top:10px;color:rgba(255,255,255,.75);font-weight:800;font-size:13px;line-height:1.6;">
-              Scan QRIS → pilih status bayar → klik <b>“Kirim”</b> (notif muncul) → klik <b>“Lanjut WhatsApp”</b>.
+              Scan QRIS → pilih status bayar → klik <b>“Kirim”</b> untuk konfirmasi (notif muncul) → klik <b>“Lanjut WhatsApp”</b>.
             </div>
 
             <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
@@ -1459,16 +1715,8 @@ html{ scroll-behavior: auto; } /* jangan dobel sama JS */
   </div>
 
 <script>
-/* =========================
-   FINAL SCRIPT (FIXED + SMOOTH)
-   - perbaiki semua template string & return
-   - smooth scroll pakai offset nav (anti “nyangkut”)
-   - sidebar & modal lock scroll rapi
-========================= */
-
 /* ========= helpers ========= */
 const qs = (q) => document.querySelector(q);
-const qsa = (q) => [...document.querySelectorAll(q)];
 const normalize = (str) => (str ?? "").toString().toLowerCase().trim();
 const requireVal = (v) => (v || "").toString().trim();
 
@@ -1482,8 +1730,8 @@ const formatRupiah = (n) => {
 };
 const todayISO = () => {
   const d = new Date();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
   return `${d.getFullYear()}-${mm}-${dd}`;
 };
 
@@ -1525,6 +1773,40 @@ const todayISO = () => {
   tick();
 })();
 
+/* ========= FX overlay ========= */
+(() => {
+  const rand = (a,b)=>Math.random()*(b-a)+a;
+  function build(wrap){
+    const isMobile = (innerWidth||360) <= 720;
+    const count = isMobile ? 36 : 18;
+    const colors = ["rgba(117,83,255,.35)","rgba(0,210,255,.28)","rgba(0,255,200,.22)","rgba(255,255,255,.18)"];
+    for(let i=0;i<count;i++){
+      const p=document.createElement("span"); p.className="fx-p";
+      p.style.setProperty("--s",(isMobile?rand(7,18):rand(8,20))+"px");
+      p.style.setProperty("--b",rand(0,2.2)+"px");
+      p.style.setProperty("--x",rand(2,98).toFixed(2)+"%");
+      p.style.setProperty("--y",rand(2,98).toFixed(2)+"%");
+      p.style.setProperty("--dx",rand(-18,18).toFixed(0)+"px");
+      p.style.setProperty("--dy",(-rand(40,isMobile?95:75)).toFixed(0)+"px");
+      p.style.setProperty("--d",rand(isMobile?6.5:8, isMobile?11:13).toFixed(2)+"s");
+      p.style.setProperty("--o",rand(0.18,isMobile?0.42:0.34).toFixed(2));
+      p.style.setProperty("--c",colors[Math.floor(rand(0,colors.length))]);
+      p.style.animationDelay = rand(-10,0).toFixed(2)+"s";
+      wrap.appendChild(p);
+    }
+  }
+  function mount(){
+    if(document.querySelector(".fx-overlay")) return;
+    const o=document.createElement("div"); o.className="fx-overlay";
+    const s=document.createElement("div"); s.className="fx-shimmer";
+    const p=document.createElement("div"); p.className="fx-particles";
+    o.appendChild(s); o.appendChild(p);
+    document.body.prepend(o);
+    build(p);
+  }
+  addEventListener("DOMContentLoaded", mount, { passive:true });
+})();
+
 /* ========= FAQ accordion ========= */
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".faq-btn");
@@ -1535,64 +1817,98 @@ document.addEventListener("click", (e) => {
   if (ico) ico.textContent = isOpen ? "−" : "+";
 }, { passive:true });
 
-/* ========= Smooth anchor (offset nav) + close sidebar ========= */
-function navOffset(){
-  const nav = qs("#topNav");
-  const h = nav ? nav.getBoundingClientRect().height : 0;
-  return Math.round(h + 18);
-}
-function smoothTo(el){
-  const y = window.scrollY + el.getBoundingClientRect().top - navOffset();
-  window.scrollTo({ top: y, behavior: "smooth" });
-}
+/* =========================
+   SMOOTH SCROLL (FINAL iOS/Android)
+   - offset sticky nav
+   - close sidebar dulu
+   - pakai window.scrollTo (lebih stabil)
+========================= */
+(() => {
+  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-document.addEventListener("click", (e) => {
-  const a = e.target.closest('a[href^="#"]');
-  if (!a) return;
-  const id = a.getAttribute("href");
-  if (!id || id === "#") return;
+  function navOffset(){
+    const nav = document.getElementById("topNav");
+    const h = nav ? nav.getBoundingClientRect().height : 0;
+    return Math.round(h + 18);
+  }
 
-  const target = qs(id);
-  if (!target) return;
+  function smoothTo(el){
+    const y = window.pageYOffset + el.getBoundingClientRect().top - navOffset();
+    if (prefersReduce) return window.scrollTo(0, y);
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
 
-  e.preventDefault();
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
 
-  // tutup sidebar kalau terbuka
-  if (mobileMenu?.classList.contains("open")) closeMenu();
+    const id = a.getAttribute("href");
+    if (!id || id === "#") return;
 
-  // scroll setelah sidebar nutup dikit
-  setTimeout(() => {
-    smoothTo(target);
-    history.pushState(null, "", id);
-  }, 60);
-}, { passive:false });
+    const target = document.querySelector(id);
+    if (!target) return;
 
-/* ========= Scroll lock (anti jitter iOS) ========= */
-let scrollTopBeforeLock = 0;
+    e.preventDefault();
 
+    // Tutup sidebar kalau kebuka
+    const menu = document.getElementById("mobileMenu");
+    const overlay = document.getElementById("menuOverlay");
+    const burger = document.getElementById("hamburger");
+
+    if (menu?.classList.contains("open")){
+      menu.classList.remove("open");
+      overlay?.classList.remove("show");
+      burger?.setAttribute("aria-expanded", "false");
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      setTimeout(() => smoothTo(target), 70);
+    }else{
+      smoothTo(target);
+    }
+
+    // optional: update hash tanpa "loncat"
+    history.replaceState(null, "", id);
+  }, { passive:false });
+})();
+
+
+/* ========= iOS/Android SCROLL LOCK (no jitter) ========= */
 function lockScroll(){
-  scrollTopBeforeLock = window.scrollY || document.documentElement.scrollTop || 0;
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollTopBeforeLock}px`;
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
 }
 function unlockScroll(){
-  const top = parseInt(document.body.style.top || "0", 10) || 0;
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.left = "";
-  document.body.style.right = "";
-  document.body.style.width = "";
-  window.scrollTo(0, Math.abs(top));
+  document.documentElement.style.overflow = "";
+  document.body.style.overflow = "";
 }
 
-/* ========= Sidebar ========= */
+function openMenu(){
+  mobileMenu.classList.add("open");
+  menuOverlay.classList.add("show");
+  hamburger.setAttribute("aria-expanded", "true");
+  lockScroll();
+}
+function closeMenu(){
+  mobileMenu.classList.remove("open");
+  menuOverlay.classList.remove("show");
+  hamburger.setAttribute("aria-expanded", "false");
+  unlockScroll();
+}
+/* ========= Sidebar Mobile (FINAL SMOOTH) ========= */
 const hamburger  = qs("#hamburger");
 const mobileMenu = qs("#mobileMenu");
 const menuOverlay= qs("#menuOverlay");
 const mobileClose= qs("#mobileClose");
+
+/* pastikan fungsi ini ADA */
+function lockScroll(){
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
+}
+function unlockScroll(){
+  document.documentElement.style.overflow = "";
+  document.body.style.overflow = "";
+}
 
 function openMenu(){
   if (!mobileMenu || !menuOverlay || !hamburger) return;
@@ -1606,19 +1922,28 @@ function closeMenu(){
   mobileMenu.classList.remove("open");
   menuOverlay.classList.remove("show");
   hamburger.setAttribute("aria-expanded", "false");
-
-  // kalau tidak ada modal lain terbuka baru unlock
-  if (!buyModal?.classList.contains("show") && !payModal?.classList.contains("show") && !qrisView?.classList.contains("show")){
-    unlockScroll();
-  }
+  unlockScroll();
 }
 
 hamburger?.addEventListener("click", () => {
   mobileMenu.classList.contains("open") ? closeMenu() : openMenu();
-}, { passive:true });
+});
 
-menuOverlay?.addEventListener("click", closeMenu, { passive:true });
-mobileClose?.addEventListener("click", closeMenu, { passive:true });
+menuOverlay?.addEventListener("click", closeMenu);
+mobileClose?.addEventListener("click", closeMenu);
+
+mobileMenu?.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener("click", closeMenu);
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape"){
+    closeMenu();
+    closeBuyModal?.();
+    closePayModal?.();
+    closeQrisView?.();
+  }
+});
 
 /* ========= DATA PRODUK ========= */
 const products = [
@@ -1648,7 +1973,7 @@ const products = [
   { brand:"youtube", label:"YOUTUBE", name:"YouTube Premium Indplan", duration:"1 Bulan", price:15000, stock:10, tag:"Populer", img:"img/youtube.png" },
 
   { brand:"alight",  label:"ALIGHT",  name:"Alight Motion Private", duration:"1 Tahun", price:10000, stock:100, tag:"Populer", img:"img/alightmotion.png" },
-  { brand:"tutor am", label:"Tutor AM", name:"Tutor Alight Motion", duration:"Seumurhidup", price:80000, stock:100, tag:"Populer", img:"img/tutoram.png" },
+  { brand:"Tutor AM", label:"Tutor AM", name:"Tutor Alight Motion", duration:"Seumurhidup", price:80000, stock:100, tag:"Populer", img:"img/tutoram.png" },
 
   { brand:"wink",  label:"WINK", name:"Wink Premium Private Android", duration:"7 Hari", price:10000, stock:10, tag:"Populer", img:"img/wink.png" },
   { brand:"viu",  label:"VIU", name:"Viu Premium Private", duration:"3 Bulan", price:13000, stock:20, tag:"Original", img:"img/viu.png" },
@@ -1681,7 +2006,6 @@ function renderProducts(list) {
 
   productGrid.innerHTML = list.map((p) => {
     const ready = (Number(p.stock) || 0) > 0;
-
     return `
       <article class="card">
         <div class="product-thumb">
@@ -1691,8 +2015,8 @@ function renderProducts(list) {
         </div>
 
         <div class="product-top">
-          <span class="tag">${p.tag || "Ready"}</span>
-          <span class="product-sub">${p.duration || ""}</span>
+          <span class="tag">${p.tag}</span>
+          <span class="product-sub">${p.duration}</span>
         </div>
 
         <h3>${p.name}</h3>
@@ -1745,8 +2069,8 @@ searchClear?.addEventListener("click", () => setSearchValue(""), { passive:true 
 
 /* ========= BUY modal ========= */
 const buyModal = qs("#buyModal");
-const closeModalBtn = qs("#closeModal");
-const cancelModalBtn = qs("#cancelModal");
+const closeModal = qs("#closeModal");
+const cancelModal = qs("#cancelModal");
 const buyForm = qs("#buyForm");
 const mPreview = qs("#mPreview");
 const f_tgl = qs("#f_tgl");
@@ -1805,14 +2129,15 @@ function openBuyModal({ product, brand, price, duration }) {
 }
 
 function closeBuyModal() {
-  if (!buyModal?.classList.contains("show")) return;
+  if (!buyModal.classList.contains("show")) return;
   buyModal.classList.remove("show");
   buyModal.setAttribute("aria-hidden", "true");
-  buyForm?.reset();
+  buyForm.reset();
   selectedOrder = { product:"", brand:"", price:0, duration:"", type:"" };
   waFinalMessage = "";
 
-  if (!payModal?.classList.contains("show") && !qrisView?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
+  // unlock scroll kalau tidak ada modal lain yang open
+  if (!qs("#payModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !qs("#mobileMenu")?.classList.contains("open")) {
     unlockScroll();
   }
 }
@@ -1828,8 +2153,8 @@ document.addEventListener("click", (e) => {
   });
 });
 
-closeModalBtn?.addEventListener("click", closeBuyModal, { passive:true });
-cancelModalBtn?.addEventListener("click", closeBuyModal, { passive:true });
+closeModal?.addEventListener("click", closeBuyModal, { passive:true });
+cancelModal?.addEventListener("click", closeBuyModal, { passive:true });
 buyModal?.addEventListener("click", (e) => { if (e.target === buyModal) closeBuyModal(); }, { passive:true });
 
 /* ========= PAYMENT modal ========= */
@@ -1852,9 +2177,10 @@ function resetPayUI(){
   if (paidNotif) paidNotif.style.display = "none";
   if (sendPaid){
     sendPaid.textContent = "Kirim";
-    sendPaid.disabled = true;
+    sendPaid.disabled = !(paidYes?.checked === true);
   }
 }
+
 function syncSendPaidState(){
   const isPaid = (paidYes?.checked === true);
   if (!waReadyToOpen && sendPaid) sendPaid.disabled = !isPaid;
@@ -1868,6 +2194,7 @@ function syncSendPaidState(){
     }
   }
 }
+
 paidYes?.addEventListener("change", syncSendPaidState, { passive:true });
 paidNo?.addEventListener("change", syncSendPaidState, { passive:true });
 
@@ -1885,14 +2212,15 @@ function openPayModal(){
   lockScroll();
 }
 function closePayModal(){
-  if (!payModal?.classList.contains("show")) return;
+  if (!payModal.classList.contains("show")) return;
   payModal.classList.remove("show");
   payModal.setAttribute("aria-hidden", "true");
   if (paidNo) paidNo.checked = true;
   resetPayUI();
   syncSendPaidState();
 
-  if (!buyModal?.classList.contains("show") && !qrisView?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
+  // unlock scroll kalau tidak ada modal lain yang open
+  if (!qs("#buyModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !qs("#mobileMenu")?.classList.contains("open")) {
     unlockScroll();
   }
 }
@@ -1909,7 +2237,8 @@ backToForm?.addEventListener("click", () => {
 
 askStockBtn?.addEventListener("click", () => {
   if (!selectedOrder.product) return alert("Pilih produk dulu.");
-  const msg = `Halo admin, saya mau tanya stok dulu ya ✅
+  const msg =
+`Halo admin, saya mau tanya stok dulu ya ✅
 
 Produk: ${selectedOrder.product}
 Durasi: ${selectedOrder.duration}
@@ -1935,10 +2264,11 @@ sendPaid?.addEventListener("click", () => {
     return;
   }
 
-  const finalMsg = `${waFinalMessage}
+  const finalMsg =
+`${waFinalMessage}
 
 🔔 *Konfirmasi pembayaran:* SUDAH BAYAR
-⏳ Status: Menunggu admin proses..`.trim();
+⏳ Status: Menunggu admin proses.`.trim();
 
   window.open(waLink(finalMsg), "_blank", "noopener,noreferrer");
   closePayModal();
@@ -1950,12 +2280,13 @@ buyForm?.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const type = selectedOrder.type || "sharing";
-  const tgl = requireVal(f_tgl?.value);
-  const durasi = requireVal(f_durasi?.value);
+  const tgl = requireVal(f_tgl.value);
+  const durasi = requireVal(f_durasi.value);
   if (!tgl || !durasi) return alert("Harap isi tgl order & durasi (*)");
 
   const hargaTxt = formatRupiah(selectedOrder.price);
-  const basePayNote = `⚠️ Sebelum bayar: *tanyakan stok ke admin dulu!*
+  const basePayNote =
+`⚠️ Sebelum bayar: *tanyakan stok ke admin dulu!*
 Metode pembayaran: *QRIS*
 Nominal: *${hargaTxt}*`;
 
@@ -1966,7 +2297,8 @@ Nominal: *${hargaTxt}*`;
     const lokasi = requireVal(qs("#n_lokasi")?.value);
     const tipe = requireVal(qs("#n_tipe")?.value);
     if (!merk || !lokasi || !tipe) return alert("Harap isi semua field wajib (*)");
-    msg = `*Format Netflix*
+    msg =
+`*Format Netflix*
 
 *🐣* produk : ${selectedOrder.product}
 *🐣* tgl order : ${tgl}
@@ -1983,7 +2315,8 @@ ${basePayNote}`;
     const pass = requireVal(qs("#y_pass")?.value);
     if (!plan || !email) return alert("Harap isi semua field wajib (*)");
     if (plan === "indplan" && !pass) return alert("Indplan wajib isi password");
-    msg = `•┈  *format youtube* ┈•
+    msg =
+`•┈  *format youtube* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -1998,7 +2331,8 @@ ${basePayNote}`;
     const email = requireVal(qs("#c_email")?.value);
     const design = requireVal(qs("#c_design")?.value);
     if (!email || !design) return alert("Harap isi semua field wajib (*)");
-    msg = `•┈  *format canva* ┈•
+    msg =
+`•┈  *format canva* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2013,7 +2347,8 @@ ${basePayNote}`;
     const email = requireVal(qs("#sp_email")?.value);
     const pass = requireVal(qs("#sp_pass")?.value);
     if (!plan || !email || !pass) return alert("Harap isi semua field wajib (*)");
-    msg = `•┈  *format spotify* ┈•
+    msg =
+`•┈  *format spotify* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2028,7 +2363,8 @@ ${basePayNote}`;
     const pass = requireVal(qs("#a_pass")?.value);
     const note = requireVal(qs("#a_note")?.value);
     if (!pass) return alert("Harap isi password (*)");
-    msg = `•┈  *format alightmotion* ┈•
+    msg =
+`•┈  *format alightmotion* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2044,7 +2380,8 @@ ${basePayNote}`.trim();
     const apk = requireVal(qs("#p_apk")?.value);
     const ket = requireVal(qs("#p_ket")?.value);
     if (!apk || !ket) return alert("Harap isi semua field wajib (*)");
-    msg = `•┈ *format app private*┈•
+    msg =
+`•┈ *format app private*┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2062,7 +2399,8 @@ ${basePayNote}`;
     const lokasi = requireVal(qs("#s_lokasi")?.value);
     const ket = requireVal(qs("#s_ket")?.value);
     if (!apk || !device || !lokasi || !ket) return alert("Harap isi semua field wajib (*)");
-    msg = `•┈  *format app sharing* ┈•
+    msg =
+`•┈  *format app sharing* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2095,31 +2433,17 @@ function openQrisView(){
   lockScroll();
 }
 function closeQrisView(){
-  if (!qrisView?.classList.contains("show")) return;
+  if (!qrisView.classList.contains("show")) return;
   qrisView.classList.remove("show");
   qrisView.setAttribute("aria-hidden","true");
 
-  if (!buyModal?.classList.contains("show") && !payModal?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
+  if (!qs("#buyModal")?.classList.contains("show") && !qs("#payModal")?.classList.contains("show") && !qs("#mobileMenu")?.classList.contains("open")) {
     unlockScroll();
   }
 }
 closeQrisBtn?.addEventListener("click", closeQrisView, { passive:true });
 qrisView?.addEventListener("click", (e)=>{ if(e.target === qrisView) closeQrisView(); }, { passive:true });
-
-qrisHref?.addEventListener("click", (e) => {
-  e.preventDefault();
-  openQrisView();
-}, { passive:false });
-
-/* ========= ESC ========= */
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape"){
-    closeMenu();
-    closeBuyModal();
-    closePayModal();
-    closeQrisView();
-  }
-});
+qrisHref?.addEventListener("click", (e) => { e.preventDefault(); openQrisView(); }, { passive:false });
 
 /* ========= Init ========= */
 document.addEventListener("DOMContentLoaded", () => {
@@ -2127,6 +2451,5 @@ document.addEventListener("DOMContentLoaded", () => {
   applySearch("");
 }, { passive:true });
 </script>
-
 </body>
 </html>
