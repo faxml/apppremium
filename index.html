@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Faxml Store</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg0:#070913;
+  --bg1:#0b1024;
+  --stroke: rgba(255,255,255,.14);
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.68);
+  --shadow: 0 20px 60px rgba(0,0,0,.45);
+  --glow1: rgba(117, 83, 255, .35);
+  --glow2: rgba(0, 255, 200, .18);
+  --radius: 18px;
+  --radius2: 26px;
+  --max: 1120px;
+
+  --safeTop: env(safe-area-inset-top, 0px);
+  --safeBot: env(safe-area-inset-bottom, 0px);
+  --navOffset: 110px; /* offset scroll */
+}
+
+*{ box-sizing:border-box; }
+html{
+  scroll-behavior: auto; /* kita handle smooth sendiri biar stabil */
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+body{
+  margin:0;
+  font-family:"Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 700px at 15% 10%, var(--glow1), transparent 55%),
+    radial-gradient(900px 600px at 85% 15%, rgba(0, 210, 255, .20), transparent 55%),
+    radial-gradient(800px 600px at 70% 85%, var(--glow2), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  min-height:100vh;
+  overflow-x:hidden;
+
+  background-size: 140% 140%, 160% 160%, 150% 150%, 100% 100%;
+  background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0%;
+  animation: bgShift 18s ease-in-out infinite;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+
+  overscroll-behavior-y: none; /* reduce bounce/jitter */
+}
+header, main{ position:relative; z-index:1; }
+@keyframes bgShift{
+  0%{ background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0%; }
+  50%{ background-position: 100% 30%, 0% 60%, 20% 0%, 0% 0%; }
+  100%{ background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0%; }
+}
+
+a{ color:inherit; text-decoration:none; }
+a, button{ -webkit-tap-highlight-color: transparent; }
+.container{ width:min(var(--max), calc(100% - 40px)); margin:0 auto; }
+@media (max-width: 640px){ .container{ width:min(var(--max), calc(100% - 24px)); } }
+
+.glass{
+  background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05));
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-weight: 900;
+  font-size: 14px;
+  transition: transform .18s cubic-bezier(.16,1,.3,1),
+              background .18s ease,
+              border-color .18s ease,
+              color .18s ease;
+  cursor:pointer;
+  user-select:none;
+  white-space:nowrap;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.22); }
+.btn.primary{
+  border-color: rgba(117,83,255,.45);
+  background: linear-gradient(135deg, rgba(117,83,255,.32), rgba(0,210,255,.18));
+  box-shadow: 0 14px 40px rgba(117,83,255,.18);
+}
+.btn:disabled{ opacity:.55; cursor:not-allowed; transform:none !important; }
+
+/* NAV */
+.nav{ position: sticky; top: calc(14px + var(--safeTop)); z-index: 50; margin-top: 14px; }
+.nav-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:12px 14px; border-radius:999px; min-width:0;
+}
+.brand{ display:flex; align-items:center; gap:10px; padding-left:6px; font-weight:900; flex: 1 1 auto; min-width:0; }
+.brand-name{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.logo-wrap{
+  width:38px; height:38px; border-radius:12px; overflow:hidden;
+  flex:0 0 auto; border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 12px 30px rgba(117,83,255,.25); background: rgba(255,255,255,.06);
+}
+.logo-img{ width:100%; height:100%; display:block; object-fit: cover; }
+
+.nav-links{ display:flex; gap:8px; align-items:center; justify-content:center; flex:1 1 auto; min-width:0; }
+.nav-links a{
+  padding:10px 12px; border-radius:999px; color: var(--muted);
+  border:1px solid transparent; transition:.2s ease; font-weight:900; font-size:14px;
+  white-space:nowrap;
+}
+.nav-links a:hover{ color: var(--text); background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.10); }
+
+.nav-cta{ display:flex; gap:10px; align-items:center; flex:0 0 auto; }
+
+.search{
+  display:flex; align-items:center; gap:8px; padding: 8px 10px;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  width: clamp(160px, 22vw, 280px);
+  max-width: 280px; min-width: 160px; flex: 0 1 auto; min-width:0;
+}
+.search input{
+  width:100%; min-width:0; border:0; outline:none; background: transparent;
+  color: var(--text); font: inherit; font-size: 14px;
+}
+.search input::placeholder{ color: rgba(255,255,255,.55); }
+.search .s-clear{
+  border:0; background: transparent; color: rgba(255,255,255,.8);
+  cursor:pointer; padding: 0 6px; display:none; font-weight:900;
+}
+.search.has-value .s-clear{ display:block; }
+
+.hamburger{
+  display:none; width:42px; height:42px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.06);
+  align-items:center; justify-content:center; cursor:pointer; flex:0 0 auto;
+}
+.hamburger span{ width:18px; height:2px; background: rgba(255,255,255,.85); position:relative; display:block; border-radius:999px; }
+.hamburger span::before,.hamburger span::after{
+  content:""; position:absolute; left:0; width:18px; height:2px;
+  background: rgba(255,255,255,.85); border-radius:999px;
+}
+.hamburger span::before{ top:-6px; }
+.hamburger span::after{ top:6px; }
+
+@media (max-width: 1100px){
+  .nav-links{ display:none; }
+  .nav-cta .btn:not(.primary){ display:none; }
+  .hamburger{ display:flex; }
+}
+@media (max-width: 640px){
+  :root{ --navOffset: 150px; }
+  .nav-inner{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "brand cta" "search search";
+    gap:10px;
+    padding:12px;
+    border-radius: var(--radius2);
+  }
+  .brand{ grid-area: brand; }
+  .nav-cta{ grid-area: cta; justify-content:flex-end; }
+  .search{ grid-area: search; width:100%; max-width:none; min-width:0; }
+  .btn{ padding: 9px 12px; font-size:13px; }
+  .hamburger{ width:40px; height:40px; }
+}
+
+/* HERO / SECTION */
+.hero{ padding:44px 0 26px; }
+.hero-grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap:18px; align-items:stretch; }
+.hero-card{ padding:26px; border-radius: var(--radius2); position:relative; overflow:hidden; }
+.kicker{
+  display:inline-flex; gap:10px; align-items:center;
+  padding:8px 12px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.05);
+  color: var(--muted); font-weight:900; font-size:13px;
+}
+.dot{ width:8px; height:8px; border-radius:999px; background: rgba(0,255,200,.85); box-shadow: 0 0 22px rgba(0,255,200,.35); }
+h1{ margin:14px 0 10px; font-size: clamp(30px, 4vw, 44px); line-height:1.1; letter-spacing:-0.6px; }
+.sub{ margin:0 0 18px; color: var(--muted); font-size:16px; line-height:1.6; max-width:62ch; }
+.type-cursor{ display:inline-block; margin-left:6px; opacity:.9; animation: blink .8s steps(1) infinite; }
+@keyframes blink{ 50%{opacity:0;} }
+
+.showcase{ padding:18px; border-radius: var(--radius2); display:flex; flex-direction:column; gap:12px; }
+.badge{
+  display:inline-flex; align-items:center; gap:8px; padding:7px 10px;
+  border-radius:999px; border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04); color: var(--muted);
+  font-weight:900; font-size:12px; width: fit-content;
+}
+.mini{ padding:14px; border-radius:18px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); }
+.mini h3{ margin:0 0 6px; font-size:14px; }
+.mini p{ margin:0; color: var(--muted); font-size:13px; line-height:1.5; }
+
+section{ padding:18px 0 24px; }
+.section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:14px; }
+.section-head h2{ margin:0; font-size:22px; letter-spacing:-.2px; }
+.section-head p{ margin:6px 0 0; color: var(--muted); max-width:64ch; line-height:1.6; font-size:14px; font-weight:700; }
+
+/* Produk grid */
+.grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+@media (max-width: 980px){
+  .hero-grid{ grid-template-columns: 1fr; }
+  .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 380px){ .grid{ grid-template-columns: 1fr; } }
+
+.card{
+  padding:14px; border-radius: var(--radius);
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  transition: transform .22s cubic-bezier(.16,1,.3,1),
+              background .22s ease,
+              border-color .22s ease;
+  position:relative; overflow:hidden;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.card:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+
+.product-thumb{
+  position:relative; height:150px; border-radius:16px; overflow:hidden;
+  border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); margin-bottom:12px;
+}
+.product-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; }
+.product-thumb::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(700px 220px at 20% 0%, rgba(255,255,255,.18), transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
+  pointer-events:none; z-index:2;
+}
+.thumb-brand{
+  position:absolute; left:14px; bottom:14px; z-index:3;
+  font-weight:900; letter-spacing:.8px; text-transform: uppercase; font-size: 18px;
+  opacity:.95; text-shadow: 0 12px 30px rgba(0,0,0,.55);
+}
+.stock-badge{
+  position:absolute; top:12px; right:12px; z-index:4;
+  padding:6px 10px; border-radius:10px; font-size:12px; font-weight:900;
+  color:#fff; border:1px solid rgba(255,255,255,.14);
+  background: rgba(34,197,94,.75); box-shadow: 0 10px 26px rgba(0,0,0,.25);
+}
+.stock-badge.habis{ background: rgba(239,68,68,.78); }
+.tag{
+  display:inline-flex; align-items:center; padding:6px 10px;
+  border-radius:999px; border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04); color: var(--muted);
+  font-size:12px; font-weight:900; white-space:nowrap;
+}
+.product-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
+.product-sub{ margin:0 0 8px; color: rgba(255,255,255,.72); font-size:12px; font-weight:900; }
+.card h3{ margin:8px 0 6px; font-size:16px; letter-spacing:-.2px; }
+.card p{ margin:0 0 12px; color: var(--muted); font-size:13px; line-height:1.6; }
+.price-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.price{ font-weight:900; letter-spacing:.2px; }
+.tiny{ color: var(--muted); font-size:12px; margin-left:8px; font-weight:800; }
+
+.btn-buy{
+  width:100%; margin-top:12px; border-radius:12px; height:40px;
+  font-weight:900;
+}
+.btn-buy.primaryish{
+  border-color: rgba(29,107,255,.45);
+  background: linear-gradient(180deg, rgba(29,107,255,.95), rgba(11,92,255,.95));
+  box-shadow: 0 14px 40px rgba(29,107,255,.18);
+}
+.btn-buy.out{
+  background: rgba(148,163,184,.18);
+  border-color: rgba(148,163,184,.22);
+  color: rgba(255,255,255,.75);
+}
+
+/* MENU OVERLAY */
+.menu-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.18);
+  display: none;
+  z-index: 9998;
+}
+.menu-overlay.show{ display:block; }
+
+/* SIDEBAR */
+#mobileMenu{
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(360px, 88vw);
+  height: 100vh;
+  z-index: 9999;
+
+  background: rgba(8, 10, 22, .48);
+  -webkit-backdrop-filter: blur(20px) saturate(155%);
+  backdrop-filter: blur(20px) saturate(155%);
+
+  border-left: 1px solid rgba(255,255,255,.14);
+  box-shadow: -22px 0 80px rgba(0,0,0,.72);
+
+  padding: 14px;
+  padding-top: calc(14px + var(--safeTop));
+  padding-bottom: calc(14px + var(--safeBot));
+
+  transform: translateX(112%);
+  transition: transform .32s cubic-bezier(.16,1,.3,1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+
+  will-change: transform;
+}
+#mobileMenu.open{ transform: translateX(0); }
+
+#mobileMenu .mobile-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding: 10px 10px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+#mobileMenu .mobile-title{ font-weight: 900; font-size: 16px; }
+#mobileMenu .mobile-close{
+  width: 42px; height: 42px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  font-size: 20px;
+  cursor:pointer;
+}
+#mobileMenu .mobile-links{
+  padding: 8px 6px;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#mobileMenu .mobile-links a{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px;
+  padding: 14px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 15px;
+}
+#mobileMenu .mobile-actions{
+  padding: 12px 6px 6px;
+  border-top: 1px solid rgba(255,255,255,.10);
+  display:flex; flex-direction: column; gap: 10px;
+}
+#mobileMenu .mobile-actions .btn{ width: 100%; border-radius: 16px; min-height: 46px; font-weight: 900; }
+
+/* MODAL (singkat saja, tetap sama look kamu) */
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0,0,0,.55);
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.modal-overlay.show{ display:flex; }
+.modal{ width: min(560px, 100%); max-height: min(86vh, 720px); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+.modal-header{ display:flex; align-items:center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.10); }
+.modal-close{ background: transparent; border: none; color: rgba(255,255,255,.9); font-size: 18px; cursor: pointer; width: 38px; height: 38px; border-radius: 12px; }
+.modal-body{ padding: 16px; overflow: auto; -webkit-overflow-scrolling: touch; }
+.modal-footer{ display:flex; gap:10px; padding:10px 12px; justify-content:space-between; align-items:center; border-top: 1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.18); }
+
+.pk-chat{
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + var(--safeBot));
+  width: 52px; height: 52px;
+  border-radius: 999px;
+  display:flex; align-items:center; justify-content:center;
+  background: #25D366;
+  border: none;
+  box-shadow: 0 16px 40px rgba(0,0,0,.45);
+  z-index: 999;
+  transition: .2s ease;
+}
+.pk-chat:hover{ transform: translateY(-2px); }
+.pk-chat .wa-ico{ width: 26px; height: 26px; color: #fff; }
+
+/* FX Overlay */
+.fx-overlay{ position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.fx-shimmer{
+  position:absolute; inset:-40%;
+  background:
+    radial-gradient(closest-side, rgba(255,255,255,.10), transparent 70%),
+    linear-gradient(120deg, transparent 40%, rgba(255,255,255,.06) 50%, transparent 60%);
+  mix-blend-mode: screen;
+  opacity: .55;
+  animation: fxShimmer 12s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes fxShimmer{
+  0%{ transform: translate3d(-8%, -6%, 0) rotate(0deg); }
+  50%{ transform: translate3d(10%, 6%, 0) rotate(10deg); }
+  100%{ transform: translate3d(-8%, -6%, 0) rotate(0deg); }
+}
+.fx-particles{ position:absolute; inset:0; }
+.fx-p{
+  position:absolute;
+  width: var(--s, 10px);
+  height: var(--s, 10px);
+  border-radius: 999px;
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+  opacity: var(--o, .35);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 70% 70%, var(--c, rgba(117,83,255,.25)), rgba(0,0,0,0) 60%);
+  filter: blur(var(--b, 0px));
+  animation: fxFloat var(--d, 9s) ease-in-out infinite;
+}
+@keyframes fxFloat{
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(var(--dx, 14px), var(--dy, -60px), 0) scale(1.08); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Mobile performance: kurangi animasi berat */
+@media (max-width: 720px){
+  body{ animation: none; }            /* stop bgShift */
+  .fx-shimmer{ animation: none; opacity:.35; }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
+}
+/* FOOTER */
+.footer-wrap{
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: var(--radius2);
+}
+.footer-top{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap:18px;
+  align-items:start;
+}
+@media (max-width: 980px){
+  .footer-top{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px){
+  .footer-top{ grid-template-columns: 1fr; gap:14px; }
+}
+.f-brand{ display:flex; gap:12px; align-items:flex-start; }
+.f-logo{
+  width:44px; height:44px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.16);
+  overflow:hidden;
+  flex:0 0 auto;
+  background: rgba(255,255,255,.06);
+}
+.f-logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+.f-title{ font-weight:900; font-size:18px; margin:0 0 8px; }
+.f-note{ margin:0; color: var(--muted); font-weight:800; font-size:13px; line-height:1.6; }
+.f-col h4{
+  margin: 2px 0 10px;
+  font-size:12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.75);
+  font-weight:900;
+}
+.f-links a{
+  display:block;
+  padding:8px 0;
+  color: rgba(255,255,255,.72);
+  font-weight:900;
+  border-radius: 10px;
+  transition: .2s ease;
+}
+.f-links a:hover{
+  color: var(--text);
+  background: rgba(255,255,255,.05);
+  padding-left: 10px;
+}
+.footer-line{ margin:14px 0; height:1px; background: rgba(255,255,255,.10); }
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  color: rgba(255,255,255,.72);
+  font-weight:900;
+}
+.footer-badges{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.f-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.80);
+  font-weight:900;
+}
+.f-badge span{
+  width:22px; height:22px;
+  border-radius: 8px;
+  display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+}
+.f-social{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+.f-social a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.85);
+  font-weight:900;
+  transition: transform .18s cubic-bezier(.16,1,.3,1),
+              background .18s ease,
+              border-color .18s ease;
+  min-height:44px;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.f-social a:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+  color: var(--text);
+}
+.f-social .ico{
+  width:28px; height:28px;
+  border-radius:10px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+}
+.f-social .ico img{ width:100%; height:100%; object-fit: contain; display:block; }
+@media (max-width: 360px){ .f-social{ grid-template-columns: 1fr; } }
+
+main.container{ padding-bottom: 90px; }
+</style>
+</head>
+
+<body>
+  <header class="nav container" id="topNav">
+    <div class="nav-inner glass">
+      <a class="brand" href="#beranda" aria-label="Ke Beranda">
+        <span class="logo-wrap" aria-hidden="true">
+          <img class="logo-img" src="img/logo.png" alt="">
+        </span>
+        <span class="brand-name">Faxml Store</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navigasi utama">
+        <a href="#beranda">Beranda</a>
+        <a href="#produk">Produk</a>
+        <a href="#services">Service</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="search" role="search">
+        <input id="searchInput" type="search" placeholder="Cari produk..." autocomplete="off">
+        <button class="s-clear" id="searchClear" type="button" aria-label="Hapus">✕</button>
+      </div>
+
+      <div class="nav-cta">
+        <a class="btn" href="#produk" title="Lihat katalog">Katalog</a>
+        <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- OVERLAY -->
+  <div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="mobileMenu" aria-label="Menu mobile">
+    <div class="mobile-head">
+      <div class="mobile-title">Menu</div>
+      <button class="mobile-close" id="mobileClose" type="button" aria-label="Tutup">✕</button>
+    </div>
+
+    <div class="mobile-links" role="navigation" aria-label="Navigasi mobile">
+      <a href="#beranda"><span>Beranda</span><span class="arrow">›</span></a>
+      <a href="#produk"><span>Produk</span><span class="arrow">›</span></a>
+      <a href="#services"><span>Service</span><span class="arrow">›</span></a>
+      <a href="#faq"><span>FAQ</span><span class="arrow">›</span></a>
+    </div>
+
+    <div class="mobile-actions">
+      <a class="btn primary" href="#produk">Lihat Produk</a>
+    </div>
+  </aside>
+
+  <main class="container">
+    <section class="hero" id="beranda">
+      <div class="hero-grid">
+        <div class="hero-card glass">
+          <div class="kicker"><span class="dot"></span> Marketplace Aplikasi Premium • Murah & Garansi</div>
+          <h1><span id="typeTarget"></span><span class="type-cursor" aria-hidden="true">|</span></h1>
+          <p class="sub">Pilih produk → isi format → lanjut pembayaran QRIS → konfirmasi sudah bayar → kirim → WhatsApp admin.</p>
+        </div>
+
+        <aside class="showcase glass" aria-label="Highlight">
+          <div class="badge">✨ Premium Picks</div>
+          <div class="mini"><h3>Streaming & Hiburan</h3><p>Netflix / YouTube Premium</p></div>
+          <div class="mini"><h3>Editing & Kreatif</h3><p>CapCut / Alight Motion</p></div>
+          <div class="mini"><h3>Desain & Produktivitas</h3><p>Canva / Spotify</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="produk">
+      <div class="section-head">
+        <div><h2>Produk Premium</h2></div>
+        <a class="btn" href="#faq">Cara beli?</a>
+      </div>
+      <div id="productGrid" class="grid"></div>
+    </section>
+
+    <section id="services">
+      <div class="section-head">
+        <div><h2>Service</h2></div>
+        <a class="btn" href="#produk">Pilih Produk</a>
+      </div>
+
+      <div class="grid" style="grid-template-columns: repeat(3, minmax(0,1fr));">
+        <div class="card">
+          <div style="font-weight:900;margin-bottom:6px;">⚙️ Instalasi & Setup</div>
+          <p>Bantuan instalasi, konfigurasi, dan optimasi agar siap dipakai.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:900;margin-bottom:6px;">🔑 Aktivasi</div>
+          <p>Panduan aktivasi jelas dan cepat sesuai paket yang dibeli.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:900;margin-bottom:6px;">💬 Support</div>
+          <p>Bantuan chat untuk kendala umum sesuai jam layanan.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="section-head">
+        <div><h2>FAQ</h2></div>
+        <a class="btn" href="#beranda">Kembali ke atas</a>
+      </div>
+
+      <div class="grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="card glass">
+          <div style="font-weight:900;margin-bottom:6px;">Bagaimana cara membeli?</div>
+          <p>Pilih produk → klik <b>Beli Sekarang</b> → isi format → lanjut pembayaran QRIS → pilih status bayar → kirim → WhatsApp admin.</p>
+        </div>
+        <div class="card glass">
+          <div style="font-weight:900;margin-bottom:6px;">Metode pembayaran apa saja?</div>
+          <p>Pembayaran via <b>QRIS</b>. Wajib <b>tanya stok ke admin</b> dulu sebelum bayar.</p>
+        </div>
+      </div>
+      <footer class="footer-wrap glass" id="footer">
+  <div class="footer-top">
+    <div class="f-brand">
+      <div class="f-logo" aria-hidden="true">
+        <img src="img/logo.png" alt="">
+      </div>
+      <div>
+        <p class="f-title">Faxml Store</p>
+        <p class="f-note">SECURED PAYMENT BY</p>
+        <div style="margin-top:10px;">
+          <img src="img/tripay.webp" alt="Tripay" style="height:34px;opacity:.95">
+        </div>
+      </div>
+    </div>
+
+    <div class="f-col">
+      <h4>Products</h4>
+      <div class="f-links">
+        <a href="#services">Service</a>
+        <a href="#produk">AI Tools</a>
+      </div>
+    </div>
+
+    <div class="f-col">
+      <h4>Profile</h4>
+      <div class="f-links">
+        <a href="#beranda">Tentang Kami</a>
+        <a href="https://wa.me/6288221694607" target="_blank" rel="noopener">Kontak</a>
+      </div>
+    </div>
+
+    <div class="f-col">
+      <h4>Social Media</h4>
+      <div class="f-social">
+        <a href="https://www.instagram.com/faxmlstore?igsh=MWdtNmR4dnpqMTZ1bA%3D%3D&utm_source=qr" target="_blank" rel="noopener">
+          <span class="ico"><img src="img/instagram.jpg" alt="Instagram"></span>
+          <span class="txt">Instagram</span>
+        </a>
+
+        <a href="https://www.tiktok.com/@faxml_?_r=1&_t=ZS-93z3KJcEiUH" target="_blank" rel="noopener">
+          <span class="ico"><img src="img/tiktok.jpg" alt="TikTok"></span>
+          <span class="txt">TikTok</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-line"></div>
+
+  <div class="footer-bottom">
+    <div>© Faxml Store.</div>
+    <div class="footer-badges">
+      <div class="f-badge"><span>🛡️</span> Secure Payment</div>
+      <div class="f-badge"><span>🕘</span> 24/7 Support</div>
+    </div>
+  </div>
+</footer>
+
+    </section>
+
+    <a class="pk-chat" href="https://wa.me/6288221694607" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
+      <svg class="wa-ico" viewBox="0 0 448 512" aria-hidden="true">
+        <path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 222-99.6 222-222 0-59.3-25.2-115-67.1-156.9z"/>
+      </svg>
+    </a>
+  </main>
+
+<script>
+/* ========= helpers ========= */
+const qs = (q) => document.querySelector(q);
+const normalize = (str) => (str ?? "").toString().toLowerCase().trim();
+
+const WA_NUMBER = "6288221694607";
+const QRIS_IMAGE_URL = "img/qris.jpeg";
+
+const formatRupiah = (n) => {
+  const num = Number(n) || 0;
+  return "Rp" + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
+/* ========= typing effect ========= */
+(function typingLoop(){
+  const el = qs("#typeTarget");
+  if(!el) return;
+  const text = "Jual Aplikasi Premium, Aman, dan Tepercaya.";
+  const typeSpeed = 55, deleteSpeed = 28;
+  const pauseAfterType = 1200, pauseAfterDelete = 450;
+  let i = 0, deleting = false;
+
+  function tick(){
+    if(!deleting){
+      el.textContent = text.slice(0, i + 1);
+      i++;
+      if(i === text.length){ deleting = true; return setTimeout(tick, pauseAfterType); }
+      setTimeout(tick, typeSpeed);
+    }else{
+      el.textContent = text.slice(0, i - 1);
+      i--;
+      if(i === 0){ deleting = false; return setTimeout(tick, pauseAfterDelete); }
+      setTimeout(tick, deleteSpeed);
+    }
+  }
+  tick();
+})();
+
+/* ========= FX overlay (lebih ringan) ========= */
+(() => {
+  const rand = (a,b)=>Math.random()*(b-a)+a;
+  function build(wrap){
+    const isMobile = (innerWidth||360) <= 720;
+    const count = isMobile ? 16 : 18; // mobile dikurangin biar FPS stabil
+    const colors = ["rgba(117,83,255,.35)","rgba(0,210,255,.28)","rgba(0,255,200,.22)","rgba(255,255,255,.18)"];
+    for(let i=0;i<count;i++){
+      const p=document.createElement("span"); p.className="fx-p";
+      p.style.setProperty("--s",(isMobile?rand(7,16):rand(8,18))+"px");
+      p.style.setProperty("--b",rand(0,2.0)+"px");
+      p.style.setProperty("--x",rand(2,98).toFixed(2)+"%");
+      p.style.setProperty("--y",rand(2,98).toFixed(2)+"%");
+      p.style.setProperty("--dx",rand(-14,14).toFixed(0)+"px");
+      p.style.setProperty("--dy",(-rand(35,isMobile?80:70)).toFixed(0)+"px");
+      p.style.setProperty("--d",rand(isMobile?7:8, isMobile?12:13).toFixed(2)+"s");
+      p.style.setProperty("--o",rand(0.18,isMobile?0.30:0.34).toFixed(2));
+      p.style.setProperty("--c",colors[Math.floor(rand(0,colors.length))]);
+      p.style.animationDelay = rand(-10,0).toFixed(2)+"s";
+      wrap.appendChild(p);
+    }
+  }
+  function mount(){
+    if(document.querySelector(".fx-overlay")) return;
+    const o=document.createElement("div"); o.className="fx-overlay";
+    const s=document.createElement("div"); s.className="fx-shimmer";
+    const p=document.createElement("div"); p.className="fx-particles";
+    o.appendChild(s); o.appendChild(p);
+    document.body.prepend(o);
+    build(p);
+  }
+  addEventListener("DOMContentLoaded", mount, { passive:true });
+})();
+
+/* ========= Smooth anchor (NO scrollIntoView) ========= */
+function getNavOffset(){
+  // pakai CSS variable --navOffset
+  const v = getComputedStyle(document.documentElement).getPropertyValue("--navOffset").trim();
+  const n = Number(v.replace("px",""));
+  return Number.isFinite(n) ? n : 110;
+}
+
+function smoothToHash(hash){
+  const id = hash || "";
+  if(!id.startsWith("#") || id.length < 2) return;
+
+  const target = document.querySelector(id);
+  if(!target) return;
+
+  const offset = getNavOffset();
+  const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+
+  // replaceState biar gak “nyentak”
+  history.replaceState(null, "", id);
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener("click", (e) => {
+    const href = a.getAttribute("href");
+    const target = document.querySelector(href);
+    if(!href || !target) return;
+    e.preventDefault();
+    smoothToHash(href);
+  }, { passive:false });
+});
+
+/* ========= Scroll Lock (iOS friendly) ========= */
+let scrollYBeforeLock = 0;
+
+function lockScroll(){
+  scrollYBeforeLock = window.scrollY || 0;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollYBeforeLock}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+}
+function unlockScroll(){
+  const top = document.body.style.top;
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+  const y = Math.abs(parseInt(top || "0", 10)) || scrollYBeforeLock || 0;
+  window.scrollTo(0, y);
+}
+
+/* ========= Sidebar Mobile ========= */
+const hamburger  = qs("#hamburger");
+const mobileMenu = qs("#mobileMenu");
+const menuOverlay= qs("#menuOverlay");
+const mobileClose= qs("#mobileClose");
+
+function openMenu(){
+  mobileMenu.classList.add("open");
+  menuOverlay.classList.add("show");
+  hamburger?.setAttribute("aria-expanded", "true");
+  lockScroll();
+}
+function closeMenu(){
+  mobileMenu.classList.remove("open");
+  menuOverlay.classList.remove("show");
+  hamburger?.setAttribute("aria-expanded", "false");
+  unlockScroll();
+}
+
+hamburger?.addEventListener("click", () => {
+  mobileMenu.classList.contains("open") ? closeMenu() : openMenu();
+}, { passive:true });
+
+menuOverlay?.addEventListener("click", closeMenu, { passive:true });
+mobileClose?.addEventListener("click", closeMenu, { passive:true });
+
+mobileMenu?.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener("click", () => {
+    closeMenu();
+    // kasih sedikit delay supaya sidebar tutup dulu baru scroll (lebih halus)
+    const href = a.getAttribute("href");
+    setTimeout(()=> smoothToHash(href), 50);
+  }, { passive:true });
+});
+
+/* ========= DATA PRODUK (contoh ringkas) ========= */
+// =========================
+  // DATA PRODUK
+  // =========================
+  const products = [
+    { brand:"netflix", label:"NETFLIX", name:"Netflix Premium 1 User", duration:"1 Bulan", price:35000, stock:10, tag:"Best Seller", img:"img/netflix.png" },
+    { brand:"netflix", label:"NETFLIX", name:"Netflix Premium 2 User", duration:"1 Bulan", price:27000, stock:10, tag:"Best Seller", img:"img/netflix.png" },
+    { brand:"netflix", label:"NETFLIX", name:"Netflix Premium SemiPrivate", duration:"1 Bulan", price:39000, stock:10, tag:"Best Seller", img:"img/netflix.png" },
+
+    { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Sharing 3 User", duration:"1 Bulan", price:10000, stock:20, tag:"Team", img:"img/capcut.jpg" },
+    { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Sharing 8 User", duration:"1 Bulan", price:5000,  stock:20, tag:"Team", img:"img/capcut.jpg" },
+    { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Sharing 5 User", duration:"1 Bulan", price:7000,  stock:20, tag:"Team", img:"img/capcut.jpg" },
+    { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi 7 Hari", duration:"7 Hari", price:12000, stock:20, tag:"Original", img:"img/capcut.jpg" },
+    { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi 14 Hari", duration:"14 Hari", price:15000, stock:20, tag:"Original", img:"img/capcut.jpg" },
+    { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi 28 Hari", duration:"28 Hari", price:20000, stock:20, tag:"Original", img:"img/capcut.jpg" },
+    { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi Full", duration:"35 Hari", price:23000, stock:20, tag:"Original", img:"img/capcut.jpg" },
+
+    { brand:"chatgpt", label:"CHATGPT", name:"ChatGPT Premium Private", duration:"1 Bulan", price:18000, stock:20, tag:"Populer", img:"img/chatgpt.png" },
+    { brand:"gemini",  label:"GEMINI",  name:"GEMINI PRO + GDRIVE 2TB + Veo3", duration:"1 Bulan", price:10000, stock:20, tag:"Populer", img:"img/gemini.png" },
+
+    { brand:"canva",   label:"CANVA",   name:"Canva Premium Team", duration:"1 Bulan", price:6000,  stock:50, tag:"Team", img:"img/canva.png" },
+    { brand:"canva",   label:"CANVA",   name:"Canva Premium Team (Plus)", duration:"1 Bulan", price:15000, stock:20, tag:"Team", img:"img/canva.png" },
+
+    { brand:"spotify", label:"SPOTIFY", name:"Spotify Premium Famplan", duration:"1 Bulan", price:26000, stock:10, tag:"Ready", img:"img/spotify.png" },
+    { brand:"spotify", label:"SPOTIFY", name:"Spotify Premium Indplan", duration:"1 Bulan", price:28000, stock:10, tag:"Ready", img:"img/spotify.png" },
+
+    { brand:"youtube", label:"YOUTUBE", name:"YouTube Premium Famplan", duration:"1 Bulan", price:5000, stock:10, tag:"Team", img:"img/youtube.png" },
+    { brand:"youtube", label:"YOUTUBE", name:"YouTube Premium Indplan", duration:"1 Bulan", price:15000, stock:10, tag:"Populer", img:"img/youtube.png" },
+
+    { brand:"alight",  label:"ALIGHT",  name:"Alight Motion Premium", duration:"1 Tahun", price:10000, stock:100, tag:"Populer", img:"img/alightmotion.png" },
+    { brand:"alight",  label:"Tutor AM",  name:"Tutor Alight Motion", duration:"Seumurhidup", price:80000, stock:100, tag:"Populer", img:"img/tutoram.png" },
+
+    { brand:"wink",  label:"WINK", name:"Wink Premium Private Android", duration:"7 Hari", price:10000, stock:10, tag:"Populer", img:"img/wink.png" },
+
+    { brand:"viu",  label:"VIU", name:"Viu Premium Private", duration:"3 Bulan", price:13000, stock:20, tag:"Original", img:"img/viu.png" },
+    { brand:"viu",  label:"VIU", name:"Viu Premium Private", duration:"Lifetime", price:20000, stock:20, tag:"Populer", img:"img/viu.png" },
+
+    { brand:"bstation", label:"B-STATION", name:"Bstation Premium Sharing", duration:"1 Bulan", price:13000, stock:20, tag:"Populer", img:"img/bstation.png" },
+    { brand:"wetv", label:"WETV", name:"Wetv Premium Sharing 8 User", duration:"1 Bulan", price:10000, stock:20, tag:"Original", img:"img/wetv.png" },
+
+    { brand:"vidio", label:"VIDIO", name:"Vidio Premium Sharing 2 User", duration:"1 Bulan", price:25000, stock:20, tag:"Original", img:"img/vidio.png" },
+    { brand:"vidio", label:"VIDIO", name:"Vidio Premium Sharing 2u Onlyhp", duration:"1 Bulan", price:20000, stock:20, tag:"Original", img:"img/vidio.png" },
+    { brand:"vidio", label:"VIDIO", name:"Vidio Premium Private Alldev", duration:"1 Bulan", price:36000, stock:20, tag:"Original", img:"img/vidio.png" },
+    { brand:"vidio", label:"VIDIO", name:"Vidio Premium Private Onlyhp", duration:"1 Bulan", price:28000, stock:20, tag:"Original", img:"img/vidio.png" },
+    { brand:"vidio", label:"VIDIO", name:"Vidio OnlyTV", duration:"1 Tahun", price:13000, stock:20, tag:"Original", img:"img/vidio.png" },
+
+    { brand:"hbomax", label:"HBO MAX", name:"HBO MAX Sharing", duration:"1 Bulan", price:19000, stock:20, tag:"Original", img:"img/hbomax.png" },
+
+    { brand:"iqiyi", label:"IQIYI", name:"Iqiyi Sharing Standar", duration:"1 Bulan", price:12000, stock:20, tag:"Original", img:"img/iqiyi.png" },
+    { brand:"iqiyi", label:"IQIYI", name:"Iqiyi Sharing Prem", duration:"1 Bulan", price:15000, stock:20, tag:"Original", img:"img/iqiyi.png" },
+
+    { brand:"prime video", label:"PRIME VIDEO", name:"Prime Video Sharing", duration:"1 Bulan", price:12000, stock:20, tag:"Original", img:"img/primevideo.png" },
+    { brand:"prime video", label:"PRIME VIDEO", name:"Prime Video Private", duration:"1 Bulan", price:18000, stock:20, tag:"Original", img:"img/primevideo.png" },
+
+    { brand:"lightroom", label:"LIGHTROOM", name:"Lightroom Premium Sharing", duration:"1 Tahun", price:20000, stock:20, tag:"Original", img:"img/lightroom.png" },
+    { brand:"picsart", label:"PICSART", name:"Picsart Premium Private", duration:"1 Bulan", price:14000, stock:20, tag:"Original", img:"img/picsart.png" },
+  ];
+
+function renderProducts(list) {
+  const productGrid = qs("#productGrid");
+  if (!productGrid) return;
+
+  productGrid.innerHTML = list.map((p) => {
+    const ready = (Number(p.stock) || 0) > 0;
+    return `
+      <article class="card">
+        <div class="product-thumb">
+          <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">
+          <span class="stock-badge ${ready ? "" : "habis"}">${ready ? `Ready • ${p.stock}` : "Habis"}</span>
+          <div class="thumb-brand">${(p.label || p.brand || "")}</div>
+        </div>
+
+        <div class="product-top">
+          <span class="tag">${p.tag}</span>
+          <span class="product-sub">${p.duration}</span>
+        </div>
+
+        <h3>${p.name}</h3>
+        <p>Akses premium sesuai paket. Support tersedia untuk proses pembelian & kendala umum.</p>
+
+        <div class="price-row">
+          <div>
+            <span class="price">${formatRupiah(p.price)}</span>
+            <span class="tiny">/${normalize(p.duration)}</span>
+          </div>
+          <a class="btn" href="#faq">Detail</a>
+        </div>
+
+        ${
+          ready
+            ? `<button class="btn btn-buy primaryish" type="button">Beli Sekarang</button>`
+            : `<button class="btn btn-buy out" disabled>Stok Habis</button>`
+        }
+      </article>
+    `;
+  }).join("");
+}
+
+/* ========= Search ========= */
+const searchInput = qs("#searchInput");
+const searchClear = qs("#searchClear");
+
+function applySearch(q) {
+  const query = normalize(q);
+  const filtered = !query ? products : products.filter((p) => {
+    const hay = [p.name, p.label, p.brand, p.tag, p.duration].map(normalize).join(" ");
+    return hay.includes(query);
+  });
+  renderProducts(filtered);
+}
+function setSearchValue(val) {
+  if (!searchInput) return;
+  searchInput.value = val;
+  searchInput.parentElement?.classList.toggle("has-value", normalize(val).length > 0);
+  applySearch(val);
+}
+searchInput?.addEventListener("input", (e) => setSearchValue(e.target.value), { passive:true });
+searchClear?.addEventListener("click", () => setSearchValue(""), { passive:true });
+
+/* ========= Init ========= */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(products);
+  applySearch("");
+}, { passive:true });
+</script>
+</body>
+</html>
