@@ -1207,6 +1207,14 @@ body{ overflow-x:hidden; }
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
+/* STOP “SCROLL SENDIRI” (scroll anchoring + layout shift) */
+html, body{ overflow-anchor: none; }
+
+/* kunci tinggi judul hero biar gak dorong konten produk */
+#beranda .hero-card h1{ min-height: 3.6em; }
+@media (min-width: 900px){
+  #beranda .hero-card h1{ min-height: 2.4em; }
+}
 
 </style>
 </head>
@@ -1735,43 +1743,23 @@ const todayISO = () => {
   return `${d.getFullYear()}-${mm}-${dd}`;
 };
 
-/* ========= typing effect ========= */
-(function typingLoop(){
+/* ========= typing effect (ONCE, NO DELETE) ========= */
+(function typingOnce(){
   const el = qs("#typeTarget");
   if(!el) return;
 
   const text = "Jual Aplikasi Premium, Aman, dan Tepercaya.";
   const typeSpeed = 55;
-  const deleteSpeed = 28;
-  const pauseAfterType = 1200;
-  const pauseAfterDelete = 450;
 
   let i = 0;
-  let deleting = false;
-
   function tick(){
-    if(!deleting){
-      el.textContent = text.slice(0, i + 1);
-      i++;
-      if(i === text.length){
-        deleting = true;
-        setTimeout(tick, pauseAfterType);
-        return;
-      }
-      setTimeout(tick, typeSpeed);
-    }else{
-      el.textContent = text.slice(0, i - 1);
-      i--;
-      if(i === 0){
-        deleting = false;
-        setTimeout(tick, pauseAfterDelete);
-        return;
-      }
-      setTimeout(tick, deleteSpeed);
-    }
+    el.textContent = text.slice(0, i + 1);
+    i++;
+    if(i < text.length) setTimeout(tick, typeSpeed);
   }
   tick();
 })();
+
 
 /* ========= FX overlay ========= */
 (() => {
