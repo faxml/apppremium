@@ -32,6 +32,7 @@ html{
   scroll-behavior:smooth;
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
+  overflow-anchor: none; /* stop “scroll sendiri” karena layout shift */
 }
 body{
   margin:0;
@@ -204,6 +205,12 @@ h1{ margin:14px 0 10px; font-size: clamp(30px, 4vw, 44px); line-height:1.1; lett
 .type-cursor{ display:inline-block; margin-left:6px; opacity:.9; animation: blink .8s steps(1) infinite; }
 @keyframes blink{ 50%{opacity:0;} }
 
+/* kunci tinggi judul hero biar gak dorong produk (stop “scroll sendiri”) */
+#beranda .hero-card h1{ min-height: 3.6em; }
+@media (min-width: 900px){
+  #beranda .hero-card h1{ min-height: 2.4em; }
+}
+
 .showcase{ padding:18px; border-radius: var(--radius2); display:flex; flex-direction:column; gap:12px; }
 .badge{
   display:inline-flex; align-items:center; gap:8px; padding:7px 10px;
@@ -227,10 +234,11 @@ section{ padding:18px 0 24px; }
   .grid{ grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 720px){
-  .grid{ grid-template-columns: repeat(2, 1fr); gap:12px; }
+  .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px; }
+  .card{ min-width:0; }
 }
 @media (max-width: 380px){
-  .grid{ gap:10px; }
+  .grid{ grid-template-columns: 1fr; gap:10px; }
 }
 
 .card{
@@ -303,25 +311,27 @@ section{ padding:18px 0 24px; }
 
 @media (max-width: 720px){
   .card{ padding: 12px; border-radius: 16px; }
-  .product-thumb{ height: 120px; border-radius: 14px; }
-  .thumb-brand{ font-size: 15px; }
-  .card h3{ font-size: 14px; }
-  .card p{ font-size: 12px; margin-bottom: 10px; }
-  .btn-buy{ height: 38px; }
-}
-@media (max-width: 380px){
-  .product-thumb{ height: 110px; }
+  .product-thumb{ height: 128px; border-radius: 14px; }
+  .thumb-brand{ font-size: 14px; left: 12px; bottom: 10px; }
+  .stock-badge{ top: 10px; right: 10px; padding: 5px 8px; font-size: 11px; border-radius: 10px; }
+  .product-sub{ white-space: nowrap; font-size: 11px; }
+  .tag{ font-size: 11px; padding: 5px 8px; }
+  .card h3{ font-size: 14px; line-height: 1.25; }
+  .card p{ font-size: 12px; line-height: 1.55; margin-bottom: 10px; }
+  .price-row > div{
+    display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; min-width:0;
+  }
+  .tiny{ white-space:nowrap; margin-left:0; }
+  .btn-buy{ height: 38px; border-radius: 12px; }
 }
 
-/* MENU OVERLAY (IMPORTANT: biar sidebar ga “aneh”) */
+/* MENU OVERLAY (sidebar background) */
 .menu-overlay{
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.55);
   display: none;
   z-index: 9998;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 .menu-overlay.show{ display:block; }
 
@@ -649,22 +659,12 @@ section{ padding:18px 0 24px; }
 @media (prefers-reduced-motion: reduce){ .app-float{ animation:none!important; } }
 
 /* SERVICE + FAQ + FOOTER */
-.service-grid{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap:14px;
-}
-@media (max-width: 980px){
-  .service-grid{ grid-template-columns: 1fr; }
-}
-.faq-grid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:14px;
-}
-@media (max-width: 980px){
-  .faq-grid{ grid-template-columns: 1fr; }
-}
+.service-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+@media (max-width: 980px){ .service-grid{ grid-template-columns: 1fr; } }
+
+.faq-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+@media (max-width: 980px){ .faq-grid{ grid-template-columns: 1fr; } }
+
 .faq-item{ padding:0; }
 .faq-btn{
   width:100%;
@@ -714,23 +714,16 @@ section{ padding:18px 0 24px; }
 }
 
 /* FOOTER */
-.footer-wrap{
-  margin-top: 28px;
-  padding: 18px;
-  border-radius: var(--radius2);
-}
+.footer-wrap{ margin-top: 28px; padding: 18px; border-radius: var(--radius2); }
 .footer-top{
   display:grid;
   grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   gap:18px;
   align-items:start;
 }
-@media (max-width: 980px){
-  .footer-top{ grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 640px){
-  .footer-top{ grid-template-columns: 1fr; gap:14px; }
-}
+@media (max-width: 980px){ .footer-top{ grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px){ .footer-top{ grid-template-columns: 1fr; gap:14px; } }
+
 .f-brand{ display:flex; gap:12px; align-items:flex-start; }
 .f-logo{
   width:44px; height:44px;
@@ -743,6 +736,7 @@ section{ padding:18px 0 24px; }
 .f-logo img{ width:100%; height:100%; object-fit:cover; display:block; }
 .f-title{ font-weight:900; font-size:18px; margin:0 0 8px; }
 .f-note{ margin:0; color: var(--muted); font-weight:800; font-size:13px; line-height:1.6; }
+
 .f-col h4{
   margin: 2px 0 10px;
   font-size:12px;
@@ -764,11 +758,7 @@ section{ padding:18px 0 24px; }
   background: rgba(255,255,255,.05);
   padding-left: 10px;
 }
-.footer-line{
-  margin:14px 0;
-  height:1px;
-  background: rgba(255,255,255,.10);
-}
+.footer-line{ margin:14px 0; height:1px; background: rgba(255,255,255,.10); }
 .footer-bottom{
   display:flex;
   align-items:center;
@@ -830,28 +820,11 @@ section{ padding:18px 0 24px; }
   border-color: rgba(255,255,255,.18);
   color: var(--text);
 }
-.f-social .ico{
-  width:28px; height:28px;
-  border-radius:10px;
-  overflow:hidden;
-  display:grid;
-  place-items:center;
-}
+.f-social .ico{ width:28px; height:28px; border-radius:10px; overflow:hidden; display:grid; place-items:center; }
 .f-social .ico img{ width:100%; height:100%; object-fit: contain; display:block; }
 @media (max-width: 360px){ .f-social{ grid-template-columns: 1fr; } }
 
-/* SIDEBAR (GLASS) */
-.menu-overlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.18);  /* BENING: halaman belakang masih keliatan */
-  display: none;
-  z-index: 9998;
- backdrop-filter: none;
--webkit-backdrop-filter: none;
-}
-.menu-overlay.show{ display:block; }
-
+/* SIDEBAR */
 #mobileMenu{
   position: fixed;
   top: 0;
@@ -1073,148 +1046,186 @@ section{ padding:18px 0 24px; }
   background: rgba(255,255,255,.03);
 }
 
+/* biar card ga ketutup tombol WA */
+main.container{ padding-bottom: 90px; }
+
+/* ===== PERF MOBILE (tetap ada overlay & icon, tapi lebih ringan) ===== */
+@media (max-width: 768px){
+  /* background anim besar sering bikin “ngerem” */
+  body{ animation: none !important; }
+
+  /* shimmer saja dimatikan, overlay + partikel tetap ada */
+  .fx-shimmer{ animation: none !important; }
+
+  /* blur fixed/sticky bisa bikin stutter -> matikan, ganti solid */
+  .glass, .nav-inner, .modal-overlay, .modal, .modal-footer, #mobileMenu, .qris-view, .qris-box{
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .glass, .nav-inner{ background: rgba(10,14,30,.82) !important; }
+
+  #mobileMenu{ background: rgba(8,10,22,.92) !important; }
+
+  /* kurangi hover transform (mobile gak perlu) */
+  .card:hover, .btn:hover, .faq-btn:hover, .f-social a:hover{ transform:none !important; }
+
+  /* kurangi will-change */
+  .card, .btn, .faq-btn, #mobileMenu, .modal{ will-change: auto !important; }
+}
+
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce){
   *{ animation: none !important; transition: none !important; scroll-behavior:auto !important; }
 }
-/* ===== FIX MOBILE 2 KOLUM BIAR GA ANCUR ===== */
-@media (max-width: 720px){
-  /* pastikan grid bener2 2 kolom & ga bikin item “nge-press” */
-  .grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .card{ min-width: 0; } /* penting biar isi card boleh mengecil */
+/* ===== LOADING sebelum QRIS muncul ===== */
+.loading-view{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0,0,0,.65);
+  z-index: 10020; /* di atas modal */
+}
+.loading-view.show{ display:flex; }
 
-  /* gambar di atas jangan terlalu tinggi */
-  .product-thumb{ height: 128px; border-radius: 14px; }
-
-  /* tulisan brand di gambar kecilin biar ga numpuk */
-  .thumb-brand{ font-size: 14px; left: 12px; bottom: 10px; }
-
-  /* badge READY kecilin */
-  .stock-badge{
-    top: 10px; right: 10px;
-    padding: 5px 8px;
-    font-size: 11px;
-    border-radius: 10px;
-  }
-
-  /* tag + durasi jangan pecah */
-  .product-sub{ white-space: nowrap; font-size: 11px; }
-  .tag{ font-size: 11px; padding: 5px 8px; }
-
-  /* judul produk biar rapih */
-  .card h3{ font-size: 14px; line-height: 1.25; }
-  .card p{ font-size: 12px; line-height: 1.55; }
-
-  /* baris harga biar "Rp.. /1 bulan" ga kepotong */
-  .price-row > div{
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    flex-wrap: wrap;
-    min-width: 0;
-  }
-  .tiny{ white-space: nowrap; margin-left: 0; }
-
-  /* tombol beli tetap enak dipencet */
-  .btn-buy{ height: 38px; border-radius: 12px; }
+.loading-card{
+  width: min(380px, 100%);
+  padding: 18px 16px;
+  border-radius: 18px;
+  text-align: center;
 }
 
-/* layar super kecil, otomatis 1 kolom */
-@media (max-width: 380px){
-  .grid{ grid-template-columns: 1fr; }
+.loading-spinner{
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 4px solid rgba(255,255,255,.18);
+  border-top-color: rgba(117,83,255,.95);
+  animation: spin .8s linear infinite;
+  margin: 0 auto 12px;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+.loading-title{
+  margin: 0 0 4px;
+  font-weight: 900;
+}
+.loading-sub{
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-/* biar card ga ketutup tombol WA */
-main.container{ padding-bottom: 90px; }
-/* =========================
-   MOBILE PERF LITE (FINAL)
-   - hilangkan "ngerem/stop" iPhone & Android
-========================= */
-
-html{ scroll-behavior: auto !important; } /* jangan dobel smooth */
-body{ overflow-x:hidden; }
-
-/* Matikan blur/animasi berat khusus mobile */
-@media (max-width: 768px){
-
-  /* 1) Matikan ANIMASI background besar (ini biang stutter paling sering) */
-  body{
-    animation: none !important;
-    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
-    background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0% !important;
-  }
-
-  /* 2) Matikan FX overlay (shimmer + particles) */
-  .fx-overlay{ display:none !important; }
-
-  /* 3) Matikan blur di elemen fixed/sticky/modal/sidebar/overlay */
-  .glass,
-  #topNav,
-  .nav-inner,
-  #mobileMenu,
-  .menu-overlay,
-  .modal-overlay,
-  .modal,
-  .modal-footer,
-  .qris-view,
-  .qris-box{
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-  }
-
-  /* 4) Ganti "glass" jadi transparan solid (tetap keren tapi enteng) */
-  .glass,
-  .nav-inner{
-    background: rgba(10,14,30,.82) !important;
-    border-color: rgba(255,255,255,.14) !important;
-  }
-
-  /* Sidebar juga jangan blur */
-  #mobileMenu{
-    background: rgba(8,10,22,.92) !important;
-  }
-
-  /* 5) Ringankan shadow besar */
-  .card,
-  .nav-inner,
-  #mobileMenu,
-  .modal,
-  .footer-wrap{
-    box-shadow: 0 10px 24px rgba(0,0,0,.35) !important;
-  }
-
-  /* 6) Matikan hover transform (mobile ga butuh) */
-  .card:hover,
-  .btn:hover,
-  .faq-btn:hover,
-  .f-social a:hover{
-    transform: none !important;
-  }
-
-  /* 7) Kurangi will-change yang kebanyakan (Safari kadang ngelag) */
-  .card, .btn, .faq-btn, #mobileMenu, .modal{
-    will-change: auto !important;
-  }
-
-  /* 8) Matikan animasi icon melayang di hero */
-  .app-float{ animation: none !important; }
+/* ===== LOADING di tombol "Lanjut Pembayaran" ===== */
+.btn.is-loading{
+  pointer-events: none;
+  opacity: .9;
+}
+.btn .btn-spin{
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 3px solid rgba(255,255,255,.25);
+  border-top-color: rgba(255,255,255,.92);
+  animation: spin .7s linear infinite;
 }
 
-/* Reduce motion juga aman */
 @media (prefers-reduced-motion: reduce){
-  *{ animation:none !important; transition:none !important; }
+  .loading-spinner,
+  .btn .btn-spin{ animation:none !important; }
 }
-/* STOP “SCROLL SENDIRI” (scroll anchoring + layout shift) */
-html, body{ overflow-anchor: none; }
 
-/* kunci tinggi judul hero biar gak dorong konten produk */
-#beranda .hero-card h1{ min-height: 3.6em; }
-@media (min-width: 900px){
-  #beranda .hero-card h1{ min-height: 2.4em; }
+/* ===== RAPihin GRID PRODUK di MOBILE ===== */
+@media (max-width: 640px){
+
+  /* 1) Grid 2 kolom rapih */
+  .products-grid, .grid-products, #productsGrid{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+    align-items: stretch !important;
+  }
+
+  /* 2) Card dibuat flex kolom biar tombol bisa “nempel bawah” */
+  .product-card, .card, .product{
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+  }
+
+  /* 3) Thumbnail gambar konsisten (biar tinggi gambar sama) */
+  .product-thumb, .thumb, .cover{
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+  .product-thumb img, .thumb img, .cover img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+@media (max-width: 640px){
+
+  /* gambar (punyamu sekarang cuma display:block, tambah ini biar aman) */
+  .product-thumb img, .thumb img, .cover img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Judul: batasi 2 baris (tanpa webkit) */
+  #productsGrid h3,
+  .products-grid h3,
+  .grid-products h3,
+  .product-grid h3{
+    line-height: 1.25;
+    max-height: calc(1.25em * 2); /* 2 baris */
+    overflow: hidden;
+  }
+
+  /* Deskripsi: batasi 3 baris (tanpa webkit) */
+  #productsGrid p,
+  .products-grid p,
+  .grid-products p,
+  .product-grid p{
+    line-height: 1.35;
+    max-height: calc(1.35em * 3); /* 3 baris */
+    overflow: hidden;
+  }
 }
+
+
+
+  /* 5) Dorong bagian aksi (harga/detail/beli) ke bawah */
+  .product-bottom, .actions, .card-actions{
+    margin-top: auto !important;
+  }
+
+  /* 6) Tombol beli full lebar biar konsisten */
+  .buy-btn, .btn-buy, .primary{
+    width: 100% !important;
+  }
+
+  /* 7) Kasih ruang bawah supaya tidak ketiban tombol WA */
+  .products-wrap, .products, main{
+    padding-bottom: 92px !important;
+  }
+}
+
+/* ===== posisi tombol WA biar tidak nutup tombol beli ===== */
+.wa-float, .whatsapp-float, .waButton, .float-wa{
+  bottom: 18px !important;     /* naikin dikit */
+  right: 16px !important;
+}
+
 
 </style>
 </head>
@@ -1250,7 +1261,7 @@ html, body{ overflow-anchor: none; }
     </div>
   </header>
 
-  <!-- OVERLAY -->
+  <!-- OVERLAY (sidebar) -->
   <div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
 
   <!-- SIDEBAR -->
@@ -1321,7 +1332,7 @@ html, body{ overflow-anchor: none; }
         <div><h2>Produk Premium</h2></div>
         <a class="btn" href="#faq">Cara beli?</a>
       </div>
-     <div id="productGrid" class="grid"></div> 
+      <div id="productGrid" class="grid"></div>
     </section>
 
     <!-- SERVICE -->
@@ -1643,6 +1654,14 @@ html, body{ overflow-anchor: none; }
       </div>
     </div>
   </div>
+<!-- LOADING VIEW (sebelum QRIS muncul) -->
+<div id="loadingView" class="loading-view" aria-hidden="true">
+  <div class="loading-card glass">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <p class="loading-title">Menyiapkan pembayaran…</p>
+    <p class="loading-sub">Mohon tunggu sebentar</p>
+  </div>
+</div>
 
   <!-- PAYMENT MODAL (QRIS) -->
   <div id="payModal" class="modal-overlay" aria-hidden="true">
@@ -1743,20 +1762,69 @@ const todayISO = () => {
   return `${d.getFullYear()}-${mm}-${dd}`;
 };
 
-/* ========= typing effect (ONCE, NO DELETE) ========= */
-(function typingOnce(){
-  const el = qs("#typeTarget");
+/* ========= iOS/Android SCROLL LOCK (no jitter) =========
+   pakai position:fixed biar gak “loncat” / “geser sendiri” */
+let __lockY = 0;
+function lockScroll(){
+  __lockY = window.scrollY || window.pageYOffset || 0;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${__lockY}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+}
+function unlockScroll(){
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+  window.scrollTo(0, __lockY);
+}
+
+/* ========= typing effect (LOOP: ketik berulang) ========= */
+(function typingLoop(){
+  const el = document.querySelector("#typeTarget");
   if(!el) return;
 
+  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
   const text = "Jual Aplikasi Premium, Aman, dan Tepercaya.";
-  const typeSpeed = 55;
+  const typeSpeed = 55;        // kecepatan ngetik
+  const deleteSpeed = 35;      // kecepatan hapus
+  const holdAfterType = 1200;  // jeda setelah selesai ngetik
+  const holdAfterDelete = 350; // jeda setelah selesai hapus
+
+  if (prefersReduce){
+    el.textContent = text;
+    return;
+  }
 
   let i = 0;
+  let deleting = false;
+
   function tick(){
-    el.textContent = text.slice(0, i + 1);
-    i++;
-    if(i < text.length) setTimeout(tick, typeSpeed);
+    if (!deleting){
+      i++;
+      el.textContent = text.slice(0, i);
+      if (i >= text.length){
+        deleting = true;
+        setTimeout(tick, holdAfterType);
+      } else {
+        setTimeout(tick, typeSpeed);
+      }
+    } else {
+      i--;
+      el.textContent = text.slice(0, i);
+      if (i <= 0){
+        deleting = false;
+        setTimeout(tick, holdAfterDelete);
+      } else {
+        setTimeout(tick, deleteSpeed);
+      }
+    }
   }
+
   tick();
 })();
 
@@ -1764,25 +1832,27 @@ const todayISO = () => {
 /* ========= FX overlay ========= */
 (() => {
   const rand = (a,b)=>Math.random()*(b-a)+a;
+
   function build(wrap){
     const isMobile = (innerWidth||360) <= 720;
-    const count = isMobile ? 36 : 18;
+    const count = isMobile ? 16 : 22; // lebih ringan di mobile
     const colors = ["rgba(117,83,255,.35)","rgba(0,210,255,.28)","rgba(0,255,200,.22)","rgba(255,255,255,.18)"];
     for(let i=0;i<count;i++){
       const p=document.createElement("span"); p.className="fx-p";
-      p.style.setProperty("--s",(isMobile?rand(7,18):rand(8,20))+"px");
-      p.style.setProperty("--b",rand(0,2.2)+"px");
+      p.style.setProperty("--s",(isMobile?rand(7,16):rand(8,20))+"px");
+      p.style.setProperty("--b",rand(0,2.0)+"px");
       p.style.setProperty("--x",rand(2,98).toFixed(2)+"%");
       p.style.setProperty("--y",rand(2,98).toFixed(2)+"%");
-      p.style.setProperty("--dx",rand(-18,18).toFixed(0)+"px");
-      p.style.setProperty("--dy",(-rand(40,isMobile?95:75)).toFixed(0)+"px");
-      p.style.setProperty("--d",rand(isMobile?6.5:8, isMobile?11:13).toFixed(2)+"s");
-      p.style.setProperty("--o",rand(0.18,isMobile?0.42:0.34).toFixed(2));
+      p.style.setProperty("--dx",rand(-16,16).toFixed(0)+"px");
+      p.style.setProperty("--dy",(-rand(40,isMobile?85:75)).toFixed(0)+"px");
+      p.style.setProperty("--d",rand(isMobile?7:8, isMobile?12:13).toFixed(2)+"s");
+      p.style.setProperty("--o",rand(0.18,isMobile?0.40:0.34).toFixed(2));
       p.style.setProperty("--c",colors[Math.floor(rand(0,colors.length))]);
       p.style.animationDelay = rand(-10,0).toFixed(2)+"s";
       wrap.appendChild(p);
     }
   }
+
   function mount(){
     if(document.querySelector(".fx-overlay")) return;
     const o=document.createElement("div"); o.className="fx-overlay";
@@ -1792,6 +1862,7 @@ const todayISO = () => {
     document.body.prepend(o);
     build(p);
   }
+
   addEventListener("DOMContentLoaded", mount, { passive:true });
 })();
 
@@ -1805,12 +1876,38 @@ document.addEventListener("click", (e) => {
   if (ico) ico.textContent = isOpen ? "−" : "+";
 }, { passive:true });
 
-/* =========================
-   SMOOTH SCROLL (FINAL iOS/Android)
-   - offset sticky nav
-   - close sidebar dulu
-   - pakai window.scrollTo (lebih stabil)
-========================= */
+/* ========= Sidebar Mobile ========= */
+const hamburger  = qs("#hamburger");
+const mobileMenu = qs("#mobileMenu");
+const menuOverlay= qs("#menuOverlay");
+const mobileClose= qs("#mobileClose");
+
+function openMenu(){
+  if (!mobileMenu || !menuOverlay || !hamburger) return;
+  mobileMenu.classList.add("open");
+  menuOverlay.classList.add("show");
+  hamburger.setAttribute("aria-expanded", "true");
+  lockScroll();
+}
+function closeMenu(){
+  if (!mobileMenu || !menuOverlay || !hamburger) return;
+  mobileMenu.classList.remove("open");
+  menuOverlay.classList.remove("show");
+  hamburger.setAttribute("aria-expanded", "false");
+  // unlock hanya kalau tidak ada modal lain
+  if (!qs("#buyModal")?.classList.contains("show") && !qs("#payModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show")) {
+    unlockScroll();
+  }
+}
+
+hamburger?.addEventListener("click", () => {
+  mobileMenu.classList.contains("open") ? closeMenu() : openMenu();
+});
+menuOverlay?.addEventListener("click", closeMenu);
+mobileClose?.addEventListener("click", closeMenu);
+mobileMenu?.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener("click", closeMenu));
+
+/* ========= Smooth scroll with offset (tanpa loncat) ========= */
 (() => {
   const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
@@ -1838,99 +1935,24 @@ document.addEventListener("click", (e) => {
 
     e.preventDefault();
 
-    // Tutup sidebar kalau kebuka
-    const menu = document.getElementById("mobileMenu");
-    const overlay = document.getElementById("menuOverlay");
-    const burger = document.getElementById("hamburger");
-
-    if (menu?.classList.contains("open")){
-      menu.classList.remove("open");
-      overlay?.classList.remove("show");
-      burger?.setAttribute("aria-expanded", "false");
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-      setTimeout(() => smoothTo(target), 70);
+    if (mobileMenu?.classList.contains("open")){
+      closeMenu();
+      setTimeout(() => smoothTo(target), 80);
     }else{
       smoothTo(target);
     }
 
-    // optional: update hash tanpa "loncat"
     history.replaceState(null, "", id);
   }, { passive:false });
 })();
 
-
-/* ========= iOS/Android SCROLL LOCK (no jitter) ========= */
-function lockScroll(){
-  document.documentElement.style.overflow = "hidden";
-  document.body.style.overflow = "hidden";
-}
-function unlockScroll(){
-  document.documentElement.style.overflow = "";
-  document.body.style.overflow = "";
-}
-
-function openMenu(){
-  mobileMenu.classList.add("open");
-  menuOverlay.classList.add("show");
-  hamburger.setAttribute("aria-expanded", "true");
-  lockScroll();
-}
-function closeMenu(){
-  mobileMenu.classList.remove("open");
-  menuOverlay.classList.remove("show");
-  hamburger.setAttribute("aria-expanded", "false");
-  unlockScroll();
-}
-/* ========= Sidebar Mobile (FINAL SMOOTH) ========= */
-const hamburger  = qs("#hamburger");
-const mobileMenu = qs("#mobileMenu");
-const menuOverlay= qs("#menuOverlay");
-const mobileClose= qs("#mobileClose");
-
-/* pastikan fungsi ini ADA */
-function lockScroll(){
-  document.documentElement.style.overflow = "hidden";
-  document.body.style.overflow = "hidden";
-}
-function unlockScroll(){
-  document.documentElement.style.overflow = "";
-  document.body.style.overflow = "";
-}
-
-function openMenu(){
-  if (!mobileMenu || !menuOverlay || !hamburger) return;
-  mobileMenu.classList.add("open");
-  menuOverlay.classList.add("show");
-  hamburger.setAttribute("aria-expanded", "true");
-  lockScroll();
-}
-function closeMenu(){
-  if (!mobileMenu || !menuOverlay || !hamburger) return;
-  mobileMenu.classList.remove("open");
-  menuOverlay.classList.remove("show");
-  hamburger.setAttribute("aria-expanded", "false");
-  unlockScroll();
-}
-
-hamburger?.addEventListener("click", () => {
-  mobileMenu.classList.contains("open") ? closeMenu() : openMenu();
-});
-
-menuOverlay?.addEventListener("click", closeMenu);
-mobileClose?.addEventListener("click", closeMenu);
-
-mobileMenu?.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener("click", closeMenu);
-});
-
+/* ========= ESC close ========= */
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape"){
-    closeMenu();
-    closeBuyModal?.();
-    closePayModal?.();
-    closeQrisView?.();
-  }
+  if (e.key !== "Escape") return;
+  closeMenu();
+  closeBuyModal();
+  closePayModal();
+  closeQrisView();
 });
 
 /* ========= DATA PRODUK ========= */
@@ -1997,7 +2019,7 @@ function renderProducts(list) {
     return `
       <article class="card">
         <div class="product-thumb">
-          <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">
+          <img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async" onerror="this.style.display='none'">
           <span class="stock-badge ${ready ? "" : "habis"}">${ready ? `Ready • ${p.stock}` : "Habis"}</span>
           <div class="thumb-brand">${(p.label || p.brand || "")}</div>
         </div>
@@ -2013,10 +2035,13 @@ function renderProducts(list) {
         <div class="price-row">
           <div>
             <span class="price">${formatRupiah(p.price)}</span>
-            <span class="tiny">/${normalize(p.duration)}</span>
+            <span class="tiny">/${p.duration}</span>
           </div>
           <a class="btn" href="#faq">Detail</a>
         </div>
+<div class="product-bottom">
+  <!-- harga + detail + tombol beli -->
+</div>
 
         ${
           ready
@@ -2117,15 +2142,14 @@ function openBuyModal({ product, brand, price, duration }) {
 }
 
 function closeBuyModal() {
-  if (!buyModal.classList.contains("show")) return;
+  if (!buyModal?.classList.contains("show")) return;
   buyModal.classList.remove("show");
   buyModal.setAttribute("aria-hidden", "true");
-  buyForm.reset();
+  buyForm?.reset();
   selectedOrder = { product:"", brand:"", price:0, duration:"", type:"" };
   waFinalMessage = "";
 
-  // unlock scroll kalau tidak ada modal lain yang open
-  if (!qs("#payModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !qs("#mobileMenu")?.classList.contains("open")) {
+  if (!qs("#payModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
     unlockScroll();
   }
 }
@@ -2168,7 +2192,6 @@ function resetPayUI(){
     sendPaid.disabled = !(paidYes?.checked === true);
   }
 }
-
 function syncSendPaidState(){
   const isPaid = (paidYes?.checked === true);
   if (!waReadyToOpen && sendPaid) sendPaid.disabled = !isPaid;
@@ -2182,7 +2205,6 @@ function syncSendPaidState(){
     }
   }
 }
-
 paidYes?.addEventListener("change", syncSendPaidState, { passive:true });
 paidNo?.addEventListener("change", syncSendPaidState, { passive:true });
 
@@ -2200,15 +2222,14 @@ function openPayModal(){
   lockScroll();
 }
 function closePayModal(){
-  if (!payModal.classList.contains("show")) return;
+  if (!payModal?.classList.contains("show")) return;
   payModal.classList.remove("show");
   payModal.setAttribute("aria-hidden", "true");
   if (paidNo) paidNo.checked = true;
   resetPayUI();
   syncSendPaidState();
 
-  // unlock scroll kalau tidak ada modal lain yang open
-  if (!qs("#buyModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !qs("#mobileMenu")?.classList.contains("open")) {
+  if (!qs("#buyModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
     unlockScroll();
   }
 }
@@ -2409,6 +2430,119 @@ ${basePayNote}`;
   openPayModal();
 }, { passive:false });
 
+/* ===== FINAL PATCH: tombol loading + overlay loading sebelum QRIS ===== */
+(() => {
+  if (window.__FAXML_LOADING_PATCH__) return;
+  window.__FAXML_LOADING_PATCH__ = true;
+
+  const loadingView = document.getElementById("loadingView");
+  const sendBtn = document.getElementById("sendBtn");     // tombol "Lanjut Pembayaran"
+  const buyForm = document.getElementById("buyForm");
+  const buyModalEl = document.getElementById("buyModal");
+  if (!loadingView || !sendBtn || !buyForm || !buyModalEl) return;
+
+  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const LOADING_SECONDS = 2; // durasi loading (detik)
+  const LOADING_DELAY   = prefersReduce ? 0 : Math.round(LOADING_SECONDS * 1000);
+
+
+  let token = 0;
+  let btnOldHTML = "";
+  let btnOldDisabled = false;
+
+  const showOverlay = () => {
+    loadingView.classList.add("show");
+    loadingView.setAttribute("aria-hidden", "false");
+  };
+  const hideOverlay = () => {
+    loadingView.classList.remove("show");
+    loadingView.setAttribute("aria-hidden", "true");
+  };
+
+  const setBtnLoading = (on) => {
+    if (!sendBtn) return;
+    if (on) {
+      // simpan state awal
+      if (!btnOldHTML) btnOldHTML = sendBtn.innerHTML;
+      btnOldDisabled = sendBtn.disabled;
+
+      sendBtn.disabled = true;
+      sendBtn.classList.add("is-loading");
+      sendBtn.innerHTML = `<span class="btn-spin" aria-hidden="true"></span><span>Memproses…</span>`;
+    } else {
+      // restore
+      if (btnOldHTML) sendBtn.innerHTML = btnOldHTML;
+      sendBtn.disabled = btnOldDisabled;
+      sendBtn.classList.remove("is-loading");
+
+      // reset cache supaya aman kalau HTML berubah dari luar
+      btnOldHTML = "";
+      btnOldDisabled = false;
+    }
+  };
+
+  // Saat submit (klik "Lanjut Pembayaran"), tampilkan loading di tombol.
+  // Kalau validasi gagal (modal tetap terbuka), auto balik normal.
+  buyForm.addEventListener("submit", () => {
+    const my = ++token;
+    setBtnLoading(true);
+
+    // tunggu sebentar: kalau buyModal masih "show", berarti handler lama return karena alert/validasi
+    setTimeout(() => {
+      if (my !== token) return;
+      const stillOpen = buyModalEl.classList.contains("show");
+      if (stillOpen) {
+        setBtnLoading(false);
+        hideOverlay();
+      }
+    }, 220);
+  }, true);
+
+  // Patch openPayModal: overlay loading dulu, baru QRIS.
+  if (typeof window.openPayModal === "function") {
+    const _openPayModal = window.openPayModal;
+
+    window.openPayModal = function () {
+      const my = ++token;
+
+      // overlay tampil setelah buy modal ketutup (biar tombol sempat kelihatan)
+      setTimeout(() => {
+        if (my !== token) return;
+        showOverlay();
+      }, prefersReduce ? 0 : 120);
+
+      setTimeout(() => {
+        if (my !== token) return;
+        hideOverlay();
+        setBtnLoading(false);
+        _openPayModal();
+      }, LOADING_DELAY);
+    };
+  }
+
+  // Safety: kalau pay modal ditutup, pastikan overlay/tombol normal lagi
+  if (typeof window.closePayModal === "function") {
+    const _closePayModal = window.closePayModal;
+    window.closePayModal = function () {
+      token++;
+      hideOverlay();
+      setBtnLoading(false);
+      _closePayModal();
+    };
+  }
+
+  // Safety: kalau buy modal ditutup (cancel/esc), matikan loading juga
+  if (typeof window.closeBuyModal === "function") {
+    const _closeBuyModal = window.closeBuyModal;
+    window.closeBuyModal = function () {
+      token++;
+      hideOverlay();
+      setBtnLoading(false);
+      _closeBuyModal();
+    };
+  }
+})();
+
 /* ========= QRIS Overlay ========= */
 const qrisView = qs("#qrisView");
 const qrisBigImg = qs("#qrisBigImg");
@@ -2421,11 +2555,11 @@ function openQrisView(){
   lockScroll();
 }
 function closeQrisView(){
-  if (!qrisView.classList.contains("show")) return;
+  if (!qrisView?.classList.contains("show")) return;
   qrisView.classList.remove("show");
   qrisView.setAttribute("aria-hidden","true");
 
-  if (!qs("#buyModal")?.classList.contains("show") && !qs("#payModal")?.classList.contains("show") && !qs("#mobileMenu")?.classList.contains("open")) {
+  if (!qs("#buyModal")?.classList.contains("show") && !qs("#payModal")?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
     unlockScroll();
   }
 }
@@ -2438,6 +2572,43 @@ document.addEventListener("DOMContentLoaded", () => {
   renderProducts(products);
   applySearch("");
 }, { passive:true });
+(function(){
+  function mark(){
+    const btns = Array.from(document.querySelectorAll("a,button"))
+      .filter(el => /beli sekarang/i.test(el.textContent || ""));
+
+    btns.forEach(btn => {
+      // cari card terdekat
+      const card = btn.closest(".product-card, .product, .card, article, li, div");
+      if(!card) return;
+
+      card.classList.add("p-card");
+
+      // wrapper grid (parent yang isinya banyak card)
+      const grid = card.parentElement;
+      if(grid && grid.children && grid.children.length >= 2){
+        grid.classList.add("p-grid");
+      }
+
+      // title & desc di dalam card
+      const title = card.querySelector(".product-title, .title, h3, h2, h4");
+      if(title) title.classList.add("p-title");
+
+      const desc  = card.querySelector(".product-desc, .desc, p");
+      if(desc) desc.classList.add("p-desc");
+
+      // actions area (tempat tombol)
+      const actions = btn.closest(".product-bottom, .actions, .card-actions") || btn.parentElement;
+      if(actions) actions.classList.add("p-actions");
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    mark();
+    setTimeout(mark, 300);   // kalau produk render async
+    setTimeout(mark, 1000);
+  });
+})();
 </script>
 </body>
 </html>
