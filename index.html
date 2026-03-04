@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -8,1229 +9,2329 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --bg0:#070913;
-  --bg1:#0b1024;
-  --stroke: rgba(255,255,255,.14);
-  --text: rgba(255,255,255,.92);
-  --muted: rgba(255,255,255,.68);
-  --shadow: 0 20px 60px rgba(0,0,0,.45);
-  --glow1: rgba(117, 83, 255, .35);
-  --glow2: rgba(0, 255, 200, .18);
-  --radius: 18px;
-  --radius2: 26px;
-  --max: 1120px;
-
-  --safeTop: env(safe-area-inset-top, 0px);
-  --safeBot: env(safe-area-inset-bottom, 0px);
-}
-
-*{ box-sizing:border-box; }
-html{
-  scroll-behavior:smooth;
-  -webkit-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
-  overflow-anchor: none; /* stop “scroll sendiri” karena layout shift */
-}
-body{
-  margin:0;
-  font-family:"Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text);
-  background:
-    radial-gradient(1200px 700px at 15% 10%, var(--glow1), transparent 55%),
-    radial-gradient(900px 600px at 85% 15%, rgba(0, 210, 255, .20), transparent 55%),
-    radial-gradient(800px 600px at 70% 85%, var(--glow2), transparent 55%),
-    linear-gradient(180deg, var(--bg0), var(--bg1));
-  min-height:100vh;
-  overflow-x:hidden;
-  background-size: 140% 140%, 160% 160%, 150% 150%, 100% 100%;
-  background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0%;
-  animation: bgShift 18s ease-in-out infinite;
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-overflow-scrolling: touch;
-  touch-action: manipulation;
-}
-header, main{ position:relative; z-index:1; }
-@keyframes bgShift{
-  0%{ background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0%; }
-  50%{ background-position: 100% 30%, 0% 60%, 20% 0%, 0% 0%; }
-  100%{ background-position: 0% 0%, 100% 0%, 80% 100%, 0% 0%; }
-}
-
-a{ color:inherit; text-decoration:none; }
-a, button{ -webkit-tap-highlight-color: transparent; }
-.container{ width:min(var(--max), calc(100% - 40px)); margin:0 auto; }
-@media (max-width: 640px){
-  .container{ width:min(var(--max), calc(100% - 24px)); }
-}
-
-.glass{
-  background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05));
-  border: 1px solid var(--stroke);
-  border-radius: var(--radius);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: var(--shadow);
-}
-
-.btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:10px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.06);
-  color: var(--text);
-  font-weight: 900;
-  font-size: 14px;
-  transition: transform .18s cubic-bezier(.16,1,.3,1),
-              background .18s ease,
-              border-color .18s ease,
-              color .18s ease;
-  cursor:pointer;
-  user-select:none;
-  white-space:nowrap;
-  will-change: transform;
-  transform: translateZ(0);
-}
-.btn:hover{
-  transform: translateY(-1px);
-  background: rgba(255,255,255,.09);
-  border-color: rgba(255,255,255,.22);
-}
-.btn.primary{
-  border-color: rgba(117,83,255,.45);
-  background: linear-gradient(135deg, rgba(117,83,255,.32), rgba(0,210,255,.18));
-  box-shadow: 0 14px 40px rgba(117,83,255,.18);
-}
-.btn:disabled{ opacity:.55; cursor:not-allowed; transform:none !important; }
-
-/* NAV */
-.nav{ position: sticky; top: calc(14px + var(--safeTop)); z-index: 50; margin-top: 14px; }
-.nav-inner{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; padding:12px 14px; border-radius:999px; min-width:0;
-}
-.brand{ display:flex; align-items:center; gap:10px; padding-left:6px; font-weight:900; flex: 1 1 auto; min-width:0; }
-.brand-name{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.logo-wrap{
-  width:38px; height:38px; border-radius:12px; overflow:hidden;
-  flex:0 0 auto; border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 12px 30px rgba(117,83,255,.25); background: rgba(255,255,255,.06);
-}
-.logo-img{ width:100%; height:100%; display:block; object-fit: cover; }
-
-.nav-links{ display:flex; gap:8px; align-items:center; justify-content:center; flex:1 1 auto; min-width:0; }
-.nav-links a{
-  padding:10px 12px; border-radius:999px; color: var(--muted);
-  border:1px solid transparent; transition:.2s ease; font-weight:900; font-size:14px;
-  white-space:nowrap;
-}
-.nav-links a:hover{ color: var(--text); background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.10); }
-
-.nav-cta{ display:flex; gap:10px; align-items:center; flex:0 0 auto; }
-#beranda, #produk, #services, #faq{ scroll-margin-top: 110px; }
-@media (max-width: 640px){ #beranda, #produk, #services, #faq{ scroll-margin-top: 150px; } }
-
-.search{
-  display:flex; align-items:center; gap:8px; padding: 8px 10px;
-  border-radius: 999px; border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.06);
-  width: clamp(160px, 22vw, 280px);
-  max-width: 280px; min-width: 160px; flex: 0 1 auto; min-width:0;
-}
-.search input{
-  width:100%; min-width:0; border:0; outline:none; background: transparent;
-  color: var(--text); font: inherit; font-size: 14px;
-}
-.search input::placeholder{ color: rgba(255,255,255,.55); }
-.search .s-clear{
-  border:0; background: transparent; color: rgba(255,255,255,.8);
-  cursor:pointer; padding: 0 6px; display:none; font-weight:900;
-}
-.search.has-value .s-clear{ display:block; }
-
-.hamburger{
-  display:none; width:42px; height:42px; border-radius:999px;
-  border:1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.06);
-  align-items:center; justify-content:center; cursor:pointer; flex:0 0 auto;
-}
-.hamburger span{ width:18px; height:2px; background: rgba(255,255,255,.85); position:relative; display:block; border-radius:999px; }
-.hamburger span::before,.hamburger span::after{
-  content:""; position:absolute; left:0; width:18px; height:2px;
-  background: rgba(255,255,255,.85); border-radius:999px;
-}
-.hamburger span::before{ top:-6px; }
-.hamburger span::after{ top:6px; }
-
-@media (max-width: 1100px){
-  .nav-links{ display:none; }
-  .nav-cta .btn:not(.primary){ display:none; }
-  .hamburger{ display:flex; }
-}
-@media (max-width: 640px){
-  .nav-inner{
-    display:grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas: "brand cta" "search search";
-    gap:10px;
-    padding:12px;
-    border-radius: var(--radius2);
-  }
-  .brand{ grid-area: brand; }
-  .nav-cta{ grid-area: cta; justify-content:flex-end; }
-  .search{ grid-area: search; width:100%; max-width:none; min-width:0; }
-  .btn{ padding: 9px 12px; font-size:13px; }
-  .hamburger{ width:40px; height:40px; }
-}
-
-/* HERO / SECTION */
-.hero{ padding:44px 0 26px; }
-.hero-grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap:18px; align-items:stretch; }
-.hero-card{ padding:26px; border-radius: var(--radius2); position:relative; overflow:hidden; }
-.kicker{
-  display:inline-flex; gap:10px; align-items:center;
-  padding:8px 12px; border-radius:999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.05);
-  color: var(--muted); font-weight:900; font-size:13px;
-}
-.dot{ width:8px; height:8px; border-radius:999px; background: rgba(0,255,200,.85); box-shadow: 0 0 22px rgba(0,255,200,.35); }
-h1{ margin:14px 0 10px; font-size: clamp(30px, 4vw, 44px); line-height:1.1; letter-spacing:-0.6px; }
-.sub{ margin:0 0 18px; color: var(--muted); font-size:16px; line-height:1.6; max-width:62ch; }
-.type-cursor{ display:inline-block; margin-left:6px; opacity:.9; animation: blink .8s steps(1) infinite; }
-@keyframes blink{ 50%{opacity:0;} }
-
-/* kunci tinggi judul hero biar gak dorong produk (stop “scroll sendiri”) */
-#beranda .hero-card h1{ min-height: 3.6em; }
-@media (min-width: 900px){
-  #beranda .hero-card h1{ min-height: 2.4em; }
-}
-
-.showcase{ padding:18px; border-radius: var(--radius2); display:flex; flex-direction:column; gap:12px; }
-.badge{
-  display:inline-flex; align-items:center; gap:8px; padding:7px 10px;
-  border-radius:999px; border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04); color: var(--muted);
-  font-weight:900; font-size:12px; width: fit-content;
-}
-.mini{ padding:14px; border-radius:18px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); }
-.mini h3{ margin:0 0 6px; font-size:14px; }
-.mini p{ margin:0; color: var(--muted); font-size:13px; line-height:1.5; }
-
-section{ padding:18px 0 24px; }
-.section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:14px; }
-.section-head h2{ margin:0; font-size:22px; letter-spacing:-.2px; }
-.section-head p{ margin:6px 0 0; color: var(--muted); max-width:64ch; line-height:1.6; font-size:14px; font-weight:700; }
-
-/* Produk grid */
-.grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
-@media (max-width: 980px){
-  .hero-grid{ grid-template-columns: 1fr; }
-  .grid{ grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 720px){
-  .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px; }
-  .card{ min-width:0; }
-}
-@media (max-width: 380px){
-  .grid{ grid-template-columns: 1fr; gap:10px; }
-}
-
-.card{
-  padding:14px; border-radius: var(--radius);
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  transition: transform .22s cubic-bezier(.16,1,.3,1),
-              background .22s ease,
-              border-color .22s ease;
-  position:relative; overflow:hidden;
-  will-change: transform;
-  transform: translateZ(0);
-}
-.card:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
-
-.product-thumb{
-  position:relative; height:150px; border-radius:16px; overflow:hidden;
-  border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); margin-bottom:12px;
-}
-.product-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; }
-.product-thumb::after{
-  content:""; position:absolute; inset:0;
-  background:
-    radial-gradient(700px 220px at 20% 0%, rgba(255,255,255,.18), transparent 55%),
-    linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
-  pointer-events:none; z-index:2;
-}
-.thumb-brand{
-  position:absolute; left:14px; bottom:14px; z-index:3;
-  font-weight:900; letter-spacing:.8px; text-transform: uppercase; font-size: 18px;
-  opacity:.95; text-shadow: 0 12px 30px rgba(0,0,0,.55);
-}
-.stock-badge{
-  position:absolute; top:12px; right:12px; z-index:4;
-  padding:6px 10px; border-radius:10px; font-size:12px; font-weight:900;
-  color:#fff; border:1px solid rgba(255,255,255,.14);
-  background: rgba(34,197,94,.75); box-shadow: 0 10px 26px rgba(0,0,0,.25);
-}
-.stock-badge.habis{ background: rgba(239,68,68,.78); }
-
-.tag{
-  display:inline-flex; align-items:center; padding:6px 10px;
-  border-radius:999px; border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04); color: var(--muted);
-  font-size:12px; font-weight:900; white-space:nowrap;
-}
-.product-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
-.product-sub{ margin:0 0 8px; color: rgba(255,255,255,.72); font-size:12px; font-weight:900; }
-.card h3{ margin:8px 0 6px; font-size:16px; letter-spacing:-.2px; }
-.card p{ margin:0 0 12px; color: var(--muted); font-size:13px; line-height:1.6; }
-
-.price-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-.price{ font-weight:900; letter-spacing:.2px; }
-.tiny{ color: var(--muted); font-size:12px; margin-left:8px; font-weight:800; }
-
-.btn-buy{
-  width:100%; margin-top:12px; border-radius:12px; height:40px;
-  font-weight:900;
-}
-.btn-buy.primaryish{
-  border-color: rgba(29,107,255,.45);
-  background: linear-gradient(180deg, rgba(29,107,255,.95), rgba(11,92,255,.95));
-  box-shadow: 0 14px 40px rgba(29,107,255,.18);
-}
-.btn-buy.out{
-  background: rgba(148,163,184,.18);
-  border-color: rgba(148,163,184,.22);
-  color: rgba(255,255,255,.75);
-}
-
-@media (max-width: 720px){
-  .card{ padding: 12px; border-radius: 16px; }
-  .product-thumb{ height: 128px; border-radius: 14px; }
-  .thumb-brand{ font-size: 14px; left: 12px; bottom: 10px; }
-  .stock-badge{ top: 10px; right: 10px; padding: 5px 8px; font-size: 11px; border-radius: 10px; }
-  .product-sub{ white-space: nowrap; font-size: 11px; }
-  .tag{ font-size: 11px; padding: 5px 8px; }
-  .card h3{ font-size: 14px; line-height: 1.25; }
-  .card p{ font-size: 12px; line-height: 1.55; margin-bottom: 10px; }
-  .price-row > div{
-    display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; min-width:0;
-  }
-  .tiny{ white-space:nowrap; margin-left:0; }
-  .btn-buy{ height: 38px; border-radius: 12px; }
-}
-
-/* MENU OVERLAY (sidebar background) */
-.menu-overlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.55);
-  display: none;
-  z-index: 9998;
-}
-.menu-overlay.show{ display:block; }
-
-/* MODAL */
-.modal-overlay{
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0,0,0,.55);
-  z-index: 9999;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.modal-overlay.show{ display:flex; }
-
-.modal{
-  width: min(560px, 100%);
-  max-height: min(86vh, 720px);
-  border-radius: 18px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  will-change: transform;
-  transform: translateZ(0);
-}
-.modal-header{
-  flex: 0 0 auto;
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-.modal-header h2,
-.modal-header h3{
-  margin:0;
-  font-size:16px;
-  line-height:1.2;
-  letter-spacing:-.2px;
-}
-.modal-close{
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,.9);
-  font-size: 18px;
-  cursor: pointer;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-}
-.modal-close:hover{ background: rgba(255,255,255,.06); }
-
-.modal-body{
-  flex: 1 1 auto;
-  padding: 16px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-}
-.modal-body, .modal-body *{
-  line-height:1.6;
-  letter-spacing:.1px;
-  word-break: break-word;
-}
-.modal-body p{
-  margin: 10px 0;
-  color: rgba(255,255,255,.78);
-  font-size: 14px;
-}
-
-.modal-footer{
-  flex: 0 0 auto;
-  display:flex;
-  gap:10px;
-  padding:10px 12px;
-  justify-content:space-between;
-  align-items:center;
-  padding-bottom: calc(10px + var(--safeBot));
-  border-top: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.modal-footer .btn{
-  flex: 1 1 0;
-  min-height: 42px;
-  padding: 10px 12px;
-  font-size: 13px;
-  border-radius: 14px;
-  white-space: nowrap;
-  line-height: 1;
-}
-#cancelModal{ flex: .9 1 0; }
-#sendBtn{ flex: 1.1 1 0; }
-
-/* Form grid */
-.form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 600px){ .form-grid{ grid-template-columns: 1fr; } }
-
-.field{ margin-top: 12px; }
-.field label{
-  display:block;
-  margin-bottom: 6px;
-  font-size: 13px;
-  font-weight: 900;
-  color: rgba(255,255,255,.82);
-}
-.field input,
-.field textarea,
-.field select{
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.92);
-  outline: none;
-  font: inherit;
-  font-size: 14px;
-  display:block;
-}
-.field input:focus,
-.field textarea:focus,
-.field select:focus{
-  border-color: rgba(255,255,255,.22);
-  box-shadow: 0 0 0 3px rgba(117,83,255,.20);
-}
-.field select{
-  cursor:pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, rgba(255,255,255,.85) 50%),
-    linear-gradient(135deg, rgba(255,255,255,.85) 50%, transparent 50%);
-  background-position:
-    calc(100% - 18px) 50%,
-    calc(100% - 12px) 50%;
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-  padding-right: 38px;
-}
-.field select option{ color:#111; background:#fff; }
-.field input:disabled{
-  opacity: 1;
-  cursor: not-allowed;
-  color: rgba(255,255,255,.82);
-  -webkit-text-fill-color: rgba(255,255,255,.82);
-  background: rgba(255,255,255,.04);
-  border-color: rgba(255,255,255,.10);
-  box-shadow: none;
-}
-.req{ color:#ff6b6b; }
-
-/* RADIO */
-.radio-row{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin-top:6px;
-}
-.radio-item{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  min-height:40px;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-}
-.radio-item input[type="radio"]{
-  width:18px;
-  height:18px;
-  accent-color:#7b5bff;
-}
-.radio-item label{
-  margin:0;
-  font-weight:900;
-  font-size:14px;
-  color:rgba(255,255,255,.86);
-  white-space:nowrap;
-  word-break:normal;
-}
-.radio-item:has(input[type="radio"]:checked){
-  border-color: rgba(117,83,255,.45);
-  background: rgba(117,83,255,.12);
-}
-@media (max-width: 640px){
-  .radio-item{ flex: 0 0 calc(50% - 6px); min-width: 0; justify-content:flex-start; }
-}
-@media (max-width: 380px){
-  .radio-item{ flex: 0 0 100%; }
-}
-
-/* Floating WhatsApp */
-.pk-chat{
-  position: fixed;
-  right: 16px;
-  bottom: calc(16px + var(--safeBot));
-  width: 52px;
-  height: 52px;
-  border-radius: 999px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: #25D366;
-  border: none;
-  box-shadow: 0 16px 40px rgba(0,0,0,.45);
-  z-index: 999;
-  transition: .2s ease;
-}
-.pk-chat:hover{ transform: translateY(-2px); }
-.pk-chat .wa-ico{ width: 26px; height: 26px; color: #fff; }
-
-/* FX Overlay */
-.fx-overlay{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.fx-overlay::before{
-  content:"";
-  position:absolute; inset:-10%;
-  background:
-    radial-gradient(900px 480px at 18% 12%, rgba(117,83,255,.16), transparent 60%),
-    radial-gradient(850px 520px at 82% 18%, rgba(0,210,255,.12), transparent 62%),
-    radial-gradient(900px 620px at 65% 88%, rgba(0,255,200,.10), transparent 62%),
-    radial-gradient(1200px 900px at 50% 50%, rgba(0,0,0,.22), transparent 55%);
-  filter: blur(2px);
-  opacity: .95;
-}
-.fx-shimmer{
-  position:absolute;
-  inset:-40%;
-  background:
-    radial-gradient(closest-side, rgba(255,255,255,.10), transparent 70%),
-    linear-gradient(120deg, transparent 40%, rgba(255,255,255,.06) 50%, transparent 60%);
-  mix-blend-mode: screen;
-  opacity: .55;
-  animation: fxShimmer 12s ease-in-out infinite;
-  will-change: transform;
-}
-@keyframes fxShimmer{
-  0%{ transform: translate3d(-8%, -6%, 0) rotate(0deg); }
-  50%{ transform: translate3d(10%, 6%, 0) rotate(10deg); }
-  100%{ transform: translate3d(-8%, -6%, 0) rotate(0deg); }
-}
-.fx-particles{ position:absolute; inset:0; }
-.fx-p{
-  position:absolute;
-  width: var(--s, 10px);
-  height: var(--s, 10px);
-  border-radius: 999px;
-  left: var(--x, 50%);
-  top: var(--y, 50%);
-  opacity: var(--o, .35);
-  background:
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 55%),
-    radial-gradient(circle at 70% 70%, var(--c, rgba(117,83,255,.25)), rgba(0,0,0,0) 60%);
-  filter: blur(var(--b, 0px));
-  transform: translate3d(0,0,0);
-  animation: fxFloat var(--d, 9s) ease-in-out infinite;
-  will-change: transform, opacity;
-}
-@keyframes fxFloat{
-  0%   { transform: translate3d(0, 0, 0) scale(1); opacity: var(--o, .35); }
-  50%  { transform: translate3d(var(--dx, 14px), var(--dy, -60px), 0) scale(1.08); opacity: calc(var(--o, .35) + .12); }
-  100% { transform: translate3d(0, 0, 0) scale(1); opacity: var(--o, .35); }
-}
-@media (prefers-reduced-motion: reduce){
-  .fx-shimmer, .fx-p{ animation: none !important; }
-}
-
-/* HERO - FLOATING SMALL APP ICONS */
-.hero-card{ position:relative; overflow:hidden; }
-.app-float-wrap{
-  position:absolute;
-  right:16px;
-  top:90px;
-  width:160px;
-  height:140px;
-  pointer-events:none;
-  z-index:1;
-  opacity:.75;
-}
-.hero-card .kicker,
-.hero-card h1,
-.hero-card .sub{ position:relative; z-index:2; }
-.app-float{
-  position:absolute;
-  width:26px; height:26px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.04);
-  display:grid; place-items:center;
-  box-shadow:0 10px 24px rgba(0,0,0,.18);
-  overflow:hidden;
-  will-change:transform,opacity;
-  transform: translateZ(0);
-}
-.app-float img{ width:76%; height:76%; object-fit:contain; display:block; }
-@keyframes appDrift{
-  0%,100%{ transform:translate3d(0,0,0) rotate(var(--rot)); opacity:var(--op); }
-  50%{ transform:translate3d(var(--dx),var(--dy),0) rotate(calc(var(--rot) + 8deg)); opacity:calc(var(--op) - .12); }
-}
-.app-float.a1{ left:92px; top:6px;   --dx:6px;  --dy:-10px; --rot:-10deg; --op:.60; animation:appDrift 4.8s ease-in-out infinite; }
-.app-float.a2{ left:124px;top:26px;  --dx:-8px; --dy:-12px; --rot:10deg;  --op:.52; animation:appDrift 5.6s ease-in-out infinite; }
-.app-float.a3{ left:70px; top:30px;  --dx:8px;  --dy:-10px; --rot:-6deg;  --op:.55; animation:appDrift 4.4s ease-in-out infinite; }
-.app-float.a4{ left:108px;top:56px;  --dx:-6px; --dy:-10px; --rot:12deg;  --op:.48; animation:appDrift 6.0s ease-in-out infinite; }
-.app-float.a5{ left:40px; top:14px;  --dx:7px;  --dy:-12px; --rot:6deg;   --op:.45; animation:appDrift 6.3s ease-in-out infinite; }
-.app-float.a6{ left:18px; top:50px;  --dx:-7px; --dy:-9px;  --rot:-12deg; --op:.42; animation:appDrift 5.0s ease-in-out infinite; }
-.app-float.a7{ left:56px; top:72px;  --dx:6px;  --dy:-10px; --rot:10deg;  --op:.40; animation:appDrift 6.8s ease-in-out infinite; }
-.app-float.a8{ left:132px;top:84px;  --dx:8px;  --dy:-10px; --rot:-8deg;  --op:.38; animation:appDrift 5.2s ease-in-out infinite; }
-@media (max-width:640px){
-  .app-float-wrap{ right:12px; top:110px; width:140px; height:120px; opacity:.85; }
-  .app-float{ width:22px; height:22px; border-radius:8px; }
-}
-@media (prefers-reduced-motion: reduce){ .app-float{ animation:none!important; } }
-
-/* SERVICE + FAQ + FOOTER */
-.service-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
-@media (max-width: 980px){ .service-grid{ grid-template-columns: 1fr; } }
-
-.faq-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
-@media (max-width: 980px){ .faq-grid{ grid-template-columns: 1fr; } }
-
-.faq-item{ padding:0; }
-.faq-btn{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:14px 14px;
-  border-radius: var(--radius);
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  cursor:pointer;
-  font: inherit;
-  color: var(--text);
-  font-weight:900;
-  text-align:left;
-  transition: transform .18s cubic-bezier(.16,1,.3,1),
-              background .18s ease,
-              border-color .18s ease;
-  will-change: transform;
-  transform: translateZ(0);
-}
-.faq-btn:hover{
-  background: rgba(255,255,255,.06);
-  border-color: rgba(255,255,255,.18);
-}
-.faq-ico{
-  width:34px; height:34px;
-  border-radius: 12px;
-  display:grid; place-items:center;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.04);
-  flex:0 0 auto;
-  font-weight:900;
-}
-.faq-panel{
-  display:none;
-  padding: 0 14px 14px 14px;
-  color: var(--muted);
-  line-height:1.65;
-  font-weight:800;
-}
-.faq-item.open .faq-panel{ display:block; }
-.faq-item.open .faq-ico{
-  background: rgba(117,83,255,.14);
-  border-color: rgba(117,83,255,.35);
-}
-
-/* FOOTER */
-.footer-wrap{ margin-top: 28px; padding: 18px; border-radius: var(--radius2); }
-.footer-top{
-  display:grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-  gap:18px;
-  align-items:start;
-}
-@media (max-width: 980px){ .footer-top{ grid-template-columns: 1fr 1fr; } }
-@media (max-width: 640px){ .footer-top{ grid-template-columns: 1fr; gap:14px; } }
-
-.f-brand{ display:flex; gap:12px; align-items:flex-start; }
-.f-logo{
-  width:44px; height:44px;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.16);
-  overflow:hidden;
-  flex:0 0 auto;
-  background: rgba(255,255,255,.06);
-}
-.f-logo img{ width:100%; height:100%; object-fit:cover; display:block; }
-.f-title{ font-weight:900; font-size:18px; margin:0 0 8px; }
-.f-note{ margin:0; color: var(--muted); font-weight:800; font-size:13px; line-height:1.6; }
-
-.f-col h4{
-  margin: 2px 0 10px;
-  font-size:12px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.75);
-  font-weight:900;
-}
-.f-links a{
-  display:block;
-  padding:8px 0;
-  color: rgba(255,255,255,.72);
-  font-weight:900;
-  border-radius: 10px;
-  transition: .2s ease;
-}
-.f-links a:hover{
-  color: var(--text);
-  background: rgba(255,255,255,.05);
-  padding-left: 10px;
-}
-.footer-line{ margin:14px 0; height:1px; background: rgba(255,255,255,.10); }
-.footer-bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  flex-wrap:wrap;
-  color: rgba(255,255,255,.72);
-  font-weight:900;
-}
-.footer-badges{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-.f-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.80);
-  font-weight:900;
-}
-.f-badge span{
-  width:22px; height:22px;
-  border-radius: 8px;
-  display:grid; place-items:center;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-}
-.f-social{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:10px;
-}
-.f-social a{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.85);
-  font-weight:900;
-  transition: transform .18s cubic-bezier(.16,1,.3,1),
-              background .18s ease,
-              border-color .18s ease;
-  min-height:44px;
-  will-change: transform;
-  transform: translateZ(0);
-}
-.f-social a:hover{
-  transform: translateY(-1px);
-  background: rgba(255,255,255,.06);
-  border-color: rgba(255,255,255,.18);
-  color: var(--text);
-}
-.f-social .ico{ width:28px; height:28px; border-radius:10px; overflow:hidden; display:grid; place-items:center; }
-.f-social .ico img{ width:100%; height:100%; object-fit: contain; display:block; }
-@media (max-width: 360px){ .f-social{ grid-template-columns: 1fr; } }
-
-/* SIDEBAR */
-#mobileMenu{
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: min(360px, 88vw);
-  height: 100vh;
-  z-index: 9999;
-
-  background: rgba(8, 10, 22, .48);
-  -webkit-backdrop-filter: blur(20px) saturate(155%);
-  backdrop-filter: blur(20px) saturate(155%);
-
-  border-left: 1px solid rgba(255,255,255,.14);
-  box-shadow: -22px 0 80px rgba(0,0,0,.72);
-
-  padding: 14px;
-  padding-top: calc(14px + var(--safeTop));
-  padding-bottom: calc(14px + var(--safeBot));
-  border-radius: 0;
-
-  transform: translateX(112%);
-  transition: transform .32s cubic-bezier(.16,1,.3,1);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-
-  will-change: transform;
-  transform: translateX(112%) translateZ(0);
-}
-#mobileMenu::before{
-  content:"";
-  position:absolute;
-  inset:-25%;
-  pointer-events:none;
-  background:
-    radial-gradient(620px 380px at 18% 16%, rgba(117,83,255,.26), transparent 62%),
-    radial-gradient(560px 360px at 92% 22%, rgba(0,210,255,.18), transparent 64%),
-    radial-gradient(560px 420px at 70% 92%, rgba(0,255,200,.12), transparent 66%),
-    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0));
-  opacity: .9;
-  filter: blur(2px);
-}
-#mobileMenu::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%, rgba(0,0,0,.10));
-  opacity:.55;
-}
-#mobileMenu > *{ position:relative; z-index:1; }
-#mobileMenu.open{ transform: translateX(0) translateZ(0); }
-
-#mobileMenu .mobile-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding: 10px 10px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-#mobileMenu .mobile-title{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight: 900;
-  font-size: 16px;
-  letter-spacing: -.2px;
-  color: rgba(255,255,255,.92);
-  text-shadow: 0 10px 28px rgba(0,0,0,.35);
-}
-#mobileMenu .mobile-close{
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.92);
-  font-size: 20px;
-  cursor:pointer;
-  transition: .2s ease;
-}
-#mobileMenu .mobile-close:hover{
-  background: rgba(255,255,255,.10);
-  transform: translateY(-1px);
-}
-#mobileMenu .mobile-links{
-  padding: 8px 6px;
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-#mobileMenu .mobile-links a{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding: 14px 14px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.12);
-  color: rgba(255,255,255,.92);
-  font-weight: 900;
-  font-size: 15px;
-  letter-spacing: -.1px;
-  transition: transform .18s cubic-bezier(.16,1,.3,1),
-              background .18s ease,
-              border-color .18s ease;
-  position:relative;
-  overflow:hidden;
-  -webkit-tap-highlight-color: transparent;
-  will-change: transform;
-  transform: translateZ(0);
-}
-#mobileMenu .mobile-links a::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:
-    radial-gradient(260px 140px at 0% 50%, rgba(117,83,255,.22), transparent 55%),
-    radial-gradient(260px 140px at 100% 50%, rgba(0,210,255,.16), transparent 55%);
-  opacity: .22;
-  transition: opacity .2s ease;
-}
-#mobileMenu .mobile-links a span{ position:relative; z-index:1; }
-#mobileMenu .mobile-links a .arrow{
-  width: 36px;
-  height: 36px;
-  border-radius: 14px;
-  display:grid;
-  place-items:center;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.12);
-  color: rgba(255,255,255,.92);
-  font-weight: 900;
-  line-height: 1;
-  opacity:.95;
-  transform: translateX(0);
-  transition: transform .2s ease, background .2s ease, border-color .2s ease;
-}
-#mobileMenu .mobile-links a:hover{
-  transform: translateY(-1px);
-  border-color: rgba(255,255,255,.18);
-  background: rgba(255,255,255,.07);
-}
-#mobileMenu .mobile-links a:hover::before{ opacity: .9; }
-#mobileMenu .mobile-links a:hover .arrow{
-  transform: translateX(2px);
-  background: rgba(255,255,255,.06);
-  border-color: rgba(255,255,255,.18);
-}
-#mobileMenu .mobile-actions{
-  padding: 12px 6px 6px;
-  border-top: 1px solid rgba(255,255,255,.10);
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-#mobileMenu .mobile-actions .btn{
-  width: 100%;
-  border-radius: 16px;
-  min-height: 46px;
-  justify-content:center;
-  font-weight: 900;
-}
-#mobileMenu .mobile-actions .btn.primary{
-  border-color: rgba(117,83,255,.55);
-  background: linear-gradient(135deg, rgba(117,83,255,.36), rgba(0,210,255,.22));
-  box-shadow: 0 16px 50px rgba(117,83,255,.20);
-}
-
-/* QRIS OVERLAY */
-.qris-view{
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0,0,0,.65);
-  z-index: 10000;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.qris-view.show{ display:flex; }
-.qris-box{
-  position: relative;
-  width: min(520px, 100%);
-  border-radius: 18px;
-  padding: 12px;
-  overflow: hidden;
-}
-.qris-x{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(0,0,0,.35);
-  color: rgba(255,255,255,.92);
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-}
-.qris-x:hover{ background: rgba(255,255,255,.08); }
-.qris-img-big{
-  width: 100%;
-  height: auto;
-  display:block;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.03);
-}
-
-/* biar card ga ketutup tombol WA */
-main.container{ padding-bottom: 90px; }
-
-/* ===== PERF MOBILE (tetap ada overlay & icon, tapi lebih ringan) ===== */
-@media (max-width: 768px){
-  /* background anim besar sering bikin “ngerem” */
-  body{ animation: none !important; }
-
-  /* shimmer saja dimatikan, overlay + partikel tetap ada */
-  .fx-shimmer{ animation: none !important; }
-
-  /* blur fixed/sticky bisa bikin stutter -> matikan, ganti solid */
-  .glass, .nav-inner, .modal-overlay, .modal, .modal-footer, #mobileMenu, .qris-view, .qris-box{
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-  }
-  .glass, .nav-inner{ background: rgba(10,14,30,.82) !important; }
-
-  #mobileMenu{ background: rgba(8,10,22,.92) !important; }
-
-  /* kurangi hover transform (mobile gak perlu) */
-  .card:hover, .btn:hover, .faq-btn:hover, .f-social a:hover{ transform:none !important; }
-
-  /* kurangi will-change */
-  .card, .btn, .faq-btn, #mobileMenu, .modal{ will-change: auto !important; }
-}
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce){
-  *{ animation: none !important; transition: none !important; scroll-behavior:auto !important; }
-}
-/* ===== LOADING sebelum QRIS muncul ===== */
-.loading-view{
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0,0,0,.65);
-  z-index: 10020; /* di atas modal */
-}
-.loading-view.show{ display:flex; }
-
-.loading-card{
-  width: min(380px, 100%);
-  padding: 18px 16px;
-  border-radius: 18px;
-  text-align: center;
-}
-
-.loading-spinner{
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
-  border: 4px solid rgba(255,255,255,.18);
-  border-top-color: rgba(117,83,255,.95);
-  animation: spin .8s linear infinite;
-  margin: 0 auto 12px;
-}
-@keyframes spin{ to{ transform: rotate(360deg); } }
-
-.loading-title{
-  margin: 0 0 4px;
-  font-weight: 900;
-}
-.loading-sub{
-  margin: 0;
-  color: rgba(255,255,255,.72);
-  font-weight: 800;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-/* ===== LOADING di tombol "Lanjut Pembayaran" ===== */
-.btn.is-loading{
-  pointer-events: none;
-  opacity: .9;
-}
-.btn .btn-spin{
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  border: 3px solid rgba(255,255,255,.25);
-  border-top-color: rgba(255,255,255,.92);
-  animation: spin .7s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce){
-  .loading-spinner,
-  .btn .btn-spin{ animation:none !important; }
-}
-
-/* ===== RAPihin GRID PRODUK di MOBILE ===== */
-@media (max-width: 640px){
-
-  /* 1) Grid 2 kolom rapih */
-  .products-grid, .grid-products, #productsGrid{
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 14px !important;
-    align-items: stretch !important;
-  }
-
-  /* 2) Card dibuat flex kolom biar tombol bisa “nempel bawah” */
-  .product-card, .card, .product{
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-  }
-
-  /* 3) Thumbnail gambar konsisten (biar tinggi gambar sama) */
-  .product-thumb, .thumb, .cover{
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    border-radius: 16px;
-  }
-  .product-thumb img, .thumb img, .cover img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-@media (max-width: 640px){
-
-  /* gambar (punyamu sekarang cuma display:block, tambah ini biar aman) */
-  .product-thumb img, .thumb img, .cover img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  /* Judul: batasi 2 baris (tanpa webkit) */
-  #productsGrid h3,
-  .products-grid h3,
-  .grid-products h3,
-  .product-grid h3{
-    line-height: 1.25;
-    max-height: calc(1.25em * 2); /* 2 baris */
-    overflow: hidden;
-  }
-
-  /* Deskripsi: batasi 3 baris (tanpa webkit) */
-  #productsGrid p,
-  .products-grid p,
-  .grid-products p,
-  .product-grid p{
-    line-height: 1.35;
-    max-height: calc(1.35em * 3); /* 3 baris */
-    overflow: hidden;
-  }
-}
-
-
-
-  /* 5) Dorong bagian aksi (harga/detail/beli) ke bawah */
-  .product-bottom, .actions, .card-actions{
-    margin-top: auto !important;
-  }
-
-  /* 6) Tombol beli full lebar biar konsisten */
-  .buy-btn, .btn-buy, .primary{
-    width: 100% !important;
-  }
-
-  /* 7) Kasih ruang bawah supaya tidak ketiban tombol WA */
-  .products-wrap, .products, main{
-    padding-bottom: 92px !important;
-  }
-}
-
-/* ===== posisi tombol WA biar tidak nutup tombol beli ===== */
-.wa-float, .whatsapp-float, .waButton, .float-wa{
-  bottom: 18px !important;     /* naikin dikit */
-  right: 16px !important;
-}
-
-
-</style>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg0: #070913;
+      --bg1: #0b1024;
+      --stroke: rgba(255, 255, 255, .14);
+      --text: rgba(255, 255, 255, .92);
+      --muted: rgba(255, 255, 255, .68);
+      --shadow: 0 18px 52px rgba(0, 0, 0, .42);
+      --glow1: rgba(117, 83, 255, .35);
+      --glow2: rgba(0, 255, 200, .18);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1120px;
+      --safeTop: env(safe-area-inset-top, 0px);
+      --safeBot: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* SUPER PREMIUM LIGHT MODE - CLOUD SILVER & LAVENDER */
+    .light-mode {
+      --bg0: #f8fafc;
+      --bg1: #eff3f9;
+      --stroke: rgba(0, 40, 100, .08);
+      --text: #1e293b;
+      --muted: #64748b;
+      --shadow: 0 20px 50px rgba(148, 163, 184, .25);
+      --glow1: rgba(99, 102, 241, .06);
+      --glow2: rgba(45, 212, 191, .04);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg0);
+      /* anti putih-putih */
+      height: 100%;
+      scroll-behavior: auto !important;
+      /* biar JS yang handle */
+      -webkit-text-size-adjust: 100%;
+      text-rendering: optimizeLegibility;
+      overflow-anchor: none;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background-color: var(--bg0);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, var(--glow1), transparent 55%),
+        radial-gradient(900px 600px at 85% 15%, rgba(0, 210, 255, .20), transparent 55%),
+        radial-gradient(800px 600px at 70% 85%, var(--glow2), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      touch-action: manipulation;
+      transition: background-color .4s ease, color .4s ease;
+    }
+
+    body.light-mode {
+      background:
+        radial-gradient(1200px 700px at 15% 10%, var(--glow1), transparent 55%),
+        radial-gradient(900px 600px at 85% 15%, rgba(0, 210, 255, .10), transparent 55%),
+        radial-gradient(800px 600px at 70% 85%, var(--glow2), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+
+    html,
+    body {
+      overscroll-behavior-y: none;
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      html {
+        height: -webkit-fill-available;
+      }
+
+      body {
+        min-height: -webkit-fill-available;
+      }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a,
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(var(--max), calc(100% - 24px));
+      }
+    }
+
+    .glass {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .05));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
+    }
+
+    body.light-mode .glass {
+      background: rgba(255, 255, 255, 0.75);
+      border-color: rgba(255, 255, 255, 1);
+      box-shadow: 0 15px 35px rgba(148, 163, 184, 0.15);
+      backdrop-filter: blur(20px);
+    }
+
+    /* Spesifik Card di Light Mode agar mewah */
+    body.light-mode .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03);
+    }
+
+    body.light-mode .card:hover {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Glow & FX Light Mode (Bersih) */
+    body.light-mode .fx-overlay::before {
+      opacity: 0.08;
+    }
+
+    body.light-mode .fx-shimmer {
+      opacity: 0.04;
+    }
+
+    body.light-mode .fx-p {
+      opacity: 0.02 !important;
+    }
+
+    /* Glow & FX Light Mode (Bersih) */
+    body.light-mode .fx-overlay::before {
+      opacity: 0.1;
+      background: radial-gradient(1200px 900px at 50% 50%, rgba(255, 255, 255, 1), transparent 70%);
+    }
+
+    body.light-mode .fx-shimmer {
+      opacity: 0.04;
+    }
+
+    body.light-mode .fx-p {
+      opacity: 0.02 !important;
+    }
+
+    /* Label produk di Light Mode */
+    body.light-mode .card h3 {
+      color: #0f172a;
+    }
+
+    body.light-mode .card p {
+      color: #475569;
+    }
+
+    body.light-mode .product-sub {
+      color: #64748b;
+    }
+
+    body.light-mode .tag {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+      color: #475569;
+    }
+
+    body.light-mode .price {
+      color: #4f46e5;
+    }
+
+    body.light-mode .tiny {
+      color: #94a3b8;
+    }
+
+    body.light-mode .thumb-brand {
+      color: #ffffff;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Search & Nav Light Mode */
+    body.light-mode .nav-inner {
+      background: rgba(255, 255, 255, 0.8);
+      border-color: rgba(0, 0, 0, 0.05);
+    }
+
+    body.light-mode .brand-name {
+      color: #0f172a;
+    }
+
+    body.light-mode .nav-links a {
+      color: #475569;
+    }
+
+    body.light-mode .nav-links a.active {
+      color: #4f46e5;
+      background: #eef2ff;
+    }
+
+    body.light-mode .search {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+    }
+
+    body.light-mode .search:focus-within {
+      background: #ffffff;
+      border-color: #6366f1;
+      box-shadow: 0 8px 24px rgba(160, 175, 210, 0.2);
+    }
+
+    body.light-mode .search input {
+      background: transparent;
+      color: #0f172a;
+      border: 0;
+    }
+
+    body.light-mode .search input::placeholder {
+      color: #94a3b8;
+    }
+
+    body.light-mode .section-head h2 {
+      color: #0f172a;
+    }
+
+    /* Stock Banner Light Mode */
+    body.light-mode .stock-banner {
+      background: #ffffff;
+      border-color: #e2e8f0;
+    }
+
+    body.light-mode .stock-text {
+      color: #000000;
+      text-shadow: none;
+    }
+
+    /* FAQ & Service Light Mode */
+    body.light-mode .faq-item {
+      background: #ffffff;
+      border-color: #e2e8f0;
+    }
+
+    body.light-mode .faq-btn {
+      color: #0f172a;
+    }
+
+    body.light-mode .faq-panel {
+      color: #475569;
+    }
+
+    body.light-mode .hero-card {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    body.light-mode .hero-card h1 {
+      color: #0f172a;
+    }
+
+    body.light-mode .hero-card .sub {
+      color: #475569;
+    }
+
+    body.light-mode .kicker {
+      background: #fff;
+      border-color: #e2e8f0;
+      color: #475569;
+    }
+
+    /* Sidebar Light Mode */
+    body.light-mode #mobileMenu {
+      background: #f8fafc;
+      border-left-color: #e2e8f0;
+    }
+
+    body.light-mode .mobile-head {
+      border-bottom-color: #e2e8f0;
+    }
+
+    body.light-mode .mobile-title {
+      color: #0f172a;
+    }
+
+    body.light-mode .mobile-links a {
+      background: #fff;
+      border-color: #e2e8f0;
+      color: #475569;
+    }
+
+    body.light-mode .mobile-close {
+      background: #fff;
+      border-color: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* Footer Light Mode - Visibilitas Teks */
+    body.light-mode .f-title {
+      color: #0f172a;
+    }
+
+    body.light-mode .f-note {
+      color: #64748b;
+    }
+
+    body.light-mode .f-col h4 {
+      color: #94a3b8;
+    }
+
+    body.light-mode .f-links a {
+      color: #475569;
+    }
+
+    body.light-mode .f-links a:hover {
+      color: #6366f1;
+      background: #f1f5f9;
+    }
+
+    body.light-mode .footer-line {
+      background: #e2e8f0;
+    }
+
+    body.light-mode .footer-bottom {
+      color: #64748b;
+    }
+
+    body.light-mode .f-badge {
+      background: #fff;
+      border-color: #e2e8f0;
+      color: #475569;
+    }
+
+    body.light-mode .f-badge span {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    body.light-mode .f-social a {
+      background: #fff;
+      border-color: #e2e8f0;
+      color: #475569;
+    }
+
+    body.light-mode .f-social a:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(160, 175, 210, 0.1);
+    }
+
+    body.light-mode .f-logo {
+      background: #fff;
+      border-color: #e2e8f0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, .06);
+      color: var(--text);
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      transition: transform .18s cubic-bezier(.16, 1, .3, 1), background .18s ease, border-color .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, .12);
+      border-color: rgba(255, 255, 255, .25);
+    }
+
+    body.light-mode .btn {
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(160, 175, 210, .15);
+    }
+
+    body.light-mode .btn:hover {
+      background: #fcfcfd;
+      border-color: rgba(0, 0, 0, .15);
+    }
+
+    .btn.primary {
+      border-color: rgba(117, 83, 255, .45);
+      background: linear-gradient(135deg, rgba(117, 83, 255, .32), rgba(0, 210, 255, .18));
+      box-shadow: 0 14px 40px rgba(117, 83, 255, .18);
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* NAV */
+    header {
+      position: relative;
+      z-index: 5;
+    }
+
+    .nav {
+      position: sticky;
+      top: calc(14px + var(--safeTop));
+      z-index: 50;
+      margin-top: 14px;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      min-width: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 6px;
+      font-weight: 900;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .brand-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .logo-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      overflow: hidden;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 255, 255, .18);
+      box-shadow: 0 12px 30px rgba(117, 83, 255, .25);
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .nav-links a {
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: .2s ease;
+      font-weight: 900;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, .06);
+      border-color: rgba(255, 255, 255, .10);
+    }
+
+    .nav-links a.active {
+      color: var(--text);
+      background: rgba(255, 255, 255, .08);
+      border-color: rgba(117, 83, 255, .35);
+      box-shadow: 0 10px 26px rgba(117, 83, 255, .16);
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .05);
+      width: clamp(160px, 22vw, 280px);
+      max-width: 280px;
+      min-width: 160px;
+      flex: 0 1 auto;
+      transition: all .25s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .search:focus-within {
+      background: rgba(255, 255, 255, .08);
+      border-color: rgba(117, 83, 255, .4);
+      box-shadow: 0 0 20px rgba(117, 83, 255, .15);
+      width: clamp(180px, 25vw, 320px);
+    }
+
+    .s-icon {
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      opacity: .7;
+    }
+
+    .search input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      padding: 0;
+    }
+
+    .search input::placeholder {
+      color: var(--muted);
+      opacity: .6;
+    }
+
+    .search .s-clear {
+      border: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, .8);
+      cursor: pointer;
+      padding: 0 6px;
+      display: none;
+      font-weight: 900;
+    }
+
+    .search.has-value .s-clear {
+      display: block;
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    .hamburger {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(255, 255, 255, .06);
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .hamburger span {
+      width: 18px;
+      height: 2px;
+      background: rgba(255, 255, 255, .85);
+      position: relative;
+      display: block;
+      border-radius: 999px;
+    }
+
+    .hamburger span::before,
+    .hamburger span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: rgba(255, 255, 255, .85);
+      border-radius: 999px;
+    }
+
+    .hamburger span::before {
+      top: -6px;
+    }
+
+    .hamburger span::after {
+      top: 6px;
+    }
+
+    @media (max-width: 1100px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-cta .btn:not(.primary) {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "brand cta" "search search";
+        gap: 10px;
+        padding: 12px;
+        border-radius: var(--radius2);
+      }
+
+      .brand {
+        grid-area: brand;
+      }
+
+      .nav-cta {
+        grid-area: cta;
+        justify-content: flex-end;
+      }
+
+      .search {
+        grid-area: search;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+      }
+
+      .btn {
+        padding: 9px 12px;
+        font-size: 13px;
+      }
+
+      .hamburger {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* HERO */
+    main {
+      position: relative;
+      z-index: 1;
+      padding-bottom: 90px;
+    }
+
+    /* biar gak ketutup tombol WA */
+    .hero {
+      padding: 44px 0 22px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .hero-card {
+      padding: 26px;
+      border-radius: var(--radius2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kicker {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(255, 255, 255, .05);
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(0, 255, 200, .85);
+      box-shadow: 0 0 22px rgba(0, 255, 200, .35);
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.1;
+      letter-spacing: -0.6px;
+    }
+
+    .sub {
+      margin: 0 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 72ch;
+    }
+
+    .type-cursor {
+      display: inline-block;
+      margin-left: 6px;
+      opacity: .9;
+      animation: blink .8s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* kunci tinggi H1 supaya typing gak dorong layout */
+    #beranda .hero-card h1 {
+      min-height: 2.25em;
+    }
+
+    @media (min-width: 1100px) {
+      #beranda .hero-card h1 {
+        min-height: 1.25em;
+      }
+    }
+
+    .app-float-wrap {
+      position: absolute;
+      right: 14px;
+      top: 86px;
+      width: 160px;
+      height: 140px;
+      pointer-events: none;
+      z-index: 1;
+      opacity: .78;
+    }
+
+    .hero-card .kicker,
+    .hero-card h1,
+    .hero-card .sub {
+      position: relative;
+      z-index: 2;
+    }
+
+    .app-float {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+      overflow: hidden;
+    }
+
+    .app-float img {
+      width: 76%;
+      height: 76%;
+      object-fit: contain;
+      display: block;
+    }
+
+    @keyframes appDrift {
+
+      0%,
+      100% {
+        transform: translate3d(0, 0, 0) rotate(var(--rot));
+        opacity: var(--op);
+      }
+
+      50% {
+        transform: translate3d(var(--dx), var(--dy), 0) rotate(calc(var(--rot) + 8deg));
+        opacity: calc(var(--op) - .12);
+      }
+    }
+
+    .app-float.a1 {
+      left: 92px;
+      top: 6px;
+      --dx: 6px;
+      --dy: -10px;
+      --rot: -10deg;
+      --op: .60;
+      animation: appDrift 4.8s ease-in-out infinite;
+    }
+
+    .app-float.a2 {
+      left: 124px;
+      top: 26px;
+      --dx: -8px;
+      --dy: -12px;
+      --rot: 10deg;
+      --op: .52;
+      animation: appDrift 5.6s ease-in-out infinite;
+    }
+
+    .app-float.a3 {
+      left: 70px;
+      top: 30px;
+      --dx: 8px;
+      --dy: -10px;
+      --rot: -6deg;
+      --op: .55;
+      animation: appDrift 4.4s ease-in-out infinite;
+    }
+
+    .app-float.a4 {
+      left: 108px;
+      top: 56px;
+      --dx: -6px;
+      --dy: -10px;
+      --rot: 12deg;
+      --op: .48;
+      animation: appDrift 6.0s ease-in-out infinite;
+    }
+
+    .app-float.a5 {
+      left: 40px;
+      top: 14px;
+      --dx: 7px;
+      --dy: -12px;
+      --rot: 6deg;
+      --op: .45;
+      animation: appDrift 6.3s ease-in-out infinite;
+    }
+
+    .app-float.a6 {
+      left: 18px;
+      top: 50px;
+      --dx: -7px;
+      --dy: -9px;
+      --rot: -12deg;
+      --op: .42;
+      animation: appDrift 5.0s ease-in-out infinite;
+    }
+
+    .app-float.a7 {
+      left: 56px;
+      top: 72px;
+      --dx: 6px;
+      --dy: -10px;
+      --rot: 10deg;
+      --op: .40;
+      animation: appDrift 6.8s ease-in-out infinite;
+    }
+
+    .app-float.a8 {
+      left: 132px;
+      top: 84px;
+      --dx: 8px;
+      --dy: -10px;
+      --rot: -8deg;
+      --op: .38;
+      animation: appDrift 5.2s ease-in-out infinite;
+    }
+
+    @media (max-width:640px) {
+      .hero {
+        padding: 34px 0 18px;
+      }
+
+      .hero-card {
+        padding: 18px 16px;
+        border-radius: 22px;
+      }
+
+      #beranda h1 {
+        font-size: 30px;
+        line-height: 1.12;
+        margin: 10px 0 8px;
+      }
+
+      .sub {
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .app-float-wrap {
+        top: 92px;
+        right: 10px;
+        width: 120px;
+        height: 110px;
+        opacity: .70;
+      }
+
+      .app-float {
+        width: 20px;
+        height: 20px;
+        border-radius: 8px;
+      }
+    }
+
+    /* Section */
+    section {
+      padding: 18px 0 24px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -.2px;
+    }
+
+    @media (max-width: 720px) {
+      .section-head h2 {
+        font-size: 18px;
+      }
+
+      .section-head .btn {
+        height: 38px;
+        padding: 9px 12px;
+      }
+    }
+
+    /* ===== STOCK RUNNING TEXT (CENTER START) ===== */
+    .stock-banner {
+      width: min(780px, calc(100% - 32px));
+      /* banner di tengah */
+      margin: 18px auto 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: linear-gradient(90deg, rgba(117, 83, 255, .18), rgba(0, 255, 200, .10));
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .40);
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    }
+
+    .stock-track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      gap: 48px;
+      will-change: transform;
+      animation: stockMarquee var(--marquee-dur, 12s) linear infinite;
+    }
+
+    .stock-text {
+      font-family: "Space Grotesk", "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: .2px;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, .95);
+      text-shadow: 0 10px 28px rgba(0, 0, 0, .45);
+    }
+
+    @media (max-width: 520px) {
+      .stock-text {
+        font-size: 15.5px;
+      }
+    }
+
+    /* START dari tengah dengan --start */
+    @keyframes stockMarquee {
+      from {
+        transform: translateX(var(--start, 0px));
+      }
+
+      to {
+        transform: translateX(calc(var(--start, 0px) - var(--marquee-dist, 420px)));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .stock-track {
+        animation: none;
+      }
+    }
+
+    /* ===== /STOCK RUNNING TEXT ===== */
+    /* Produk grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      padding: 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, .04);
+      transition: transform .18s cubic-bezier(.16, 1, .3, 1), background .18s ease, border-color .18s ease, box-shadow .18s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    body.light-mode .card {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, .04);
+      box-shadow: 0 4px 20px rgba(160, 175, 210, .1);
+    }
+
+    #productGrid .card {
+      animation: cardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, .18);
+      background: rgba(255, 255, 255, .06);
+    }
+
+    body.light-mode .card:hover {
+      background: #fff;
+      border-color: rgba(0, 0, 0, .08);
+      box-shadow: 0 12px 36px rgba(160, 175, 210, .25);
+    }
+
+    .product-thumb {
+      position: relative;
+      height: 150px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, .03);
+      margin-bottom: 12px;
+    }
+
+    .product-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-thumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(700px 220px at 20% 0%, rgba(255, 255, 255, .18), transparent 55%),
+        linear-gradient(180deg, rgba(0, 0, 0, .25), rgba(0, 0, 0, .55));
+      pointer-events: none;
+    }
+
+    .thumb-brand {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 2;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      font-size: 18px;
+      opacity: .95;
+      text-shadow: 0 12px 30px rgba(0, 0, 0, .55);
+    }
+
+    .stock-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(34, 197, 94, .75);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .25);
+    }
+
+    .stock-badge.habis {
+      background: rgba(239, 68, 68, .78);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .product-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .product-sub {
+      margin: 0 0 8px;
+      color: rgba(255, 255, 255, .72);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .card h3 {
+      margin: 8px 0 6px;
+      font-size: 16px;
+      letter-spacing: -.2px;
+      line-height: 1.25;
+      max-height: calc(1.25em * 2);
+      overflow: hidden;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      max-height: calc(1.55em * 3);
+      overflow: hidden;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .price {
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+
+    .tiny {
+      color: var(--muted);
+      font-size: 12px;
+      margin-left: 8px;
+      font-weight: 800;
+    }
+
+    .btn-buy {
+      width: 100%;
+      margin-top: 12px;
+      border-radius: 12px;
+      height: 40px;
+      font-weight: 900;
+    }
+
+    .btn-buy.primaryish {
+      border-color: rgba(29, 107, 255, .45);
+      background: linear-gradient(180deg, rgba(29, 107, 255, .95), rgba(11, 92, 255, .95));
+      box-shadow: 0 14px 40px rgba(29, 107, 255, .18);
+    }
+
+    .btn-buy.out {
+      background: rgba(148, 163, 184, .18);
+      border-color: rgba(148, 163, 184, .22);
+      color: rgba(255, 255, 255, .75);
+    }
+
+    @media (max-width: 720px) {
+      .card {
+        padding: 12px;
+        border-radius: 16px;
+      }
+
+      .product-thumb {
+        height: 120px;
+        border-radius: 14px;
+      }
+
+      .thumb-brand {
+        font-size: 13px;
+        left: 12px;
+        bottom: 10px;
+      }
+
+      .stock-badge {
+        top: 10px;
+        right: 10px;
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+
+      .tag {
+        font-size: 11px;
+        padding: 5px 8px;
+      }
+
+      .card h3 {
+        font-size: 14px;
+      }
+
+      .card p {
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+
+      .tiny {
+        margin-left: 0;
+      }
+
+      .btn-buy {
+        height: 38px;
+      }
+    }
+
+    .grid-empty {
+      grid-column: 1 / -1;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+      color: rgba(255, 255, 255, .80);
+      font-weight: 900;
+    }
+
+    /* Sidebar overlay */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .55);
+      display: none;
+      z-index: 9998;
+    }
+
+    .menu-overlay.show {
+      display: block;
+    }
+
+    /* Sidebar */
+    #mobileMenu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(360px, 88vw);
+      height: 100vh;
+      z-index: 9999;
+      background: rgba(8, 10, 22, .48);
+      -webkit-backdrop-filter: blur(20px) saturate(155%);
+      backdrop-filter: blur(20px) saturate(155%);
+      border-left: 1px solid rgba(255, 255, 255, .14);
+      box-shadow: -22px 0 80px rgba(0, 0, 0, .72);
+      padding: 14px;
+      padding-top: calc(14px + var(--safeTop));
+      padding-bottom: calc(14px + var(--safeBot));
+      transform: translateX(112%);
+      transition: transform .32s cubic-bezier(.16, 1, .3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    #mobileMenu.open {
+      transform: translateX(0);
+    }
+
+    #mobileMenu .mobile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, .10);
+    }
+
+    #mobileMenu .mobile-title {
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    #mobileMenu .mobile-close {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .92);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    #mobileMenu .mobile-links {
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #mobileMenu .mobile-links a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .12);
+      color: rgba(255, 255, 255, .92);
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    #mobileMenu .mobile-links a.active {
+      border-color: rgba(117, 83, 255, .35);
+      background: rgba(117, 83, 255, .10);
+    }
+
+    #mobileMenu .mobile-links a .arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(0, 0, 0, .12);
+    }
+
+    #mobileMenu .mobile-actions {
+      padding: 12px 6px 6px;
+      border-top: 1px solid rgba(255, 255, 255, .10);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #mobileMenu .mobile-actions .btn {
+      width: 100%;
+      border-radius: 16px;
+      min-height: 46px;
+    }
+
+    /* FAQ */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .faq-item {
+      padding: 0;
+    }
+
+    .faq-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+      cursor: pointer;
+      font: inherit;
+      color: var(--text);
+      font-weight: 900;
+      text-align: left;
+    }
+
+    .faq-ico {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(255, 255, 255, .04);
+      flex: 0 0 auto;
+      font-weight: 900;
+    }
+
+    .faq-panel {
+      display: none;
+      padding: 0 14px 14px 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 800;
+    }
+
+    .faq-item.open .faq-panel {
+      display: block;
+    }
+
+    .faq-item.open .faq-ico {
+      background: rgba(117, 83, 255, .14);
+      border-color: rgba(117, 83, 255, .35);
+    }
+
+    /* Footer */
+    .footer-wrap {
+      margin-top: 28px;
+      padding: 18px;
+      border-radius: var(--radius2);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .footer-top {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    .f-brand {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .f-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      overflow: hidden;
+      flex: 0 0 auto;
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .f-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .f-title {
+      font-weight: 900;
+      font-size: 18px;
+      margin: 0 0 8px;
+    }
+
+    .f-note {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .f-col h4 {
+      margin: 2px 0 10px;
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .75);
+      font-weight: 900;
+    }
+
+    .f-links a {
+      display: block;
+      padding: 8px 0;
+      color: rgba(255, 255, 255, .72);
+      font-weight: 900;
+      border-radius: 10px;
+    }
+
+    .f-links a:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, .05);
+      padding-left: 10px;
+      transition: .2s ease;
+    }
+
+    .footer-line {
+      margin: 14px 0;
+      height: 1px;
+      background: rgba(255, 255, 255, .10);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      color: rgba(255, 255, 255, .72);
+      font-weight: 900;
+    }
+
+    .footer-badges {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .f-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+      color: rgba(255, 255, 255, .80);
+      font-weight: 900;
+    }
+
+    .f-badge span {
+      width: 22px;
+      height: 22px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .f-social {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 360px) {
+      .f-social {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .f-social a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+      color: rgba(255, 255, 255, .85);
+      font-weight: 900;
+      min-height: 44px;
+    }
+
+    .f-social .ico {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+
+    .f-social .ico img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .f-social .ico.wa {
+      background: #25D366;
+      color: #fff;
+    }
+
+    .f-social .ico.tg {
+      background: #229ED9;
+      color: #fff;
+    }
+
+    .f-social .ico svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    /* Floating WhatsApp */
+    .pk-chat {
+      position: fixed;
+      right: 16px;
+      bottom: calc(16px + var(--safeBot));
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #25D366;
+      border: none;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
+      z-index: 999;
+      transition: transform .18s ease;
+    }
+
+    .pk-chat:hover {
+      transform: translateY(-2px);
+    }
+
+    .pk-chat .wa-ico {
+      width: 26px;
+      height: 26px;
+      color: #fff;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(0, 0, 0, .55);
+      z-index: 9999;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(560px, 100%);
+      max-height: min(86vh, 720px);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, .10);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+      letter-spacing: -.2px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, .9);
+      font-size: 18px;
+      cursor: pointer;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .modal-body {
+      padding: 16px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      padding: 10px 12px;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: calc(10px + var(--safeBot));
+      border-top: 1px solid rgba(255, 255, 255, .10);
+      background: rgba(0, 0, 0, .18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .modal-footer .btn {
+      flex: 1 1 0;
+      min-height: 42px;
+      padding: 10px 12px;
+      font-size: 13px;
+      border-radius: 14px;
+      line-height: 1;
+    }
+
+    /* Form */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      margin-top: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, .82);
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .92);
+      outline: none;
+      font: inherit;
+      font-size: 14px;
+      display: block;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: rgba(255, 255, 255, .22);
+      box-shadow: 0 0 0 3px rgba(117, 83, 255, .20);
+    }
+
+    .field select {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, .85) 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, .85) 50%, transparent 50%);
+      background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      padding-right: 38px;
+    }
+
+    .field select option {
+      color: #111;
+      background: #fff;
+    }
+
+    .field input:disabled {
+      opacity: 1;
+      cursor: not-allowed;
+      color: rgba(255, 255, 255, .82);
+      -webkit-text-fill-color: rgba(255, 255, 255, .82);
+      background: rgba(255, 255, 255, .04);
+      border-color: rgba(255, 255, 255, .10);
+      box-shadow: none;
+    }
+
+    .req {
+      color: #ff6b6b;
+    }
+
+    /* Radio */
+    .radio-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .radio-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .radio-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #7b5bff;
+    }
+
+    .radio-item label {
+      margin: 0;
+      font-weight: 900;
+      font-size: 14px;
+      color: rgba(255, 255, 255, .86);
+      white-space: nowrap;
+    }
+
+    .radio-item:has(input[type="radio"]:checked) {
+      border-color: rgba(117, 83, 255, .45);
+      background: rgba(117, 83, 255, .12);
+    }
+
+    @media (max-width: 640px) {
+      .radio-item {
+        flex: 0 0 calc(50% - 6px);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .radio-item {
+        flex: 0 0 100%;
+      }
+    }
+
+    /* QRIS overlay (gambar besar) */
+    .qris-view {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(0, 0, 0, .65);
+      z-index: 10000;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .qris-view.show {
+      display: flex;
+    }
+
+    .qris-box {
+      position: relative;
+      width: min(520px, 100%);
+      border-radius: 18px;
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    .qris-x {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(0, 0, 0, .35);
+      color: rgba(255, 255, 255, .92);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .qris-img-big {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .03);
+    }
+
+    /* Loading overlay */
+    .loading-view {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(0, 0, 0, .65);
+      z-index: 10020;
+    }
+
+    .loading-view.show {
+      display: flex;
+    }
+
+    .loading-card {
+      width: min(380px, 100%);
+      padding: 18px 16px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .loading-spinner {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 4px solid rgba(255, 255, 255, .18);
+      border-top-color: rgba(117, 83, 255, .95);
+      animation: spin .8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-title {
+      margin: 0 0 4px;
+      font-weight: 900;
+    }
+
+    .loading-sub {
+      margin: 0;
+      color: rgba(255, 255, 255, .72);
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .btn.is-loading {
+      pointer-events: none;
+      opacity: .9;
+    }
+
+    .btn .btn-spin {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 3px solid rgba(255, 255, 255, .25);
+      border-top-color: rgba(255, 255, 255, .92);
+      animation: spin .7s linear infinite;
+    }
+
+    /* FX overlay (ringan) */
+    .fx-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .fx-overlay::before {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background:
+        radial-gradient(900px 480px at 18% 12%, rgba(117, 83, 255, .14), transparent 60%),
+        radial-gradient(850px 520px at 82% 18%, rgba(0, 210, 255, .10), transparent 62%),
+        radial-gradient(900px 620px at 65% 88%, rgba(0, 255, 200, .08), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, rgba(0, 0, 0, .20), transparent 55%);
+      opacity: .95;
+    }
+
+    .fx-shimmer {
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(closest-side, rgba(255, 255, 255, .08), transparent 70%),
+        linear-gradient(120deg, transparent 40%, rgba(255, 255, 255, .05) 50%, transparent 60%);
+      opacity: .32;
+      /* lebih ringan */
+      animation: fxShimmer 16s ease-in-out infinite;
+    }
+
+    @keyframes fxShimmer {
+      0% {
+        transform: translate3d(-8%, -6%, 0) rotate(0deg);
+      }
+
+      50% {
+        transform: translate3d(10%, 6%, 0) rotate(10deg);
+      }
+
+      100% {
+        transform: translate3d(-8%, -6%, 0) rotate(0deg);
+      }
+    }
+
+    .fx-particles {
+      position: absolute;
+      inset: 0;
+    }
+
+    .fx-p {
+      position: absolute;
+      width: var(--s, 10px);
+      height: var(--s, 10px);
+      border-radius: 999px;
+      left: var(--x, 50%);
+      top: var(--y, 50%);
+      opacity: var(--o, .28);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 55%),
+        radial-gradient(circle at 70% 70%, var(--c, rgba(117, 83, 255, .20)), rgba(0, 0, 0, 0) 60%);
+      animation: fxFloat var(--d, 11s) ease-in-out infinite;
+    }
+
+    @keyframes fxFloat {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate3d(var(--dx, 12px), var(--dy, -54px), 0) scale(1.06);
+      }
+
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    /* Perf mobile: matikan blur + anim berat */
+    @media (max-width: 768px) {
+
+      .glass,
+      .nav-inner,
+      .modal-overlay,
+      .modal,
+      .modal-footer,
+      #mobileMenu,
+      .qris-view,
+      .qris-box {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+      }
+
+      .glass,
+      .nav-inner {
+        background: rgba(10, 14, 30, .86) !important;
+      }
+
+      body.light-mode .glass,
+      body.light-mode .nav-inner {
+        background: rgba(255, 255, 255, .90) !important;
+      }
+
+      #mobileMenu {
+        background: rgba(8, 10, 22, .92) !important;
+      }
+
+      body.light-mode #mobileMenu {
+        background: rgba(248, 250, 252, .95) !important;
+      }
+
+      .card:hover,
+      .btn:hover {
+        transform: none !important;
+      }
+
+      .fx-shimmer {
+        animation: none !important;
+      }
+
+      .fx-p {
+        animation: none !important;
+      }
+
+      /* mobile: no particle anim */
+      .app-float {
+        animation: none !important;
+      }
+
+      /* mobile: no drift (lebih smooth) */
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* ===== ELECTRIC FX on Product Container ===== */
+    .electric-wrap {
+      position: relative;
+      overflow: visible;
+    }
+
+    .electric-wrap .grid {
+      overflow: visible;
+    }
+
+    /* CARD GLOW */
+    #electricWrap.on .card {
+      border-color: rgba(0, 234, 255, .55);
+      box-shadow:
+        0 0 0 2px rgba(0, 234, 255, .85),
+        0 0 14px rgba(0, 234, 255, .6),
+        0 0 36px rgba(0, 234, 255, .2),
+        0 18px 52px rgba(0, 0, 0, .42);
+      animation: cardElecGlow 3s ease-in-out infinite;
+      transition: box-shadow .4s ease, border-color .4s ease;
+    }
+
+    #electricWrap.on .card:nth-child(2) {
+      animation-delay: .5s
+    }
+
+    #electricWrap.on .card:nth-child(3) {
+      animation-delay: 1s
+    }
+
+    #electricWrap.on .card:nth-child(4) {
+      animation-delay: 1.5s
+    }
+
+    #electricWrap.on .card:nth-child(5) {
+      animation-delay: 2s
+    }
+
+    #electricWrap.on .card:nth-child(6) {
+      animation-delay: 2.5s
+    }
+
+    #electricWrap.on .card:nth-child(7) {
+      animation-delay: .3s
+    }
+
+    #electricWrap.on .card:nth-child(8) {
+      animation-delay: .8s
+    }
+
+    #electricWrap.on .card:nth-child(9) {
+      animation-delay: 1.3s
+    }
+
+    @keyframes cardElecGlow {
+
+      0%,
+      100% {
+        border-color: rgba(0, 234, 255, .55);
+        box-shadow: 0 0 0 2px rgba(0, 234, 255, .85), 0 0 14px rgba(0, 234, 255, .6), 0 0 36px rgba(0, 234, 255, .2), 0 18px 52px rgba(0, 0, 0, .42);
+      }
+
+      33% {
+        border-color: rgba(157, 78, 221, .55);
+        box-shadow: 0 0 0 2px rgba(157, 78, 221, .85), 0 0 14px rgba(157, 78, 221, .6), 0 0 36px rgba(157, 78, 221, .2), 0 18px 52px rgba(0, 0, 0, .42);
+      }
+
+      66% {
+        border-color: rgba(255, 0, 128, .55);
+        box-shadow: 0 0 0 2px rgba(255, 0, 128, .85), 0 0 14px rgba(255, 0, 128, .6), 0 0 36px rgba(255, 0, 128, .2), 0 18px 52px rgba(0, 0, 0, .42);
+      }
+    }
+
+    /* Tombol ON/OFF */
+    .elec-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 234, 255, .35);
+      background: rgba(0, 234, 255, .06);
+      color: rgba(255, 255, 255, .85);
+      font-weight: 900;
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+      transition: all .25s cubic-bezier(.16, 1, .3, 1);
+      white-space: nowrap;
+    }
+
+    .elec-toggle:hover {
+      background: rgba(0, 234, 255, .12);
+      border-color: rgba(0, 234, 255, .55);
+      box-shadow: 0 0 20px rgba(0, 234, 255, .20);
+      transform: translateY(-1px);
+    }
+
+    .elec-toggle.on {
+      background: linear-gradient(135deg, rgba(0, 234, 255, .22), rgba(157, 78, 221, .18));
+      border-color: rgba(0, 234, 255, .65);
+      box-shadow: 0 0 30px rgba(0, 234, 255, .30), 0 0 60px rgba(157, 78, 221, .15);
+      color: #00eaff;
+      text-shadow: 0 0 12px rgba(0, 234, 255, .7);
+    }
+
+    .elec-toggle-dot {
+      width: 28px;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .15);
+      border: 1px solid rgba(255, 255, 255, .20);
+      position: relative;
+      flex: 0 0 auto;
+      transition: background .25s, border-color .25s, box-shadow .25s;
+    }
+
+    .elec-toggle-dot::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .6);
+      top: 50%;
+      left: 2px;
+      transform: translateY(-50%);
+      transition: transform .25s cubic-bezier(.16, 1, .3, 1), background .25s, box-shadow .25s;
+    }
+
+    .elec-toggle.on .elec-toggle-dot {
+      background: rgba(0, 234, 255, .35);
+      border-color: rgba(0, 234, 255, .6);
+      box-shadow: 0 0 10px rgba(0, 234, 255, .45);
+    }
+
+    .elec-toggle.on .elec-toggle-dot::after {
+      transform: translateY(-50%) translateX(12px);
+      background: #00eaff;
+      box-shadow: 0 0 8px rgba(0, 234, 255, .9);
+    }
+
+    .elec-toggle-label {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .4px;
+    }
+
+    .elec-bolt {
+      font-size: 14px;
+    }
+
+    @media(max-width:720px) {
+      .elec-toggle {
+        padding: 7px 12px;
+        font-size: 12px;
+      }
+
+      .elec-toggle-label {
+        display: none;
+      }
+    }
+
+    /* ===== /ELECTRIC FX ===== */
+  </style>
 </head>
 
 <body>
+  <!-- FX overlay -->
+  <div class="fx-overlay" aria-hidden="true">
+    <div class="fx-shimmer"></div>
+    <div class="fx-particles" id="fxParticles"></div>
+  </div>
+
   <header class="nav container" id="topNav">
     <div class="nav-inner glass">
       <a class="brand" href="#beranda" aria-label="Ke Beranda">
@@ -1248,6 +2349,13 @@ main.container{ padding-bottom: 90px; }
       </nav>
 
       <div class="search" role="search">
+        <span class="s-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="9" r="7"></circle>
+            <line x1="14" y1="14" x2="18.5" y2="18.5"></line>
+          </svg>
+        </span>
         <input id="searchInput" type="search" placeholder="Cari produk..." autocomplete="off">
         <button class="s-clear" id="searchClear" type="button" aria-label="Hapus">✕</button>
       </div>
@@ -1286,9 +2394,9 @@ main.container{ padding-bottom: 90px; }
   <main class="container">
     <!-- HERO -->
     <section class="hero" id="beranda">
-      <div class="hero-grid">
+      <div class="hero-grid reveal" style="transition-delay: 0.1s;">
         <div class="hero-card glass">
-          <div class="kicker"><span class="dot"></span> Marketplace Aplikasi Premium • Murah & Garansi</div>
+          <div class="kicker"><span class="dot"></span> Marketplace App Premium • Murah & Garansi</div>
 
           <div class="app-float-wrap" aria-hidden="true">
             <span class="app-float a1"><img src="img/logonet.png" alt=""></span>
@@ -1304,54 +2412,64 @@ main.container{ padding-bottom: 90px; }
           <h1>
             <span id="typeTarget"></span><span class="type-cursor" aria-hidden="true">|</span>
           </h1>
-
-          <p class="sub">Pilih produk → isi format → lanjut pembayaran QRIS → konfirmasi sudah bayar → kirim → WhatsApp admin.</p>
+          <p class="sub">Pilih produk → isi format → lanjut pembayaran QRIS → konfirmasi sudah bayar → kirim → WhatsApp
+            admin.</p>
         </div>
-
-        <aside class="showcase glass" aria-label="Highlight">
-          <div class="badge">✨ Premium Picks</div>
-          <div class="mini">
-            <h3>Streaming & Hiburan</h3>
-            <p>Netflix / YouTube Premium</p>
-          </div>
-          <div class="mini">
-            <h3>Editing & Kreatif</h3>
-            <p>CapCut / Alight Motion</p>
-          </div>
-          <div class="mini">
-            <h3>Desain & Produktivitas</h3>
-            <p>Canva / Spotify</p>
-          </div>
-        </aside>
       </div>
     </section>
 
+    <div class="stock-banner reveal" id="stockBanner" aria-label="Info stok" style="transition-delay: 0.2s;">
+      <div class="stock-track" id="stockTrack">
+        <span class="stock-text" id="stockText">
+          Tanyakan Stock Ke Admin Terlebih Dahulu Sebelum Transaksi
+        </span>
+      </div>
+    </div>
+
     <!-- PRODUK -->
     <section id="produk">
-      <div class="section-head">
-        <div><h2>Produk Premium</h2></div>
-        <a class="btn" href="#faq">Cara beli?</a>
+      <div class="section-head reveal">
+        <div>
+          <h2>Produk Premium</h2>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="elec-toggle" id="themeToggle" type="button" title="Ganti Tema (Pagi/Malam)">
+            <span id="themeIco">🌙</span>
+          </button>
+          <button class="elec-toggle" id="elecToggle" type="button" aria-pressed="false" title="Aktifkan efek listrik">
+            <span class="elec-bolt">&#x26A1;</span>
+            <span class="elec-toggle-label">Electric</span>
+            <span class="elec-toggle-dot"></span>
+          </button>
+          <a class="btn" href="#faq">Cara beli?</a>
+        </div>
       </div>
-      <div id="productGrid" class="grid"></div>
+
+      <!-- Electric FX wrapper -->
+      <div class="electric-wrap" id="electricWrap">
+        <div id="productGrid" class="grid" style="position:relative;z-index:1;"></div>
+      </div>
     </section>
 
     <!-- SERVICE -->
     <section id="services">
-      <div class="section-head">
-        <div><h2>Service</h2></div>
+      <div class="section-head reveal">
+        <div>
+          <h2>Service</h2>
+        </div>
         <a class="btn" href="#produk">Pilih Produk</a>
       </div>
 
-      <div class="service-grid">
-        <div class="card">
+      <div class="grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="card reveal" style="transition-delay: 0.1s;">
           <div style="font-weight:900;margin-bottom:6px;">⚙️ Instalasi & Setup</div>
           <p>Bantuan instalasi, konfigurasi, dan optimasi agar siap dipakai.</p>
         </div>
-        <div class="card">
+        <div class="card reveal" style="transition-delay: 0.2s;">
           <div style="font-weight:900;margin-bottom:6px;">🔑 Aktivasi</div>
           <p>Panduan aktivasi jelas dan cepat sesuai paket yang dibeli.</p>
         </div>
-        <div class="card">
+        <div class="card reveal" style="transition-delay: 0.3s;">
           <div style="font-weight:900;margin-bottom:6px;">💬 Support</div>
           <p>Bantuan chat untuk kendala umum sesuai jam layanan.</p>
         </div>
@@ -1360,13 +2478,15 @@ main.container{ padding-bottom: 90px; }
 
     <!-- FAQ -->
     <section id="faq">
-      <div class="section-head">
-        <div><h2>FAQ</h2></div>
+      <div class="section-head reveal">
+        <div>
+          <h2>FAQ</h2>
+        </div>
         <a class="btn" href="#beranda">Kembali ke atas</a>
       </div>
 
       <div class="faq-grid">
-        <div class="faq-item glass">
+        <div class="faq-item glass reveal" style="transition-delay: 0.1s;">
           <button class="faq-btn" type="button">
             <span>Bagaimana cara membeli?</span>
             <span class="faq-ico">+</span>
@@ -1377,7 +2497,7 @@ main.container{ padding-bottom: 90px; }
           </div>
         </div>
 
-        <div class="faq-item glass">
+        <div class="faq-item glass reveal" style="transition-delay: 0.2s;">
           <button class="faq-btn" type="button">
             <span>Kenapa produk tidak muncul?</span>
             <span class="faq-ico">+</span>
@@ -1388,7 +2508,7 @@ main.container{ padding-bottom: 90px; }
           </div>
         </div>
 
-        <div class="faq-item glass">
+        <div class="faq-item glass reveal" style="transition-delay: 0.3s;">
           <button class="faq-btn" type="button">
             <span>Search bisa cari apa saja?</span>
             <span class="faq-ico">+</span>
@@ -1398,7 +2518,7 @@ main.container{ padding-bottom: 90px; }
           </div>
         </div>
 
-        <div class="faq-item glass">
+        <div class="faq-item glass reveal" style="transition-delay: 0.4s;">
           <button class="faq-btn" type="button">
             <span>Metode pembayaran apa saja?</span>
             <span class="faq-ico">+</span>
@@ -1413,7 +2533,7 @@ main.container{ padding-bottom: 90px; }
     <!-- FOOTER -->
     <footer class="footer-wrap glass" id="footer">
       <div class="footer-top">
-        <div class="f-brand">
+        <div class="f-brand reveal" style="transition-delay: 0.1s;">
           <div class="f-logo" aria-hidden="true">
             <img src="img/logo.png" alt="">
           </div>
@@ -1426,7 +2546,7 @@ main.container{ padding-bottom: 90px; }
           </div>
         </div>
 
-        <div class="f-col">
+        <div class="f-col reveal" style="transition-delay: 0.2s;">
           <h4>Products</h4>
           <div class="f-links">
             <a href="#services">Service</a>
@@ -1434,7 +2554,7 @@ main.container{ padding-bottom: 90px; }
           </div>
         </div>
 
-        <div class="f-col">
+        <div class="f-col reveal" style="transition-delay: 0.3s;">
           <h4>Profile</h4>
           <div class="f-links">
             <a href="#beranda">Tentang Kami</a>
@@ -1442,10 +2562,11 @@ main.container{ padding-bottom: 90px; }
           </div>
         </div>
 
-        <div class="f-col">
+        <div class="f-col reveal" style="transition-delay: 0.4s;">
           <h4>Social Media</h4>
           <div class="f-social">
-            <a href="https://www.instagram.com/faxmlstore?igsh=MWdtNmR4dnpqMTZ1bA%3D%3D&utm_source=qr" target="_blank" rel="noopener">
+            <a href="https://www.instagram.com/faxmlstore?igsh=MWdtNmR4dnpqMTZ1bA%3D%3D&utm_source=qr" target="_blank"
+              rel="noopener">
               <span class="ico"><img src="img/instagram.jpg" alt="Instagram"></span>
               <span class="txt">Instagram</span>
             </a>
@@ -1454,6 +2575,27 @@ main.container{ padding-bottom: 90px; }
               <span class="ico"><img src="img/tiktok.jpg" alt="TikTok"></span>
               <span class="txt">TikTok</span>
             </a>
+
+            <a class="wa-link" href="https://chat.whatsapp.com/JBSlNH5rB2kG6Kjik1xNpc?mode=gi_t" target="_blank"
+              rel="noopener">
+              <span class="ico wa" aria-hidden="true">
+                <svg viewBox="0 0 448 512" aria-hidden="true">
+                  <path fill="currentColor"
+                    d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 222-99.6 222-222 0-59.3-25.2-115-67.1-156.9zM224 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.2-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-82.8 184.6-184.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z" />
+                </svg>
+              </span>
+              <span class="txt">Info App Prem</span>
+            </a>
+
+            <a class="tg-link" href="https://t.me/faxmlpreset" target="_blank" rel="noopener">
+              <span class="ico tg" aria-hidden="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor"
+                    d="M21.9 4.6c.3-1.3-1.1-2.4-2.3-1.9L2.9 9.1c-1.2.5-1.2 2.2.1 2.6l4.6 1.5 1.8 5.6c.4 1.2 2 1.4 2.7.4l2.6-3.5 4.9 3.6c1 .7 2.4.2 2.6-1L21.9 4.6zM9 12.7l9.6-6.1-7.7 7.3-.3 3.3-1.5-4.7L5.9 11l16.2-6.1L9 12.7z" />
+                </svg>
+              </span>
+              <span class="txt">Telegram</span>
+            </a>
           </div>
         </div>
       </div>
@@ -1461,7 +2603,7 @@ main.container{ padding-bottom: 90px; }
       <div class="footer-line"></div>
 
       <div class="footer-bottom">
-        <div>© Faxml Store.</div>
+        <div>© Faxml Store 2023.</div>
         <div class="footer-badges">
           <div class="f-badge"><span>🛡️</span> Secure Payment</div>
           <div class="f-badge"><span>🕘</span> 24/7 Support</div>
@@ -1472,7 +2614,8 @@ main.container{ padding-bottom: 90px; }
     <!-- Floating WA -->
     <a class="pk-chat" href="https://wa.me/6288221694607" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
       <svg class="wa-ico" viewBox="0 0 448 512" aria-hidden="true">
-        <path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 222-99.6 222-222 0-59.3-25.2-115-67.1-156.9zM224 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.2-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-82.8 184.6-184.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z"/>
+        <path fill="currentColor"
+          d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 222-99.6 222-222 0-59.3-25.2-115-67.1-156.9zM224 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.2-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-82.8 184.6-184.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z" />
       </svg>
     </a>
   </main>
@@ -1502,6 +2645,7 @@ main.container{ padding-bottom: 90px; }
             <input id="f_durasi" type="text" placeholder="Contoh: 1 Bulan" required>
           </div>
 
+          <!-- NETFLIX -->
           <div id="block_netflix" style="display:none; grid-column:1/-1">
             <div class="form-grid">
               <div class="field">
@@ -1525,6 +2669,7 @@ main.container{ padding-bottom: 90px; }
             </div>
           </div>
 
+          <!-- SHARING -->
           <div id="block_sharing" style="display:none; grid-column:1/-1">
             <div class="form-grid">
               <div class="field">
@@ -1552,6 +2697,7 @@ main.container{ padding-bottom: 90px; }
             </div>
           </div>
 
+          <!-- PRIVATE -->
           <div id="block_private" style="display:none; grid-column:1/-1">
             <div class="form-grid">
               <div class="field">
@@ -1573,6 +2719,7 @@ main.container{ padding-bottom: 90px; }
             </div>
           </div>
 
+          <!-- YOUTUBE -->
           <div id="block_youtube" style="display:none; grid-column:1/-1">
             <div class="form-grid">
               <div class="field">
@@ -1594,6 +2741,7 @@ main.container{ padding-bottom: 90px; }
             </div>
           </div>
 
+          <!-- CANVA -->
           <div id="block_canva" style="display:none; grid-column:1/-1">
             <div class="form-grid">
               <div class="field">
@@ -1607,6 +2755,7 @@ main.container{ padding-bottom: 90px; }
             </div>
           </div>
 
+          <!-- SPOTIFY -->
           <div id="block_spotify" style="display:none; grid-column:1/-1">
             <div class="form-grid">
               <div class="field">
@@ -1628,6 +2777,7 @@ main.container{ padding-bottom: 90px; }
             </div>
           </div>
 
+          <!-- ALIGHT -->
           <div id="block_alight" style="display:none; grid-column:1/-1">
             <div class="form-grid">
               <div class="field">
@@ -1654,26 +2804,40 @@ main.container{ padding-bottom: 90px; }
       </div>
     </div>
   </div>
-<!-- LOADING VIEW (sebelum QRIS muncul) -->
-<div id="loadingView" class="loading-view" aria-hidden="true">
-  <div class="loading-card glass">
-    <div class="loading-spinner" aria-hidden="true"></div>
-    <p class="loading-title">Menyiapkan pembayaran…</p>
-    <p class="loading-sub">Mohon tunggu sebentar</p>
-  </div>
-</div>
 
-  <!-- PAYMENT MODAL (QRIS) -->
+  <!-- DETAIL MODAL -->
+  <div id="detailModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="modal-header">
+        <h3 id="detailTitle">Detail Produk</h3>
+        <button id="closeDetail" class="modal-close" type="button" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modal-body" id="detailBody"></div>
+      <div class="modal-footer">
+        <button id="detailCloseBtn" type="button" class="btn">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING VIEW -->
+  <div id="loadingView" class="loading-view" aria-hidden="true">
+    <div class="loading-card glass">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p class="loading-title">Menyiapkan pembayaran…</p>
+      <p class="loading-sub">Mohon tunggu sebentar</p>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
   <div id="payModal" class="modal-overlay" aria-hidden="true">
     <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="payTitle">
       <div class="modal-header">
         <h3 id="payTitle">Pembayaran QRIS</h3>
-        <button id="closePay" class="modal-close" type="button">✕</button>
+        <button id="closePay" class="modal-close" type="button" aria-label="Tutup">✕</button>
       </div>
 
       <div class="modal-body">
-        <div id="paidNotif"
-          style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:12px;
+        <div id="paidNotif" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:12px;
           background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35);
           color:rgba(255,255,255,.92);font-weight:900;font-size:13px;">
           🔔 Pembayaran Berhasil (Klik <b>Lanjut WhatsApp</b>)
@@ -1683,7 +2847,8 @@ main.container{ padding-bottom: 90px; }
           <div style="font-weight:900">Silakan bayar sesuai nominal:</div>
           <div id="payAmount" style="font-size:22px;font-weight:900;"></div>
 
-          <div style="border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px;background:rgba(255,255,255,.04);">
+          <div
+            style="border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px;background:rgba(255,255,255,.04);">
             <div style="font-weight:900; margin-bottom:6px;">⚠️ QRIS NOTE</div>
             <div style="color:rgba(255,255,255,.78);font-weight:800;font-size:13px;line-height:1.6;">
               • <b>Tanyakan stok ke admin dulu</b> sebelum melakukan pembayaran.<br>
@@ -1692,15 +2857,17 @@ main.container{ padding-bottom: 90px; }
             </div>
           </div>
 
-          <div style="border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px;background:rgba(255,255,255,.04);">
+          <div
+            style="border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px;background:rgba(255,255,255,.04);">
             <img id="qrisImg" alt="QRIS"
               style="width:100%;max-width:340px;display:block;margin:0 auto;border-radius:12px;">
             <div style="margin-top:10px;color:rgba(255,255,255,.75);font-weight:800;font-size:13px;line-height:1.6;">
-              Scan QRIS → pilih status bayar → klik <b>“Kirim”</b> untuk konfirmasi (notif muncul) → klik <b>“Lanjut WhatsApp”</b>.
+              Scan QRIS → pilih status bayar → klik <b>“Kirim”</b> untuk konfirmasi (notif muncul) → klik <b>“Lanjut
+                WhatsApp”</b>.
             </div>
 
             <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-              <a id="qrisHref" class="btn" href="#" target="_blank" rel="noopener">Buka QRIS</a>
+              <a id="qrisHref" class="btn" href="#" rel="noopener">Buka QRIS</a>
               <button id="askStockBtn" type="button" class="btn">Tanya stok</button>
             </div>
           </div>
@@ -1741,283 +2908,357 @@ main.container{ padding-bottom: 90px; }
     </div>
   </div>
 
-<script>
-/* ========= helpers ========= */
-const qs = (q) => document.querySelector(q);
-const normalize = (str) => (str ?? "").toString().toLowerCase().trim();
-const requireVal = (v) => (v || "").toString().trim();
+  <script>
+    /* ========= helpers ========= */
+    const qs = (q) => document.querySelector(q);
+    const normalize = (str) => (str ?? "").toString().toLowerCase().trim();
+    const requireVal = (v) => (v || "").toString().trim();
 
-const WA_NUMBER = "6288221694607";
-const waLink = (text) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
-const QRIS_IMAGE_URL = "img/qris.jpeg";
+    const WA_NUMBER = "6288221694607";
+    const waLink = (text) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+    const QRIS_IMAGE_URL = "img/qris.jpeg";
 
-const formatRupiah = (n) => {
-  const num = Number(n) || 0;
-  return "Rp" + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
-const todayISO = () => {
-  const d = new Date();
-  const mm = String(d.getMonth()+1).padStart(2,"0");
-  const dd = String(d.getDate()).padStart(2,"0");
-  return `${d.getFullYear()}-${mm}-${dd}`;
-};
+    const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const isMobile = matchMedia("(max-width: 768px)").matches || matchMedia("(hover:none) and (pointer:coarse)").matches;
 
-/* ========= iOS/Android SCROLL LOCK (no jitter) =========
-   pakai position:fixed biar gak “loncat” / “geser sendiri” */
-let __lockY = 0;
-function lockScroll(){
-  __lockY = window.scrollY || window.pageYOffset || 0;
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${__lockY}px`;
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
-}
-function unlockScroll(){
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.left = "";
-  document.body.style.right = "";
-  document.body.style.width = "";
-  window.scrollTo(0, __lockY);
-}
+    const formatRupiah = (n) => {
+      const num = Number(n) || 0;
+      return "Rp" + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
+    const todayISO = () => {
+      const d = new Date();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${d.getFullYear()}-${mm}-${dd}`;
+    };
 
-/* ========= typing effect (LOOP: ketik berulang) ========= */
-(function typingLoop(){
-  const el = document.querySelector("#typeTarget");
-  if(!el) return;
+    /* ========= Scroll lock (idempotent + anti geser scrollbar) ========= */
+    let __lockY = 0;
+    let __isLocked = false;
+    let __padRight = "";
 
-  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    function lockScroll() {
+      if (__isLocked) return;
+      __isLocked = true;
 
-  const text = "Jual Aplikasi Premium, Aman, dan Tepercaya.";
-  const typeSpeed = 55;        // kecepatan ngetik
-  const deleteSpeed = 35;      // kecepatan hapus
-  const holdAfterType = 1200;  // jeda setelah selesai ngetik
-  const holdAfterDelete = 350; // jeda setelah selesai hapus
+      __lockY = window.scrollY || window.pageYOffset || 0;
 
-  if (prefersReduce){
-    el.textContent = text;
-    return;
-  }
+      const sbw = window.innerWidth - document.documentElement.clientWidth;
+      __padRight = document.body.style.paddingRight || "";
+      if (sbw > 0) document.body.style.paddingRight = sbw + "px";
 
-  let i = 0;
-  let deleting = false;
-
-  function tick(){
-    if (!deleting){
-      i++;
-      el.textContent = text.slice(0, i);
-      if (i >= text.length){
-        deleting = true;
-        setTimeout(tick, holdAfterType);
-      } else {
-        setTimeout(tick, typeSpeed);
-      }
-    } else {
-      i--;
-      el.textContent = text.slice(0, i);
-      if (i <= 0){
-        deleting = false;
-        setTimeout(tick, holdAfterDelete);
-      } else {
-        setTimeout(tick, deleteSpeed);
-      }
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${__lockY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
     }
-  }
 
-  tick();
-})();
+    function unlockScroll() {
+      if (!__isLocked) return;
+      __isLocked = false;
 
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+      document.body.style.paddingRight = __padRight;
 
-/* ========= FX overlay ========= */
-(() => {
-  const rand = (a,b)=>Math.random()*(b-a)+a;
-
-  function build(wrap){
-    const isMobile = (innerWidth||360) <= 720;
-    const count = isMobile ? 16 : 22; // lebih ringan di mobile
-    const colors = ["rgba(117,83,255,.35)","rgba(0,210,255,.28)","rgba(0,255,200,.22)","rgba(255,255,255,.18)"];
-    for(let i=0;i<count;i++){
-      const p=document.createElement("span"); p.className="fx-p";
-      p.style.setProperty("--s",(isMobile?rand(7,16):rand(8,20))+"px");
-      p.style.setProperty("--b",rand(0,2.0)+"px");
-      p.style.setProperty("--x",rand(2,98).toFixed(2)+"%");
-      p.style.setProperty("--y",rand(2,98).toFixed(2)+"%");
-      p.style.setProperty("--dx",rand(-16,16).toFixed(0)+"px");
-      p.style.setProperty("--dy",(-rand(40,isMobile?85:75)).toFixed(0)+"px");
-      p.style.setProperty("--d",rand(isMobile?7:8, isMobile?12:13).toFixed(2)+"s");
-      p.style.setProperty("--o",rand(0.18,isMobile?0.40:0.34).toFixed(2));
-      p.style.setProperty("--c",colors[Math.floor(rand(0,colors.length))]);
-      p.style.animationDelay = rand(-10,0).toFixed(2)+"s";
-      wrap.appendChild(p);
+      window.scrollTo(0, __lockY);
     }
-  }
 
-  function mount(){
-    if(document.querySelector(".fx-overlay")) return;
-    const o=document.createElement("div"); o.className="fx-overlay";
-    const s=document.createElement("div"); s.className="fx-shimmer";
-    const p=document.createElement("div"); p.className="fx-particles";
-    o.appendChild(s); o.appendChild(p);
-    document.body.prepend(o);
-    build(p);
-  }
+    /* ========= typing effect ========= */
+    (function typingLoop() {
+      const el = qs("#typeTarget");
+      if (!el) return;
 
-  addEventListener("DOMContentLoaded", mount, { passive:true });
-})();
+      const text = "Jual Aplikasi Premium, Aman, dan Tepercaya.";
+      if (prefersReduce) { el.textContent = text; return; }
 
-/* ========= FAQ accordion ========= */
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".faq-btn");
-  if (!btn) return;
-  const item = btn.closest(".faq-item");
-  const ico = btn.querySelector(".faq-ico");
-  const isOpen = item.classList.toggle("open");
-  if (ico) ico.textContent = isOpen ? "−" : "+";
-}, { passive:true });
+      const typeSpeed = 55;
+      const deleteSpeed = 35;
+      const holdAfterType = 1100;
+      const holdAfterDelete = 320;
 
-/* ========= Sidebar Mobile ========= */
-const hamburger  = qs("#hamburger");
-const mobileMenu = qs("#mobileMenu");
-const menuOverlay= qs("#menuOverlay");
-const mobileClose= qs("#mobileClose");
+      let i = 0;
+      let deleting = false;
 
-function openMenu(){
-  if (!mobileMenu || !menuOverlay || !hamburger) return;
-  mobileMenu.classList.add("open");
-  menuOverlay.classList.add("show");
-  hamburger.setAttribute("aria-expanded", "true");
-  lockScroll();
-}
-function closeMenu(){
-  if (!mobileMenu || !menuOverlay || !hamburger) return;
-  mobileMenu.classList.remove("open");
-  menuOverlay.classList.remove("show");
-  hamburger.setAttribute("aria-expanded", "false");
-  // unlock hanya kalau tidak ada modal lain
-  if (!qs("#buyModal")?.classList.contains("show") && !qs("#payModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show")) {
-    unlockScroll();
-  }
-}
+      function tick() {
+        if (!deleting) {
+          i++;
+          el.textContent = text.slice(0, i);
+          if (i >= text.length) {
+            deleting = true;
+            setTimeout(tick, holdAfterType);
+          } else setTimeout(tick, typeSpeed);
+        } else {
+          i--;
+          el.textContent = text.slice(0, i);
+          if (i <= 0) {
+            deleting = false;
+            setTimeout(tick, holdAfterDelete);
+          } else setTimeout(tick, deleteSpeed);
+        }
+      }
+      tick();
+    })();
 
-hamburger?.addEventListener("click", () => {
-  mobileMenu.classList.contains("open") ? closeMenu() : openMenu();
-});
-menuOverlay?.addEventListener("click", closeMenu);
-mobileClose?.addEventListener("click", closeMenu);
-mobileMenu?.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener("click", closeMenu));
+    /* ========= FX particles (desktop saja) ========= */
+    (() => {
+      if (prefersReduce || isMobile) return;
+      const wrap = qs("#fxParticles");
+      if (!wrap) return;
 
-/* ========= Smooth scroll with offset (tanpa loncat) ========= */
-(() => {
-  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+      const rand = (a, b) => Math.random() * (b - a) + a;
+      const colors = ["rgba(117,83,255,.22)", "rgba(0,210,255,.18)", "rgba(0,255,200,.16)", "rgba(255,255,255,.12)"];
+      const count = 14;
 
-  function navOffset(){
-    const nav = document.getElementById("topNav");
-    const h = nav ? nav.getBoundingClientRect().height : 0;
-    return Math.round(h + 18);
-  }
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement("span");
+        p.className = "fx-p";
+        p.style.setProperty("--s", rand(8, 18).toFixed(0) + "px");
+        p.style.setProperty("--x", rand(2, 98).toFixed(2) + "%");
+        p.style.setProperty("--y", rand(2, 98).toFixed(2) + "%");
+        p.style.setProperty("--dx", rand(-14, 14).toFixed(0) + "px");
+        p.style.setProperty("--dy", (-rand(40, 70)).toFixed(0) + "px");
+        p.style.setProperty("--d", rand(9, 14).toFixed(2) + "s");
+        p.style.setProperty("--o", rand(0.16, 0.32).toFixed(2));
+        p.style.setProperty("--c", colors[Math.floor(rand(0, colors.length))]);
+        p.style.animationDelay = rand(-10, 0).toFixed(2) + "s";
+        wrap.appendChild(p);
+      }
+    })();
 
-  function smoothTo(el){
-    const y = window.pageYOffset + el.getBoundingClientRect().top - navOffset();
-    if (prefersReduce) return window.scrollTo(0, y);
-    window.scrollTo({ top: y, behavior: "smooth" });
-  }
+    /* ========= FAQ accordion ========= */
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".faq-btn");
+      if (!btn) return;
+      const item = btn.closest(".faq-item");
+      const ico = btn.querySelector(".faq-ico");
+      const isOpen = item.classList.toggle("open");
+      if (ico) ico.textContent = isOpen ? "−" : "+";
+    }, { passive: true });
 
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
+    /* ========= Sidebar ========= */
+    const hamburger = qs("#hamburger");
+    const mobileMenu = qs("#mobileMenu");
+    const menuOverlay = qs("#menuOverlay");
+    const mobileClose = qs("#mobileClose");
 
-    const id = a.getAttribute("href");
-    if (!id || id === "#") return;
+    function openMenu() {
+      if (!mobileMenu || !menuOverlay || !hamburger) return;
+      mobileMenu.classList.add("open");
+      menuOverlay.classList.add("show");
+      hamburger.setAttribute("aria-expanded", "true");
+      lockScroll();
+    }
+    function closeMenu() {
+      if (!mobileMenu || !menuOverlay || !hamburger) return;
+      mobileMenu.classList.remove("open");
+      menuOverlay.classList.remove("show");
+      hamburger.setAttribute("aria-expanded", "false");
+      if (!anyOverlayOpen()) unlockScroll();
+    }
+    hamburger?.addEventListener("click", () => {
+      mobileMenu.classList.contains("open") ? closeMenu() : openMenu();
+    });
+    menuOverlay?.addEventListener("click", closeMenu);
+    mobileClose?.addEventListener("click", closeMenu);
 
-    const target = document.querySelector(id);
-    if (!target) return;
+    /* ========= One Smooth Scroll (single handler, no double) ========= */
+    function navOffset() {
+      const nav = qs("#topNav");
+      if (!nav) return 160;
+      return Math.round(nav.getBoundingClientRect().height + 18);
+    }
 
-    e.preventDefault();
+    let __raf = 0;
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
-    if (mobileMenu?.classList.contains("open")){
+    function animateScrollTo(toY) {
+      cancelAnimationFrame(__raf);
+      const startY = window.pageYOffset || 0;
+      const delta = toY - startY;
+
+      if (prefersReduce || Math.abs(delta) < 2) {
+        window.scrollTo(0, toY);
+        return;
+      }
+
+      const dur = Math.max(320, Math.min(900, Math.abs(delta) * 0.55));
+      const start = performance.now();
+
+      const step = (now) => {
+        const p = Math.min(1, (now - start) / dur);
+        window.scrollTo(0, startY + delta * easeOutCubic(p));
+        if (p < 1) __raf = requestAnimationFrame(step);
+      };
+      __raf = requestAnimationFrame(step);
+    }
+
+    function closeMenuThen(cb) {
+      const menu = qs("#mobileMenu");
+      if (!menu || !menu.classList.contains("open")) return cb?.();
+
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        menu.removeEventListener("transitionend", finish);
+        cb?.();
+      };
+
+      menu.addEventListener("transitionend", finish, { once: true });
+      setTimeout(finish, 360);
       closeMenu();
-      setTimeout(() => smoothTo(target), 80);
-    }else{
-      smoothTo(target);
     }
 
-    history.replaceState(null, "", id);
-  }, { passive:false });
-})();
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
 
-/* ========= ESC close ========= */
-document.addEventListener("keydown", (e) => {
-  if (e.key !== "Escape") return;
-  closeMenu();
-  closeBuyModal();
-  closePayModal();
-  closeQrisView();
-});
+      const id = a.getAttribute("href");
+      if (!id || id === "#") return;
 
-/* ========= DATA PRODUK ========= */
-const products = [
-  { brand:"netflix", label:"NETFLIX", name:"Netflix Premium 1 User", duration:"1 Bulan", price:35000, stock:10, tag:"Best Seller", img:"img/netflix.png" },
-  { brand:"netflix", label:"NETFLIX", name:"Netflix Premium 2 User", duration:"1 Bulan", price:27000, stock:10, tag:"Best Seller", img:"img/netflix.png" },
-  { brand:"netflix", label:"NETFLIX", name:"Netflix Premium SemiPrivate", duration:"1 Bulan", price:39000, stock:10, tag:"Best Seller", img:"img/netflix.png" },
+      const target = document.querySelector(id);
+      if (!target) return;
 
-  { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Sharing 3 User", duration:"1 Bulan", price:10000, stock:20, tag:"Team", img:"img/capcut.jpg" },
-  { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Sharing 8 User", duration:"1 Bulan", price:5000,  stock:20, tag:"Team", img:"img/capcut.jpg" },
-  { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Sharing 5 User", duration:"1 Bulan", price:7000,  stock:20, tag:"Team", img:"img/capcut.jpg" },
+      e.preventDefault();
 
-  { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi 7 Hari", duration:"7 Hari", price:12000, stock:20, tag:"Original", img:"img/capcut.jpg" },
-  { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi 14 Hari", duration:"14 Hari", price:15000, stock:20, tag:"Original", img:"img/capcut.jpg" },
-  { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi 28 Hari", duration:"28 Hari", price:20000, stock:20, tag:"Original", img:"img/capcut.jpg" },
-  { brand:"capcut",  label:"CAPCUT",  name:"CapCut Premium Private Garansi Full", duration:"35 Hari", price:23000, stock:20, tag:"Original", img:"img/capcut.jpg" },
+      closeMenuThen(() => {
+        if (!anyOverlayOpen()) unlockScroll();
+        const y = window.pageYOffset + target.getBoundingClientRect().top - navOffset();
+        requestAnimationFrame(() => requestAnimationFrame(() => animateScrollTo(y)));
+        history.replaceState(null, "", id);
+        window.__setActiveNav?.(id);
+      });
+    }, true);
 
-  { brand:"chatgpt", label:"CHATGPT", name:"ChatGPT Premium Private", duration:"1 Bulan", price:18000, stock:20, tag:"Populer", img:"img/chatgpt.png" },
-  { brand:"gemini",  label:"GEMINI",  name:"GEMINI PRO + GDRIVE 2TB + Veo3", duration:"1 Bulan", price:10000, stock:20, tag:"Populer", img:"img/gemini.png" },
+    /* ========= ESC close ========= */
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      closeMenu();
+      closeBuyModal();
+      closePayModal();
+      closeQrisView();
+      closeDetailModal();
+    });
 
-  { brand:"canva",   label:"CANVA",   name:"Canva Premium Team", duration:"1 Bulan", price:6000,  stock:50, tag:"Team", img:"img/canva.png" },
-  { brand:"canva",   label:"CANVA",   name:"Canva Premium Team (Plus)", duration:"1 Bulan", price:15000, stock:20, tag:"Team", img:"img/canva.png" },
+    (() => {
+      const banner = document.getElementById("stockBanner");
+      const track = document.getElementById("stockTrack");
+      const text = document.getElementById("stockText");
+      if (!banner || !track || !text) return;
 
-  { brand:"spotify", label:"SPOTIFY", name:"Spotify Premium Famplan", duration:"1 Bulan", price:26000, stock:10, tag:"Ready", img:"img/spotify.png" },
-  { brand:"spotify", label:"SPOTIFY", name:"Spotify Premium Indplan", duration:"1 Bulan", price:28000, stock:10, tag:"Ready", img:"img/spotify.png" },
+      // clone sekali aja (HTML tetap 1 teks)
+      if (!track.dataset.cloned) {
+        const clone = text.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+        track.dataset.cloned = "1";
+      }
 
-  { brand:"youtube", label:"YOUTUBE", name:"YouTube Premium Famplan", duration:"1 Bulan", price:5000, stock:10, tag:"Team", img:"img/youtube.png" },
-  { brand:"youtube", label:"YOUTUBE", name:"YouTube Premium Indplan", duration:"1 Bulan", price:15000, stock:10, tag:"Populer", img:"img/youtube.png" },
+      const gap = 48;      // sama dengan CSS gap
+      const speed = 90;    // px/detik
 
-  { brand:"alight",  label:"ALIGHT",  name:"Alight Motion Private", duration:"1 Tahun", price:10000, stock:100, tag:"Populer", img:"img/alightmotion.png" },
-  { brand:"Tutor AM", label:"Tutor AM", name:"Tutor Alight Motion", duration:"Seumurhidup", price:80000, stock:100, tag:"Populer", img:"img/tutoram.png" },
+      function recalc() {
+        const bw = banner.getBoundingClientRect().width;
+        const tw = text.getBoundingClientRect().width;
 
-  { brand:"wink",  label:"WINK", name:"Wink Premium Private Android", duration:"7 Hari", price:10000, stock:10, tag:"Populer", img:"img/wink.png" },
-  { brand:"viu",  label:"VIU", name:"Viu Premium Private", duration:"3 Bulan", price:13000, stock:20, tag:"Original", img:"img/viu.png" },
-  { brand:"viu",  label:"VIU", name:"Viu Premium Private", duration:"Lifetime", price:20000, stock:20, tag:"Populer", img:"img/viu.png" },
+        // jarak loop: 1 teks + gap
+        const dist = Math.ceil(tw + gap);
 
-  { brand:"bstation", label:"B-STATION", name:"Bstation Premium Sharing", duration:"1 Bulan", price:13000, stock:20, tag:"Populer", img:"img/bstation.png" },
-  { brand:"wetv", label:"WETV", name:"Wetv Premium Sharing 8 User", duration:"1 Bulan", price:10000, stock:20, tag:"Original", img:"img/wetv.png" },
+        // start di tengah (kalau teks lebih pendek dari banner)
+        const start = Math.max(0, Math.floor((bw - tw) / 2));
 
-  { brand:"vidio", label:"VIDIO", name:"Vidio Premium Sharing 2 User", duration:"1 Bulan", price:25000, stock:20, tag:"Original", img:"img/vidio.png" },
-  { brand:"vidio", label:"VIDIO", name:"Vidio Premium Sharing 2u Onlyhp", duration:"1 Bulan", price:20000, stock:20, tag:"Original", img:"img/vidio.png" },
-  { brand:"vidio", label:"VIDIO", name:"Vidio Premium Private Alldev", duration:"1 Bulan", price:36000, stock:20, tag:"Original", img:"img/vidio.png" },
-  { brand:"vidio", label:"VIDIO", name:"Vidio Premium Private Onlyhp", duration:"1 Bulan", price:28000, stock:20, tag:"Original", img:"img/vidio.png" },
-  { brand:"vidio", label:"VIDIO", name:"Vidio OnlyTV", duration:"1 Tahun", price:13000, stock:20, tag:"Original", img:"img/vidio.png" },
+        track.style.setProperty("--marquee-dist", dist + "px");
+        track.style.setProperty("--start", start + "px");
 
-  { brand:"hbomax", label:"HBO MAX", name:"HBO MAX Sharing", duration:"1 Bulan", price:19000, stock:20, tag:"Original", img:"img/hbomax.png" },
+        const dur = Math.max(8, Math.round((dist / speed) * 10) / 10);
+        track.style.setProperty("--marquee-dur", dur + "s");
+      }
 
-  { brand:"iqiyi", label:"IQIYI", name:"Iqiyi Sharing Standar", duration:"1 Bulan", price:12000, stock:20, tag:"Original", img:"img/iqiyi.png" },
-  { brand:"iqiyi", label:"IQIYI", name:"Iqiyi Sharing Prem", duration:"1 Bulan", price:15000, stock:20, tag:"Original", img:"img/iqiyi.png" },
+      recalc();
+      window.addEventListener("resize", () => requestAnimationFrame(recalc), { passive: true });
+    })();
 
-  { brand:"prime video", label:"PRIME VIDEO", name:"Prime Video Sharing", duration:"1 Bulan", price:12000, stock:20, tag:"Original", img:"img/primevideo.png" },
-  { brand:"prime video", label:"PRIME VIDEO", name:"Prime Video Private", duration:"1 Bulan", price:18000, stock:20, tag:"Original", img:"img/primevideo.png" },
+    /* ========= DATA PRODUK ========= */
+    const products = [
+      { brand: "netflix", label: "NETFLIX", name: "Netflix Premium 1 User", duration: "1 Bulan", price: 35000, stock: 10, tag: "Best Seller", img: "img/netflix.png" },
+      { brand: "netflix", label: "NETFLIX", name: "Netflix Premium 2 User", duration: "1 Bulan", price: 27000, stock: 10, tag: "Best Seller", img: "img/netflix.png" },
+      { brand: "netflix", label: "NETFLIX", name: "Netflix Premium SemiPrivate", duration: "1 Bulan", price: 39000, stock: 10, tag: "Best Seller", img: "img/netflix.png" },
 
-  { brand:"lightroom", label:"LIGHTROOM", name:"Lightroom Premium Sharing", duration:"1 Tahun", price:20000, stock:20, tag:"Original", img:"img/lightroom.png" },
-  { brand:"picsart", label:"PICSART", name:"Picsart Premium Private", duration:"1 Bulan", price:14000, stock:20, tag:"Original", img:"img/picsart.png" },
-];
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Sharing 3 User", duration: "1 Bulan", price: 10000, stock: 20, tag: "Team", img: "img/capcut.jpg" },
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Sharing 8 User", duration: "1 Bulan", price: 5000, stock: 20, tag: "Team", img: "img/capcut.jpg" },
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Sharing 5 User", duration: "1 Bulan", price: 7000, stock: 20, tag: "Team", img: "img/capcut.jpg" },
 
-function renderProducts(list) {
-  const productGrid = qs("#productGrid");
-  if (!productGrid) return;
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi 7 Hari", duration: "7 Hari", price: 12000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi 14 Hari", duration: "14 Hari", price: 15000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi 30 Hari", duration: "30 Hari", price: 20000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi Full", duration: "35 Hari", price: 23000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
 
-  productGrid.innerHTML = list.map((p) => {
-    const ready = (Number(p.stock) || 0) > 0;
-    return `
-      <article class="card">
+      { brand: "chatgpt", label: "CHATGPT", name: "ChatGPT Premium Private", duration: "1 Bulan", price: 15000, stock: 20, tag: "Populer", img: "img/chatgpt.png" },
+      { brand: "gemini", label: "GEMINI", name: "GEMINI PRO + GDRIVE 2TB + Veo3", duration: "1 Bulan", price: 10000, stock: 20, tag: "Populer", img: "img/gemini.png" },
+
+      { brand: "canva", label: "CANVA", name: "Canva Premium Team", duration: "1 Bulan", price: 6000, stock: 50, tag: "Team", img: "img/canva.png" },
+      { brand: "canva", label: "CANVA", name: "Canva Premium Gar6b", duration: "1 Tahun", price: 15000, stock: 20, tag: "Team", img: "img/canva.png" },
+
+      { brand: "disney", label: "DISNEY+", name: "Disney Sharing 10u", duration: "1 Bulan", price: 30000, stock: 20, tag: "Populer", img: "img/disney.png" },
+
+      { brand: "spotify", label: "SPOTIFY", name: "Spotify Premium Famplan", duration: "1 Bulan", price: 26000, stock: 10, tag: "Ready", img: "img/spotify.png" },
+      { brand: "spotify", label: "SPOTIFY", name: "Spotify Premium Indplan", duration: "1 Bulan", price: 28000, stock: 10, tag: "Ready", img: "img/spotify.png" },
+
+      { brand: "youtube", label: "YOUTUBE", name: "YouTube Premium Famplan", duration: "1 Bulan", price: 5000, stock: 10, tag: "Team", img: "img/youtube.png" },
+      { brand: "youtube", label: "YOUTUBE", name: "YouTube Premium Indplan", duration: "1 Bulan", price: 15000, stock: 10, tag: "Populer", img: "img/youtube.png" },
+
+      { brand: "alight", label: "ALIGHT", name: "Alight Motion Private", duration: "1 Tahun", price: 10000, stock: 100, tag: "Populer", img: "img/alightmotion.png" },
+      { brand: "tutor am", label: "TUTOR AM", name: "Tutor Alight Motion", duration: "Seumurhidup", price: 80000, stock: 100, tag: "Populer", img: "img/tutoram.png" },
+      { brand: "remini", label: "REMINI", name: "Remini Premium Private", duration: "1 Bulan", price: 12000, stock: 100, tag: "Populer", img: "img/remini.png" },
+
+      { brand: "wink", label: "WINK", name: "Wink Premium Private Android", duration: "7 Hari", price: 10000, stock: 10, tag: "Populer", img: "img/wink.png" },
+      { brand: "viu", label: "VIU", name: "Viu Premium Private", duration: "3 Bulan", price: 13000, stock: 20, tag: "Original", img: "img/viu.png" },
+      { brand: "viu", label: "VIU", name: "Viu Premium Private", duration: "Lifetime", price: 20000, stock: 20, tag: "Populer", img: "img/viu.png" },
+      { brand: "viu", label: "VIU", name: "Viu Premium Private", duration: "200 Tahun", price: 30000, stock: 100, tag: "Antilimit", img: "img/viu.png" },
+
+      { brand: "bstation", label: "B-STATION", name: "Bstation Premium Sharing", duration: "1 Bulan", price: 13000, stock: 20, tag: "Populer", img: "img/bstation.png" },
+      { brand: "wetv", label: "WETV", name: "Wetv Premium Sharing 8 User", duration: "1 Bulan", price: 10000, stock: 20, tag: "Original", img: "img/wetv.png" },
+
+      { brand: "vidio", label: "VIDIO", name: "Vidio Premium Sharing 2 User", duration: "1 Bulan", price: 25000, stock: 20, tag: "Original", img: "img/vidio.png" },
+      { brand: "vidio", label: "VIDIO", name: "Vidio Premium Sharing 2u Onlyhp", duration: "1 Bulan", price: 20000, stock: 20, tag: "Original", img: "img/vidio.png" },
+      { brand: "vidio", label: "VIDIO", name: "Vidio Premium Private Alldev", duration: "1 Bulan", price: 36000, stock: 20, tag: "Original", img: "img/vidio.png" },
+      { brand: "vidio", label: "VIDIO", name: "Vidio Premium Private Onlyhp", duration: "1 Bulan", price: 28000, stock: 20, tag: "Original", img: "img/vidio.png" },
+      { brand: "vidio", label: "VIDIO", name: "Vidio OnlyTV", duration: "1 Tahun", price: 13000, stock: 20, tag: "Original", img: "img/vidio.png" },
+
+      { brand: "hbomax", label: "HBO MAX", name: "HBO MAX Sharing", duration: "1 Bulan", price: 19000, stock: 20, tag: "Original", img: "img/hbomax.png" },
+
+      { brand: "iqiyi", label: "IQIYI", name: "Iqiyi Sharing Standar", duration: "1 Bulan", price: 12000, stock: 20, tag: "Original", img: "img/iqiyi.png" },
+      { brand: "iqiyi", label: "IQIYI", name: "Iqiyi Sharing Prem", duration: "1 Bulan", price: 15000, stock: 20, tag: "Populer", img: "img/iqiyi.png" },
+      { brand: "iqiyi", label: "IQIYI", name: "Iqiyi Sharing", duration: "1 Tahun", price: 22000, stock: 20, tag: "Original", img: "img/iqiyi.png" },
+
+      { brand: "prime video", label: "PRIME VIDEO", name: "Prime Video Sharing", duration: "1 Bulan", price: 12000, stock: 20, tag: "Original", img: "img/primevideo.png" },
+      { brand: "prime video", label: "PRIME VIDEO", name: "Prime Video Private", duration: "1 Bulan", price: 18000, stock: 20, tag: "Original", img: "img/primevideo.png" },
+
+      { brand: "lightroom", label: "LIGHTROOM", name: "Lightroom Premium Sharing", duration: "1 Tahun", price: 20000, stock: 20, tag: "Original", img: "img/lightroom.png" },
+      { brand: "picsart", label: "PICSART", name: "Picsart Premium Private", duration: "1 Bulan", price: 14000, stock: 20, tag: "Original", img: "img/picsart.png" },
+      { brand: "zoom", label: "ZOOM", name: "Zoom Premium Private", duration: "14 Hari", price: 15000, stock: 20, tag: "Original", img: "img/zoom.png" },
+    ];
+
+    /* ========= Render products ========= */
+    function renderProducts(list) {
+      const productGrid = qs("#productGrid");
+      if (!productGrid) return;
+
+      if (!list.length) {
+        productGrid.innerHTML = `<div class="grid-empty">Tidak ada produk yang cocok dengan pencarian kamu.</div>`;
+        return;
+      }
+
+      productGrid.innerHTML = list.map((p, index) => {
+        const ready = (Number(p.stock) || 0) > 0;
+        const delay = Math.min(index * 0.05, 0.4); // Staggering delay perlahan (max 0.4s)
+        return `
+      <article class="card" style="animation-delay: ${delay}s">
         <div class="product-thumb">
           <img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async" onerror="this.style.display='none'">
           <span class="stock-badge ${ready ? "" : "habis"}">${ready ? `Ready • ${p.stock}` : "Habis"}</span>
@@ -2037,14 +3278,10 @@ function renderProducts(list) {
             <span class="price">${formatRupiah(p.price)}</span>
             <span class="tiny">/${p.duration}</span>
           </div>
-          <a class="btn" href="#faq">Detail</a>
+          <button class="btn" type="button" data-detail data-name="${p.name}" data-duration="${p.duration}">Detail</button>
         </div>
-<div class="product-bottom">
-  <!-- harga + detail + tombol beli -->
-</div>
 
-        ${
-          ready
+        ${ready
             ? `<button class="btn btn-buy primaryish" type="button"
                 data-buy
                 data-product="${p.name}"
@@ -2053,261 +3290,373 @@ function renderProducts(list) {
                 data-duration="${p.duration}"
               >Beli Sekarang</button>`
             : `<button class="btn btn-buy out" disabled>Stok Habis</button>`
-        }
+          }
       </article>
     `;
-  }).join("");
-}
-
-/* ========= Search ========= */
-const searchInput = qs("#searchInput");
-const searchClear = qs("#searchClear");
-
-function applySearch(q) {
-  const query = normalize(q);
-  const filtered = !query ? products : products.filter((p) => {
-    const hay = [p.name, p.label, p.brand, p.tag, p.duration].map(normalize).join(" ");
-    return hay.includes(query);
-  });
-  renderProducts(filtered);
-}
-function setSearchValue(val) {
-  if (!searchInput) return;
-  searchInput.value = val;
-  searchInput.parentElement?.classList.toggle("has-value", normalize(val).length > 0);
-  applySearch(val);
-}
-searchInput?.addEventListener("input", (e) => setSearchValue(e.target.value), { passive:true });
-searchClear?.addEventListener("click", () => setSearchValue(""), { passive:true });
-
-/* ========= BUY modal ========= */
-const buyModal = qs("#buyModal");
-const closeModal = qs("#closeModal");
-const cancelModal = qs("#cancelModal");
-const buyForm = qs("#buyForm");
-const mPreview = qs("#mPreview");
-const f_tgl = qs("#f_tgl");
-const f_durasi = qs("#f_durasi");
-
-const blocks = ["netflix","sharing","private","youtube","canva","spotify","alight"];
-function showBlock(type){
-  blocks.forEach((k) => {
-    const el = qs("#block_" + k);
-    if (!el) return;
-    const isActive = (k === type);
-    el.style.display = isActive ? "block" : "none";
-    el.querySelectorAll("input, select, textarea, button").forEach((inp) => {
-      inp.disabled = !isActive;
-    });
-  });
-}
-
-function detectType(productName, brand) {
-  const n = normalize(productName);
-  const b = normalize(brand);
-  if (b.includes("netflix") || n.includes("netflix")) return "netflix";
-  if (b.includes("youtube") || n.includes("youtube")) return "youtube";
-  if (b.includes("canva") || n.includes("canva")) return "canva";
-  if (b.includes("spotify") || n.includes("spotify")) return "spotify";
-  if (b.includes("alight") || n.includes("alight")) return "alight";
-  if (n.includes("private")) return "private";
-  return "sharing";
-}
-
-let selectedOrder = { product:"", brand:"", price:0, duration:"", type:"" };
-let waFinalMessage = "";
-
-function openBuyModal({ product, brand, price, duration }) {
-  const type = detectType(product, brand);
-  selectedOrder = {
-    product: product || "",
-    brand: brand || "",
-    price: Number(price) || 0,
-    duration: duration || "",
-    type
-  };
-
-  if (mPreview) mPreview.value = `${selectedOrder.product} • ${selectedOrder.duration} • ${formatRupiah(selectedOrder.price)}`;
-  if (f_tgl) f_tgl.value = todayISO();
-  if (f_durasi) f_durasi.value = selectedOrder.duration || "";
-
-  const s_apk = qs("#s_apk"); if (s_apk) s_apk.value = selectedOrder.product;
-  const p_apk = qs("#p_apk"); if (p_apk) p_apk.value = selectedOrder.product;
-
-  showBlock(type);
-
-  buyModal.classList.add("show");
-  buyModal.setAttribute("aria-hidden", "false");
-  lockScroll();
-}
-
-function closeBuyModal() {
-  if (!buyModal?.classList.contains("show")) return;
-  buyModal.classList.remove("show");
-  buyModal.setAttribute("aria-hidden", "true");
-  buyForm?.reset();
-  selectedOrder = { product:"", brand:"", price:0, duration:"", type:"" };
-  waFinalMessage = "";
-
-  if (!qs("#payModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
-    unlockScroll();
-  }
-}
-
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-buy]");
-  if (!btn) return;
-  openBuyModal({
-    product: btn.getAttribute("data-product"),
-    brand: btn.getAttribute("data-brand"),
-    price: btn.getAttribute("data-price"),
-    duration: btn.getAttribute("data-duration"),
-  });
-});
-
-closeModal?.addEventListener("click", closeBuyModal, { passive:true });
-cancelModal?.addEventListener("click", closeBuyModal, { passive:true });
-buyModal?.addEventListener("click", (e) => { if (e.target === buyModal) closeBuyModal(); }, { passive:true });
-
-/* ========= PAYMENT modal ========= */
-const payModal = qs("#payModal");
-const closePay = qs("#closePay");
-const backToForm = qs("#backToForm");
-const sendPaid = qs("#sendPaid");
-const payAmount = qs("#payAmount");
-const qrisImg = qs("#qrisImg");
-const qrisHref = qs("#qrisHref");
-const askStockBtn = qs("#askStockBtn");
-const paidNotif = qs("#paidNotif");
-const paidYes = qs("#paid_yes");
-const paidNo  = qs("#paid_no");
-
-let waReadyToOpen = false;
-
-function resetPayUI(){
-  waReadyToOpen = false;
-  if (paidNotif) paidNotif.style.display = "none";
-  if (sendPaid){
-    sendPaid.textContent = "Kirim";
-    sendPaid.disabled = !(paidYes?.checked === true);
-  }
-}
-function syncSendPaidState(){
-  const isPaid = (paidYes?.checked === true);
-  if (!waReadyToOpen && sendPaid) sendPaid.disabled = !isPaid;
-
-  if (!isPaid){
-    waReadyToOpen = false;
-    if (paidNotif) paidNotif.style.display = "none";
-    if (sendPaid){
-      sendPaid.textContent = "Kirim";
-      sendPaid.disabled = true;
+      }).join("");
     }
-  }
-}
-paidYes?.addEventListener("change", syncSendPaidState, { passive:true });
-paidNo?.addEventListener("change", syncSendPaidState, { passive:true });
 
-function openPayModal(){
-  if (payAmount) payAmount.textContent = formatRupiah(selectedOrder.price);
-  if (qrisImg) qrisImg.src = QRIS_IMAGE_URL;
-  if (qrisHref) qrisHref.href = QRIS_IMAGE_URL;
+    /* ========= Search ========= */
+    const searchInput = qs("#searchInput");
+    const searchClear = qs("#searchClear");
 
-  if (paidNo) paidNo.checked = true;
-  resetPayUI();
-  syncSendPaidState();
+    function applySearch(q) {
+      const query = normalize(q);
+      const filtered = !query ? products : products.filter((p) => {
+        const hay = [p.name, p.label, p.brand, p.tag, p.duration].map(normalize).join(" ");
+        return hay.includes(query);
+      });
+      renderProducts(filtered);
+    }
+    function setSearchValue(val) {
+      if (!searchInput) return;
+      searchInput.value = val;
+      searchInput.parentElement?.classList.toggle("has-value", normalize(val).length > 0);
+      applySearch(val);
+    }
+    searchInput?.addEventListener("input", (e) => setSearchValue(e.target.value), { passive: true });
+    searchClear?.addEventListener("click", () => setSearchValue(""), { passive: true });
 
-  payModal.classList.add("show");
-  payModal.setAttribute("aria-hidden", "false");
-  lockScroll();
-}
-function closePayModal(){
-  if (!payModal?.classList.contains("show")) return;
-  payModal.classList.remove("show");
-  payModal.setAttribute("aria-hidden", "true");
-  if (paidNo) paidNo.checked = true;
-  resetPayUI();
-  syncSendPaidState();
+    /* ========= Active nav ========= */
+    (() => {
+      const ids = ["beranda", "produk", "services", "faq"];
+      const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
 
-  if (!qs("#buyModal")?.classList.contains("show") && !qs("#qrisView")?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
-    unlockScroll();
-  }
-}
+      const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+      const mobLinks = [...document.querySelectorAll('#mobileMenu .mobile-links a[href^="#"]')];
+      const allLinks = [...navLinks, ...mobLinks];
 
-closePay?.addEventListener("click", closePayModal, { passive:true });
-payModal?.addEventListener("click", (e) => { if (e.target === payModal) closePayModal(); }, { passive:true });
+      function setActive(hash) {
+        allLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === hash));
+      }
+      window.__setActiveNav = setActive;
 
-backToForm?.addEventListener("click", () => {
-  closePayModal();
-  buyModal.classList.add("show");
-  buyModal.setAttribute("aria-hidden", "false");
-  lockScroll();
-}, { passive:true });
+      setActive(location.hash && document.querySelector(location.hash) ? location.hash : "#beranda");
 
-askStockBtn?.addEventListener("click", () => {
-  if (!selectedOrder.product) return alert("Pilih produk dulu.");
-  const msg =
-`Halo admin, saya mau tanya stok dulu ya ✅
+      const obs = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        setActive("#" + visible.target.id);
+      }, { rootMargin: "-35% 0px -55% 0px", threshold: [0.01, 0.08, 0.15] });
+
+      sections.forEach(s => obs.observe(s));
+
+      /* Scroll reveal observer */
+      const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+            // Optional: unobserve if you only want it to reveal once
+            revealObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+      document.querySelectorAll(".reveal").forEach(el => revealObs.observe(el));
+    })();
+
+    /* ========= Detail modal ========= */
+    const detailModal = qs("#detailModal");
+    const detailBody = qs("#detailBody");
+    const closeDetail = qs("#closeDetail");
+    const detailCloseBtn = qs("#detailCloseBtn");
+
+    function anyOverlayOpen() {
+      return (
+        qs("#buyModal")?.classList.contains("show") ||
+        qs("#payModal")?.classList.contains("show") ||
+        qs("#qrisView")?.classList.contains("show") ||
+        qs("#detailModal")?.classList.contains("show") ||
+        qs("#mobileMenu")?.classList.contains("open")
+      );
+    }
+
+    function openDetailModal(p) {
+      if (!detailBody) return;
+
+      detailBody.innerHTML = `
+    <div style="display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);">
+      <div style="width:72px;height:72px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);flex:0 0 auto;">
+        <img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">
+      </div>
+      <div style="min-width:0">
+        <div style="font-weight:900;font-size:16px;letter-spacing:-.2px">${p.name}</div>
+        <div style="color:var(--muted);font-weight:800;font-size:13px;line-height:1.5;margin-top:2px">${p.label || p.brand} • ${p.duration} • Tag: ${p.tag}</div>
+        <div style="margin-top:8px;font-weight:900;font-size:18px">${formatRupiah(p.price)} <span style="color:var(--muted);font-size:12px;font-weight:900">/ ${p.duration}</span></div>
+      </div>
+    </div>
+
+    <ul style="margin:12px 0 0;padding-left:18px;color:rgba(255,255,255,.78);font-weight:800;font-size:14px;line-height:1.6;">
+      <li>Akses premium sesuai paket.</li>
+      <li>Konfirmasi stok ke admin sebelum bayar QRIS.</li>
+      <li>Support untuk kendala umum sesuai jam layanan.</li>
+    </ul>
+  `;
+
+      detailModal.classList.add("show");
+      detailModal.setAttribute("aria-hidden", "false");
+      lockScroll();
+    }
+    function closeDetailModal() {
+      if (!detailModal?.classList.contains("show")) return;
+      detailModal.classList.remove("show");
+      detailModal.setAttribute("aria-hidden", "true");
+      if (detailBody) detailBody.innerHTML = "";
+      if (!anyOverlayOpen()) unlockScroll();
+    }
+    closeDetail?.addEventListener("click", closeDetailModal, { passive: true });
+    detailCloseBtn?.addEventListener("click", closeDetailModal, { passive: true });
+    detailModal?.addEventListener("click", (e) => { if (e.target === detailModal) closeDetailModal(); }, { passive: true });
+
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-detail]");
+      if (!b) return;
+      const name = b.getAttribute("data-name");
+      const duration = b.getAttribute("data-duration");
+      const p = products.find(x => x.name === name && x.duration === duration);
+      if (!p) return;
+      openDetailModal(p);
+    });
+
+    /* ========= Buy modal ========= */
+    const buyModal = qs("#buyModal");
+    const closeModal = qs("#closeModal");
+    const cancelModal = qs("#cancelModal");
+    const buyForm = qs("#buyForm");
+    const sendBtn = qs("#sendBtn");
+    const mPreview = qs("#mPreview");
+    const f_tgl = qs("#f_tgl");
+    const f_durasi = qs("#f_durasi");
+    const loadingView = qs("#loadingView");
+
+    const blocks = ["netflix", "sharing", "private", "youtube", "canva", "spotify", "alight"];
+    function showBlock(type) {
+      blocks.forEach((k) => {
+        const el = qs("#block_" + k);
+        if (!el) return;
+        const isActive = (k === type);
+        el.style.display = isActive ? "block" : "none";
+        el.querySelectorAll("input, select, textarea, button").forEach((inp) => {
+          inp.disabled = !isActive;
+        });
+      });
+    }
+    function detectType(productName, brand) {
+      const n = normalize(productName);
+      const b = normalize(brand);
+      if (b.includes("netflix") || n.includes("netflix")) return "netflix";
+      if (b.includes("youtube") || n.includes("youtube")) return "youtube";
+      if (b.includes("canva") || n.includes("canva")) return "canva";
+      if (b.includes("spotify") || n.includes("spotify")) return "spotify";
+      if (b.includes("alight") || n.includes("alight")) return "alight";
+      if (n.includes("private")) return "private";
+      return "sharing";
+    }
+
+    let selectedOrder = { product: "", brand: "", price: 0, duration: "", type: "" };
+    let waFinalMessage = "";
+
+    function openBuyModal({ product, brand, price, duration }) {
+      const type = detectType(product, brand);
+      selectedOrder = { product: product || "", brand: brand || "", price: Number(price) || 0, duration: duration || "", type };
+
+      if (mPreview) mPreview.value = `${selectedOrder.product} • ${selectedOrder.duration} • ${formatRupiah(selectedOrder.price)}`;
+      if (f_tgl) f_tgl.value = todayISO();
+      if (f_durasi) f_durasi.value = selectedOrder.duration || "";
+
+      const s_apk = qs("#s_apk"); if (s_apk) s_apk.value = selectedOrder.product;
+      const p_apk = qs("#p_apk"); if (p_apk) p_apk.value = selectedOrder.product;
+
+      showBlock(type);
+
+      buyModal.classList.add("show");
+      buyModal.setAttribute("aria-hidden", "false");
+      lockScroll();
+    }
+    function closeBuyModal() {
+      if (!buyModal?.classList.contains("show")) return;
+      buyModal.classList.remove("show");
+      buyModal.setAttribute("aria-hidden", "true");
+      buyForm?.reset();
+      selectedOrder = { product: "", brand: "", price: 0, duration: "", type: "" };
+      waFinalMessage = "";
+      if (!anyOverlayOpen()) unlockScroll();
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-buy]");
+      if (!btn) return;
+      openBuyModal({
+        product: btn.getAttribute("data-product"),
+        brand: btn.getAttribute("data-brand"),
+        price: btn.getAttribute("data-price"),
+        duration: btn.getAttribute("data-duration"),
+      });
+    });
+    closeModal?.addEventListener("click", closeBuyModal, { passive: true });
+    cancelModal?.addEventListener("click", closeBuyModal, { passive: true });
+    buyModal?.addEventListener("click", (e) => { if (e.target === buyModal) closeBuyModal(); }, { passive: true });
+
+    /* ========= Payment modal ========= */
+    const payModal = qs("#payModal");
+    const closePay = qs("#closePay");
+    const backToForm = qs("#backToForm");
+    const sendPaid = qs("#sendPaid");
+    const payAmount = qs("#payAmount");
+    const qrisImg = qs("#qrisImg");
+    const qrisHref = qs("#qrisHref");
+    const askStockBtn = qs("#askStockBtn");
+    const paidNotif = qs("#paidNotif");
+    const paidYes = qs("#paid_yes");
+    const paidNo = qs("#paid_no");
+
+    let waReadyToOpen = false;
+
+    function openPayModal() {
+      if (payAmount) payAmount.textContent = formatRupiah(selectedOrder.price);
+      if (qrisImg) qrisImg.src = QRIS_IMAGE_URL;
+
+      if (paidNo) paidNo.checked = true;
+      waReadyToOpen = false;
+      if (paidNotif) paidNotif.style.display = "none";
+      if (sendPaid) {
+        sendPaid.textContent = "Kirim";
+        sendPaid.disabled = true;
+      }
+
+      payModal.classList.add("show");
+      payModal.setAttribute("aria-hidden", "false");
+      lockScroll();
+    }
+    function closePayModal() {
+      if (!payModal?.classList.contains("show")) return;
+      payModal.classList.remove("show");
+      payModal.setAttribute("aria-hidden", "true");
+      if (paidNo) paidNo.checked = true;
+      waReadyToOpen = false;
+      if (paidNotif) paidNotif.style.display = "none";
+      if (sendPaid) { sendPaid.textContent = "Kirim"; sendPaid.disabled = true; }
+      if (!anyOverlayOpen()) unlockScroll();
+    }
+    closePay?.addEventListener("click", closePayModal, { passive: true });
+    payModal?.addEventListener("click", (e) => { if (e.target === payModal) closePayModal(); }, { passive: true });
+
+    function syncSendPaidState() {
+      const isPaid = (paidYes?.checked === true);
+      if (!waReadyToOpen) sendPaid.disabled = !isPaid;
+      if (!isPaid) {
+        waReadyToOpen = false;
+        if (paidNotif) paidNotif.style.display = "none";
+        sendPaid.textContent = "Kirim";
+        sendPaid.disabled = true;
+      }
+    }
+    paidYes?.addEventListener("change", syncSendPaidState, { passive: true });
+    paidNo?.addEventListener("change", syncSendPaidState, { passive: true });
+
+    backToForm?.addEventListener("click", () => {
+      closePayModal();
+      buyModal.classList.add("show");
+      buyModal.setAttribute("aria-hidden", "false");
+      lockScroll();
+    }, { passive: true });
+
+    askStockBtn?.addEventListener("click", () => {
+      if (!selectedOrder.product) return alert("Pilih produk dulu.");
+      const msg =
+        `Halo admin, saya mau tanya stok dulu ya ✅
 
 Produk: ${selectedOrder.product}
 Durasi: ${selectedOrder.duration}
 Harga: ${formatRupiah(selectedOrder.price)}
 
 Apakah stok ready?`;
-  window.open(waLink(msg), "_blank", "noopener,noreferrer");
-}, { passive:true });
+      window.open(waLink(msg), "_blank", "noopener,noreferrer");
+    }, { passive: true });
 
-sendPaid?.addEventListener("click", () => {
-  if (!waFinalMessage) return alert("Data order belum ada. Isi format dulu.");
-  const isPaid = (paidYes?.checked === true);
-  if (!isPaid) return;
+    sendPaid?.addEventListener("click", () => {
+      if (!waFinalMessage) return alert("Data order belum ada. Isi format dulu.");
+      const isPaid = (paidYes?.checked === true);
+      if (!isPaid) return;
 
-  if (!waReadyToOpen){
-    if (paidNotif) paidNotif.style.display = "block";
-    const body = payModal?.querySelector(".modal-body");
-    if (body) body.scrollTo({ top: 0, behavior: "smooth" });
+      if (!waReadyToOpen) {
+        if (paidNotif) paidNotif.style.display = "block";
+        const body = payModal?.querySelector(".modal-body");
+        if (body) body.scrollTo({ top: 0, behavior: prefersReduce ? "auto" : "smooth" });
+        waReadyToOpen = true;
+        sendPaid.textContent = "Lanjut WhatsApp";
+        sendPaid.disabled = false;
+        return;
+      }
 
-    waReadyToOpen = true;
-    sendPaid.textContent = "Lanjut WhatsApp";
-    sendPaid.disabled = false;
-    return;
-  }
-
-  const finalMsg =
-`${waFinalMessage}
+      const finalMsg =
+        `${waFinalMessage}
 
 🔔 *Konfirmasi pembayaran:* SUDAH BAYAR
 ⏳ Status: Menunggu admin proses.`.trim();
 
-  window.open(waLink(finalMsg), "_blank", "noopener,noreferrer");
-  closePayModal();
-  closeBuyModal();
-}, { passive:true });
+      window.open(waLink(finalMsg), "_blank", "noopener,noreferrer");
+      closePayModal();
+      closeBuyModal();
+    }, { passive: true });
 
-/* ========= BUY FORM submit ========= */
-buyForm?.addEventListener("submit", (e) => {
-  e.preventDefault();
+    /* ========= Loading helpers ========= */
+    function showLoading() {
+      if (!loadingView) return;
+      loadingView.classList.add("show");
+      loadingView.setAttribute("aria-hidden", "false");
+    }
+    function hideLoading() {
+      if (!loadingView) return;
+      loadingView.classList.remove("show");
+      loadingView.setAttribute("aria-hidden", "true");
+    }
+    function setSendBtnLoading(on) {
+      if (!sendBtn) return;
+      if (on) {
+        sendBtn.classList.add("is-loading");
+        sendBtn.disabled = true;
+        sendBtn.innerHTML = `<span class="btn-spin" aria-hidden="true"></span><span>Memproses…</span>`;
+      } else {
+        sendBtn.classList.remove("is-loading");
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Lanjut Pembayaran";
+      }
+    }
 
-  const type = selectedOrder.type || "sharing";
-  const tgl = requireVal(f_tgl.value);
-  const durasi = requireVal(f_durasi.value);
-  if (!tgl || !durasi) return alert("Harap isi tgl order & durasi (*)");
+    /* ========= BUY submit ========= */
+    buyForm?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      setSendBtnLoading(true);
 
-  const hargaTxt = formatRupiah(selectedOrder.price);
-  const basePayNote =
-`⚠️ Sebelum bayar: *tanyakan stok ke admin dulu!*
+      const type = selectedOrder.type || "sharing";
+      const tgl = requireVal(f_tgl.value);
+      const durasi = requireVal(f_durasi.value);
+      if (!tgl || !durasi) {
+        setSendBtnLoading(false);
+        return alert("Harap isi tgl order & durasi (*)");
+      }
+
+      const hargaTxt = formatRupiah(selectedOrder.price);
+      const basePayNote =
+        `⚠️ Sebelum bayar: *tanyakan stok ke admin dulu!*
 Metode pembayaran: *QRIS*
 Nominal: *${hargaTxt}*`;
 
-  let msg = "";
+      let msg = "";
 
-  if (type === "netflix") {
-    const merk = requireVal(qs("#n_merk")?.value);
-    const lokasi = requireVal(qs("#n_lokasi")?.value);
-    const tipe = requireVal(qs("#n_tipe")?.value);
-    if (!merk || !lokasi || !tipe) return alert("Harap isi semua field wajib (*)");
-    msg =
-`*Format Netflix*
+      if (type === "netflix") {
+        const merk = requireVal(qs("#n_merk")?.value);
+        const lokasi = requireVal(qs("#n_lokasi")?.value);
+        const tipe = requireVal(qs("#n_tipe")?.value);
+        if (!merk || !lokasi || !tipe) {
+          setSendBtnLoading(false);
+          return alert("Harap isi semua field wajib (*)");
+        }
+        msg =
+          `*Format Netflix*
 
 *🐣* produk : ${selectedOrder.product}
 *🐣* tgl order : ${tgl}
@@ -2318,14 +3667,20 @@ Nominal: *${hargaTxt}*`;
 *🐣* 1u/2u/semipriv/priv : ${tipe}
 
 ${basePayNote}`;
-  } else if (type === "youtube") {
-    const plan = requireVal(qs("#y_plan")?.value);
-    const email = requireVal(qs("#y_email")?.value);
-    const pass = requireVal(qs("#y_pass")?.value);
-    if (!plan || !email) return alert("Harap isi semua field wajib (*)");
-    if (plan === "indplan" && !pass) return alert("Indplan wajib isi password");
-    msg =
-`•┈  *format youtube* ┈•
+      } else if (type === "youtube") {
+        const plan = requireVal(qs("#y_plan")?.value);
+        const email = requireVal(qs("#y_email")?.value);
+        const pass = requireVal(qs("#y_pass")?.value);
+        if (!plan || !email) {
+          setSendBtnLoading(false);
+          return alert("Harap isi semua field wajib (*)");
+        }
+        if (plan === "indplan" && !pass) {
+          setSendBtnLoading(false);
+          return alert("Indplan wajib isi password");
+        }
+        msg =
+          `•┈  *format youtube* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2336,12 +3691,15 @@ ${basePayNote}`;
 *𔘓* famplan/indplan : ${plan}
 
 ${basePayNote}`;
-  } else if (type === "canva") {
-    const email = requireVal(qs("#c_email")?.value);
-    const design = requireVal(qs("#c_design")?.value);
-    if (!email || !design) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈  *format canva* ┈•
+      } else if (type === "canva") {
+        const email = requireVal(qs("#c_email")?.value);
+        const design = requireVal(qs("#c_design")?.value);
+        if (!email || !design) {
+          setSendBtnLoading(false);
+          return alert("Harap isi semua field wajib (*)");
+        }
+        msg =
+          `•┈  *format canva* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2351,13 +3709,16 @@ ${basePayNote}`;
 *𔘓* design/no : ${design}
 
 ${basePayNote}`;
-  } else if (type === "spotify") {
-    const plan = requireVal(qs("#sp_plan")?.value);
-    const email = requireVal(qs("#sp_email")?.value);
-    const pass = requireVal(qs("#sp_pass")?.value);
-    if (!plan || !email || !pass) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈  *format spotify* ┈•
+      } else if (type === "spotify") {
+        const plan = requireVal(qs("#sp_plan")?.value);
+        const email = requireVal(qs("#sp_email")?.value);
+        const pass = requireVal(qs("#sp_pass")?.value);
+        if (!plan || !email || !pass) {
+          setSendBtnLoading(false);
+          return alert("Harap isi semua field wajib (*)");
+        }
+        msg =
+          `•┈  *format spotify* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2368,12 +3729,15 @@ ${basePayNote}`;
 *𔘓* famplan/indplan : ${plan}
 
 ${basePayNote}`;
-  } else if (type === "alight") {
-    const pass = requireVal(qs("#a_pass")?.value);
-    const note = requireVal(qs("#a_note")?.value);
-    if (!pass) return alert("Harap isi password (*)");
-    msg =
-`•┈  *format alightmotion* ┈•
+      } else if (type === "alight") {
+        const pass = requireVal(qs("#a_pass")?.value);
+        const note = requireVal(qs("#a_note")?.value);
+        if (!pass) {
+          setSendBtnLoading(false);
+          return alert("Harap isi password (*)");
+        }
+        msg =
+          `•┈  *format alightmotion* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2385,12 +3749,15 @@ ${basePayNote}`;
 ${note ? "• catatan : " + note : ""}
 
 ${basePayNote}`.trim();
-  } else if (type === "private") {
-    const apk = requireVal(qs("#p_apk")?.value);
-    const ket = requireVal(qs("#p_ket")?.value);
-    if (!apk || !ket) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈ *format app private*┈•
+      } else if (type === "private") {
+        const apk = requireVal(qs("#p_apk")?.value);
+        const ket = requireVal(qs("#p_ket")?.value);
+        if (!apk || !ket) {
+          setSendBtnLoading(false);
+          return alert("Harap isi semua field wajib (*)");
+        }
+        msg =
+          `•┈ *format app private*┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2402,14 +3769,17 @@ ${basePayNote}`.trim();
 *𔘓* keterangan : ${ket}
 
 ${basePayNote}`;
-  } else {
-    const apk = requireVal(qs("#s_apk")?.value);
-    const device = requireVal(qs("#s_device")?.value);
-    const lokasi = requireVal(qs("#s_lokasi")?.value);
-    const ket = requireVal(qs("#s_ket")?.value);
-    if (!apk || !device || !lokasi || !ket) return alert("Harap isi semua field wajib (*)");
-    msg =
-`•┈  *format app sharing* ┈•
+      } else {
+        const apk = requireVal(qs("#s_apk")?.value);
+        const device = requireVal(qs("#s_device")?.value);
+        const lokasi = requireVal(qs("#s_lokasi")?.value);
+        const ket = requireVal(qs("#s_ket")?.value);
+        if (!apk || !device || !lokasi || !ket) {
+          setSendBtnLoading(false);
+          return alert("Harap isi semua field wajib (*)");
+        }
+        msg =
+          `•┈  *format app sharing* ┈•
 
 *𔘓* produk : ${selectedOrder.product}
 *𔘓* tgl order : ${tgl}
@@ -2418,197 +3788,115 @@ ${basePayNote}`;
 *𔘓* harga : ${hargaTxt}
 *𔘓* device : ${device}
 *𔘓* lokasi : ${lokasi}
-*𔘓* keterangan : ${ket}
+*𔘓* keterangan : ${ket}   
 
 ${basePayNote}`;
-  }
+      }
 
-  waFinalMessage = msg;
+      waFinalMessage = msg;
 
-  buyModal.classList.remove("show");
-  buyModal.setAttribute("aria-hidden", "true");
-  openPayModal();
-}, { passive:false });
+      // Tutup form, tampilkan loading, lalu buka QRIS
+      buyModal.classList.remove("show");
+      buyModal.setAttribute("aria-hidden", "true");
 
-/* ===== FINAL PATCH: tombol loading + overlay loading sebelum QRIS ===== */
-(() => {
-  if (window.__FAXML_LOADING_PATCH__) return;
-  window.__FAXML_LOADING_PATCH__ = true;
+      showLoading();
+      const delay = prefersReduce ? 0 : 1200; // ringan & cepat
+      setTimeout(() => {
+        hideLoading();
+        setSendBtnLoading(false);
+        openPayModal();
+      }, delay);
+    }, { passive: false });
 
-  const loadingView = document.getElementById("loadingView");
-  const sendBtn = document.getElementById("sendBtn");     // tombol "Lanjut Pembayaran"
-  const buyForm = document.getElementById("buyForm");
-  const buyModalEl = document.getElementById("buyModal");
-  if (!loadingView || !sendBtn || !buyForm || !buyModalEl) return;
+    /* ========= QRIS Overlay ========= */
+    const qrisView = qs("#qrisView");
+    const qrisBigImg = qs("#qrisBigImg");
+    const closeQrisBtn = qs("#closeQrisBtn");
 
-  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-  const LOADING_SECONDS = 2; // durasi loading (detik)
-  const LOADING_DELAY   = prefersReduce ? 0 : Math.round(LOADING_SECONDS * 1000);
-
-
-  let token = 0;
-  let btnOldHTML = "";
-  let btnOldDisabled = false;
-
-  const showOverlay = () => {
-    loadingView.classList.add("show");
-    loadingView.setAttribute("aria-hidden", "false");
-  };
-  const hideOverlay = () => {
-    loadingView.classList.remove("show");
-    loadingView.setAttribute("aria-hidden", "true");
-  };
-
-  const setBtnLoading = (on) => {
-    if (!sendBtn) return;
-    if (on) {
-      // simpan state awal
-      if (!btnOldHTML) btnOldHTML = sendBtn.innerHTML;
-      btnOldDisabled = sendBtn.disabled;
-
-      sendBtn.disabled = true;
-      sendBtn.classList.add("is-loading");
-      sendBtn.innerHTML = `<span class="btn-spin" aria-hidden="true"></span><span>Memproses…</span>`;
-    } else {
-      // restore
-      if (btnOldHTML) sendBtn.innerHTML = btnOldHTML;
-      sendBtn.disabled = btnOldDisabled;
-      sendBtn.classList.remove("is-loading");
-
-      // reset cache supaya aman kalau HTML berubah dari luar
-      btnOldHTML = "";
-      btnOldDisabled = false;
+    function openQrisView() {
+      if (qrisBigImg) qrisBigImg.src = QRIS_IMAGE_URL;
+      qrisView.classList.add("show");
+      qrisView.setAttribute("aria-hidden", "false");
+      lockScroll();
     }
-  };
+    function closeQrisView() {
+      if (!qrisView?.classList.contains("show")) return;
+      qrisView.classList.remove("show");
+      qrisView.setAttribute("aria-hidden", "true");
+      if (!anyOverlayOpen()) unlockScroll();
+    }
+    closeQrisBtn?.addEventListener("click", closeQrisView, { passive: true });
+    qrisView?.addEventListener("click", (e) => { if (e.target === qrisView) closeQrisView(); }, { passive: true });
+    qrisHref?.addEventListener("click", (e) => { e.preventDefault(); openQrisView(); }, { passive: false });
 
-  // Saat submit (klik "Lanjut Pembayaran"), tampilkan loading di tombol.
-  // Kalau validasi gagal (modal tetap terbuka), auto balik normal.
-  buyForm.addEventListener("submit", () => {
-    const my = ++token;
-    setBtnLoading(true);
+    /* ========= THEME TOGGLE (MORNING/NIGHT) ========= */
+    (function initTheme() {
+      const btn = qs('#themeToggle');
+      const ico = qs('#themeIco');
+      if (!btn || !ico) return;
 
-    // tunggu sebentar: kalau buyModal masih "show", berarti handler lama return karena alert/validasi
-    setTimeout(() => {
-      if (my !== token) return;
-      const stillOpen = buyModalEl.classList.contains("show");
-      if (stillOpen) {
-        setBtnLoading(false);
-        hideOverlay();
-      }
-    }, 220);
-  }, true);
+      let isLight = false;
 
-  // Patch openPayModal: overlay loading dulu, baru QRIS.
-  if (typeof window.openPayModal === "function") {
-    const _openPayModal = window.openPayModal;
-
-    window.openPayModal = function () {
-      const my = ++token;
-
-      // overlay tampil setelah buy modal ketutup (biar tombol sempat kelihatan)
-      setTimeout(() => {
-        if (my !== token) return;
-        showOverlay();
-      }, prefersReduce ? 0 : 120);
-
-      setTimeout(() => {
-        if (my !== token) return;
-        hideOverlay();
-        setBtnLoading(false);
-        _openPayModal();
-      }, LOADING_DELAY);
-    };
-  }
-
-  // Safety: kalau pay modal ditutup, pastikan overlay/tombol normal lagi
-  if (typeof window.closePayModal === "function") {
-    const _closePayModal = window.closePayModal;
-    window.closePayModal = function () {
-      token++;
-      hideOverlay();
-      setBtnLoading(false);
-      _closePayModal();
-    };
-  }
-
-  // Safety: kalau buy modal ditutup (cancel/esc), matikan loading juga
-  if (typeof window.closeBuyModal === "function") {
-    const _closeBuyModal = window.closeBuyModal;
-    window.closeBuyModal = function () {
-      token++;
-      hideOverlay();
-      setBtnLoading(false);
-      _closeBuyModal();
-    };
-  }
-})();
-
-/* ========= QRIS Overlay ========= */
-const qrisView = qs("#qrisView");
-const qrisBigImg = qs("#qrisBigImg");
-const closeQrisBtn = qs("#closeQrisBtn");
-
-function openQrisView(){
-  if (qrisBigImg) qrisBigImg.src = QRIS_IMAGE_URL;
-  qrisView.classList.add("show");
-  qrisView.setAttribute("aria-hidden","false");
-  lockScroll();
-}
-function closeQrisView(){
-  if (!qrisView?.classList.contains("show")) return;
-  qrisView.classList.remove("show");
-  qrisView.setAttribute("aria-hidden","true");
-
-  if (!qs("#buyModal")?.classList.contains("show") && !qs("#payModal")?.classList.contains("show") && !mobileMenu?.classList.contains("open")) {
-    unlockScroll();
-  }
-}
-closeQrisBtn?.addEventListener("click", closeQrisView, { passive:true });
-qrisView?.addEventListener("click", (e)=>{ if(e.target === qrisView) closeQrisView(); }, { passive:true });
-qrisHref?.addEventListener("click", (e) => { e.preventDefault(); openQrisView(); }, { passive:false });
-
-/* ========= Init ========= */
-document.addEventListener("DOMContentLoaded", () => {
-  renderProducts(products);
-  applySearch("");
-}, { passive:true });
-(function(){
-  function mark(){
-    const btns = Array.from(document.querySelectorAll("a,button"))
-      .filter(el => /beli sekarang/i.test(el.textContent || ""));
-
-    btns.forEach(btn => {
-      // cari card terdekat
-      const card = btn.closest(".product-card, .product, .card, article, li, div");
-      if(!card) return;
-
-      card.classList.add("p-card");
-
-      // wrapper grid (parent yang isinya banyak card)
-      const grid = card.parentElement;
-      if(grid && grid.children && grid.children.length >= 2){
-        grid.classList.add("p-grid");
+      function setTheme(light) {
+        isLight = light;
+        if (isLight) {
+          document.documentElement.classList.add('light-mode');
+          ico.textContent = '☀️';
+        } else {
+          document.documentElement.classList.remove('light-mode');
+          ico.textContent = '🌙';
+        }
+        try { localStorage.setItem('theme-mode', isLight ? 'light' : 'dark'); } catch (e) { }
       }
 
-      // title & desc di dalam card
-      const title = card.querySelector(".product-title, .title, h3, h2, h4");
-      if(title) title.classList.add("p-title");
+      btn.addEventListener('click', () => setTheme(!isLight), { passive: true });
 
-      const desc  = card.querySelector(".product-desc, .desc, p");
-      if(desc) desc.classList.add("p-desc");
+      // Auto dark mode detection / load saved
+      try {
+        const saved = localStorage.getItem('theme-mode');
+        if (saved === 'light') {
+          setTheme(true);
+        } else if (!saved && window.matchMedia('(prefers-color-scheme: light)').matches) {
+          setTheme(true);
+        }
+      } catch (e) { }
+    })();
 
-      // actions area (tempat tombol)
-      const actions = btn.closest(".product-bottom, .actions, .card-actions") || btn.parentElement;
-      if(actions) actions.classList.add("p-actions");
-    });
-  }
+    /* ========= ELECTRIC FX ========= */
+    (function initElectricFX() {
+      const wrap = qs('#electricWrap');
+      const btn = qs('#elecToggle');
+      if (!wrap || !btn) return;
 
-  window.addEventListener("DOMContentLoaded", () => {
-    mark();
-    setTimeout(mark, 300);   // kalau produk render async
-    setTimeout(mark, 1000);
-  });
-})();
-</script>
+      let isOn = false;
+
+      function setOn(val) {
+        isOn = val;
+        if (isOn) {
+          wrap.classList.add('on');
+          btn.classList.add('on');
+          btn.setAttribute('aria-pressed', 'true');
+          btn.querySelector('.elec-toggle-label').textContent = 'Electric ON';
+        } else {
+          wrap.classList.remove('on');
+          btn.classList.remove('on');
+          btn.setAttribute('aria-pressed', 'false');
+          btn.querySelector('.elec-toggle-label').textContent = 'Electric';
+        }
+        try { localStorage.setItem('elec-fx', isOn ? '1' : '0'); } catch (e) { }
+      }
+
+      btn.addEventListener('click', () => setOn(!isOn), { passive: true });
+      try { if (localStorage.getItem('elec-fx') === '1') setOn(true); } catch (e) { }
+    })();
+    /* ========= /ELECTRIC FX ========= */
+
+    /* ========= Init ========= */
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProducts(products);
+      applySearch("");
+    }, { passive: true });
+  </script>
 </body>
+
 </html>
