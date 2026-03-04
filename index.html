@@ -942,49 +942,79 @@
     }
 
     @media (max-width: 720px) {
-      .card {
-        padding: 12px;
-        border-radius: 16px;
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
       }
 
-      .product-thumb {
-        height: 120px;
+      .card {
+        padding: 10px;
         border-radius: 14px;
       }
 
+      .product-thumb {
+        height: 100px;
+        border-radius: 12px;
+        margin-bottom: 8px;
+      }
+
       .thumb-brand {
-        font-size: 13px;
-        left: 12px;
-        bottom: 10px;
+        font-size: 11px;
+        left: 10px;
+        bottom: 8px;
       }
 
       .stock-badge {
-        top: 10px;
-        right: 10px;
-        padding: 5px 8px;
-        font-size: 11px;
+        top: 8px;
+        right: 8px;
+        padding: 4px 6px;
+        font-size: 10px;
       }
 
       .tag {
-        font-size: 11px;
-        padding: 5px 8px;
+        font-size: 10px;
+        padding: 4px 6px;
+      }
+
+      .product-sub {
+        font-size: 10px;
+        margin-bottom: 4px;
       }
 
       .card h3 {
-        font-size: 14px;
+        font-size: 13px;
+        margin: 6px 0 4px;
+        max-height: calc(1.25em * 2);
       }
 
       .card p {
-        font-size: 12px;
-        margin-bottom: 10px;
+        font-size: 11px;
+        margin-bottom: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .price {
+        font-size: 13px;
       }
 
       .tiny {
-        margin-left: 0;
+        font-size: 10px;
+        margin-left: 2px;
+      }
+
+      .price-row .btn {
+        padding: 5px 10px;
+        font-size: 11px;
       }
 
       .btn-buy {
-        height: 38px;
+        height: 34px;
+        font-size: 12px;
+        margin-top: 8px;
       }
     }
 
