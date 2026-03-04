@@ -28,18 +28,6 @@
       --safeBot: env(safe-area-inset-bottom, 0px);
     }
 
-    /* SUPER PREMIUM LIGHT MODE - CLOUD SILVER & LAVENDER */
-    .light-mode {
-      --bg0: #f8fafc;
-      --bg1: #eff3f9;
-      --stroke: rgba(0, 40, 100, .08);
-      --text: #1e293b;
-      --muted: #64748b;
-      --shadow: 0 20px 50px rgba(148, 163, 184, .25);
-      --glow1: rgba(99, 102, 241, .06);
-      --glow2: rgba(45, 212, 191, .04);
-    }
-
     * {
       box-sizing: border-box;
     }
@@ -71,14 +59,6 @@
       -moz-osx-font-smoothing: grayscale;
       touch-action: manipulation;
       transition: background-color .4s ease, color .4s ease;
-    }
-
-    body.light-mode {
-      background:
-        radial-gradient(1200px 700px at 15% 10%, var(--glow1), transparent 55%),
-        radial-gradient(900px 600px at 85% 15%, rgba(0, 210, 255, .10), transparent 55%),
-        radial-gradient(800px 600px at 70% 85%, var(--glow2), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
     }
 
     html,
@@ -127,255 +107,6 @@
       transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
     }
 
-    body.light-mode .glass {
-      background: rgba(255, 255, 255, 0.75);
-      border-color: rgba(255, 255, 255, 1);
-      box-shadow: 0 15px 35px rgba(148, 163, 184, 0.15);
-      backdrop-filter: blur(20px);
-    }
-
-    /* Spesifik Card di Light Mode agar mewah */
-    body.light-mode .card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03);
-    }
-
-    body.light-mode .card:hover {
-      background: #ffffff;
-      border-color: #cbd5e1;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-
-    /* Glow & FX Light Mode (Bersih) */
-    body.light-mode .fx-overlay::before {
-      opacity: 0.08;
-    }
-
-    body.light-mode .fx-shimmer {
-      opacity: 0.04;
-    }
-
-    body.light-mode .fx-p {
-      opacity: 0.02 !important;
-    }
-
-    /* Glow & FX Light Mode (Bersih) */
-    body.light-mode .fx-overlay::before {
-      opacity: 0.1;
-      background: radial-gradient(1200px 900px at 50% 50%, rgba(255, 255, 255, 1), transparent 70%);
-    }
-
-    body.light-mode .fx-shimmer {
-      opacity: 0.04;
-    }
-
-    body.light-mode .fx-p {
-      opacity: 0.02 !important;
-    }
-
-    /* Label produk di Light Mode */
-    body.light-mode .card h3 {
-      color: #0f172a;
-    }
-
-    body.light-mode .card p {
-      color: #475569;
-    }
-
-    body.light-mode .product-sub {
-      color: #64748b;
-    }
-
-    body.light-mode .tag {
-      background: #f1f5f9;
-      border-color: #e2e8f0;
-      color: #475569;
-    }
-
-    body.light-mode .price {
-      color: #4f46e5;
-    }
-
-    body.light-mode .tiny {
-      color: #94a3b8;
-    }
-
-    body.light-mode .thumb-brand {
-      color: #ffffff;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Search & Nav Light Mode */
-    body.light-mode .nav-inner {
-      background: rgba(255, 255, 255, 0.8);
-      border-color: rgba(0, 0, 0, 0.05);
-    }
-
-    body.light-mode .brand-name {
-      color: #0f172a;
-    }
-
-    body.light-mode .nav-links a {
-      color: #475569;
-    }
-
-    body.light-mode .nav-links a.active {
-      color: #4f46e5;
-      background: #eef2ff;
-    }
-
-    body.light-mode .search {
-      background: #f1f5f9;
-      border-color: #e2e8f0;
-    }
-
-    body.light-mode .search:focus-within {
-      background: #ffffff;
-      border-color: #6366f1;
-      box-shadow: 0 8px 24px rgba(160, 175, 210, 0.2);
-    }
-
-    body.light-mode .search input {
-      background: transparent;
-      color: #0f172a;
-      border: 0;
-    }
-
-    body.light-mode .search input::placeholder {
-      color: #94a3b8;
-    }
-
-    body.light-mode .section-head h2 {
-      color: #0f172a;
-    }
-
-    /* Stock Banner Light Mode */
-    body.light-mode .stock-banner {
-      background: #ffffff;
-      border-color: #e2e8f0;
-    }
-
-    body.light-mode .stock-text {
-      color: #000000;
-      text-shadow: none;
-    }
-
-    /* FAQ & Service Light Mode */
-    body.light-mode .faq-item {
-      background: #ffffff;
-      border-color: #e2e8f0;
-    }
-
-    body.light-mode .faq-btn {
-      color: #0f172a;
-    }
-
-    body.light-mode .faq-panel {
-      color: #475569;
-    }
-
-    body.light-mode .hero-card {
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    body.light-mode .hero-card h1 {
-      color: #0f172a;
-    }
-
-    body.light-mode .hero-card .sub {
-      color: #475569;
-    }
-
-    body.light-mode .kicker {
-      background: #fff;
-      border-color: #e2e8f0;
-      color: #475569;
-    }
-
-    /* Sidebar Light Mode */
-    body.light-mode #mobileMenu {
-      background: #f8fafc;
-      border-left-color: #e2e8f0;
-    }
-
-    body.light-mode .mobile-head {
-      border-bottom-color: #e2e8f0;
-    }
-
-    body.light-mode .mobile-title {
-      color: #0f172a;
-    }
-
-    body.light-mode .mobile-links a {
-      background: #fff;
-      border-color: #e2e8f0;
-      color: #475569;
-    }
-
-    body.light-mode .mobile-close {
-      background: #fff;
-      border-color: #e2e8f0;
-      color: #0f172a;
-    }
-
-    /* Footer Light Mode - Visibilitas Teks */
-    body.light-mode .f-title {
-      color: #0f172a;
-    }
-
-    body.light-mode .f-note {
-      color: #64748b;
-    }
-
-    body.light-mode .f-col h4 {
-      color: #94a3b8;
-    }
-
-    body.light-mode .f-links a {
-      color: #475569;
-    }
-
-    body.light-mode .f-links a:hover {
-      color: #6366f1;
-      background: #f1f5f9;
-    }
-
-    body.light-mode .footer-line {
-      background: #e2e8f0;
-    }
-
-    body.light-mode .footer-bottom {
-      color: #64748b;
-    }
-
-    body.light-mode .f-badge {
-      background: #fff;
-      border-color: #e2e8f0;
-      color: #475569;
-    }
-
-    body.light-mode .f-badge span {
-      background: #f8fafc;
-      border-color: #e2e8f0;
-    }
-
-    body.light-mode .f-social a {
-      background: #fff;
-      border-color: #e2e8f0;
-      color: #475569;
-    }
-
-    body.light-mode .f-social a:hover {
-      border-color: #cbd5e1;
-      box-shadow: 0 4px 12px rgba(160, 175, 210, 0.1);
-    }
-
-    body.light-mode .f-logo {
-      background: #fff;
-      border-color: #e2e8f0;
-    }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -398,16 +129,6 @@
       transform: translateY(-1px);
       background: rgba(255, 255, 255, .12);
       border-color: rgba(255, 255, 255, .25);
-    }
-
-    body.light-mode .btn {
-      background: #fff;
-      box-shadow: 0 4px 12px rgba(160, 175, 210, .15);
-    }
-
-    body.light-mode .btn:hover {
-      background: #fcfcfd;
-      border-color: rgba(0, 0, 0, .15);
     }
 
     .btn.primary {
@@ -1036,11 +757,7 @@
       height: 100%;
     }
 
-    body.light-mode .card {
-      background: #ffffff;
-      border-color: rgba(0, 0, 0, .04);
-      box-shadow: 0 4px 20px rgba(160, 175, 210, .1);
-    }
+
 
     #productGrid .card {
       animation: cardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -1075,11 +792,7 @@
       background: rgba(255, 255, 255, .06);
     }
 
-    body.light-mode .card:hover {
-      background: #fff;
-      border-color: rgba(0, 0, 0, .08);
-      box-shadow: 0 12px 36px rgba(160, 175, 210, .25);
-    }
+
 
     .product-thumb {
       position: relative;
@@ -2116,18 +1829,7 @@
         background: rgba(10, 14, 30, .86) !important;
       }
 
-      body.light-mode .glass,
-      body.light-mode .nav-inner {
-        background: rgba(255, 255, 255, .90) !important;
-      }
 
-      #mobileMenu {
-        background: rgba(8, 10, 22, .92) !important;
-      }
-
-      body.light-mode #mobileMenu {
-        background: rgba(248, 250, 252, .95) !important;
-      }
 
       .card:hover,
       .btn:hover {
@@ -2433,9 +2135,6 @@
           <h2>Produk Premium</h2>
         </div>
         <div style="display:flex;gap:10px;align-items:center;">
-          <button class="elec-toggle" id="themeToggle" type="button" title="Ganti Tema (Pagi/Malam)">
-            <span id="themeIco">🌙</span>
-          </button>
           <button class="elec-toggle" id="elecToggle" type="button" aria-pressed="false" title="Aktifkan efek listrik">
             <span class="elec-bolt">&#x26A1;</span>
             <span class="elec-toggle-label">Electric</span>
@@ -3829,38 +3528,7 @@ ${basePayNote}`;
     qrisView?.addEventListener("click", (e) => { if (e.target === qrisView) closeQrisView(); }, { passive: true });
     qrisHref?.addEventListener("click", (e) => { e.preventDefault(); openQrisView(); }, { passive: false });
 
-    /* ========= THEME TOGGLE (MORNING/NIGHT) ========= */
-    (function initTheme() {
-      const btn = qs('#themeToggle');
-      const ico = qs('#themeIco');
-      if (!btn || !ico) return;
 
-      let isLight = false;
-
-      function setTheme(light) {
-        isLight = light;
-        if (isLight) {
-          document.documentElement.classList.add('light-mode');
-          ico.textContent = '☀️';
-        } else {
-          document.documentElement.classList.remove('light-mode');
-          ico.textContent = '🌙';
-        }
-        try { localStorage.setItem('theme-mode', isLight ? 'light' : 'dark'); } catch (e) { }
-      }
-
-      btn.addEventListener('click', () => setTheme(!isLight), { passive: true });
-
-      // Auto dark mode detection / load saved
-      try {
-        const saved = localStorage.getItem('theme-mode');
-        if (saved === 'light') {
-          setTheme(true);
-        } else if (!saved && window.matchMedia('(prefers-color-scheme: light)').matches) {
-          setTheme(true);
-        }
-      } catch (e) { }
-    })();
 
     /* ========= ELECTRIC FX ========= */
     (function initElectricFX() {
