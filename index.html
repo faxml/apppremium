@@ -61,6 +61,43 @@
       transition: background-color .4s ease, color .4s ease;
     }
 
+    /* ===== PREMIUM SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg0);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      border: 3px solid var(--bg0);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(117, 83, 255, 0.4);
+    }
+
+    /* ===== MOUSE FOLLOW GLOW ===== */
+    .mouse-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(117, 83, 255, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    body:hover .mouse-glow {
+      opacity: 1;
+    }
+
     html,
     body {
       overscroll-behavior-y: none;
@@ -143,6 +180,110 @@
       transform: none !important;
     }
 
+    /* ===== HERO STATS ===== */
+    .hero-stats {
+      display: flex;
+      gap: 20px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-actions .btn {
+      min-height: 42px;
+      padding-inline: 16px;
+    }
+
+    .btn.ghost {
+      background: rgba(255, 255, 255, .03);
+      border-color: rgba(255, 255, 255, .2);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-val {
+      font-weight: 900;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    /* ===== BACK TO TOP ===== */
+    .back-to-top {
+      position: fixed;
+      right: 25px;
+      bottom: 90px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(8, 10, 22, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .back-to-top:hover svg {
+      transform: translateY(-3px);
+    }
+
+    .progress-circle {
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      width: 54px;
+      height: 54px;
+      pointer-events: none;
+    }
+
+    .progress-circle circle {
+      fill: none;
+      stroke: #7553ff;
+      stroke-width: 2;
+      stroke-dasharray: 163.36;
+      stroke-dashoffset: 163.36;
+      transition: stroke-dashoffset 0.1s linear;
+    }
+
     /* NAV */
     header {
       position: relative;
@@ -164,6 +305,21 @@
       padding: 12px 14px;
       border-radius: 999px;
       min-width: 0;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav.scrolled .nav-inner {
+      background: rgba(8, 10, 22, 0.65);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      padding: 8px 14px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav.scrolled .logo-wrap {
+      width: 32px;
+      height: 32px;
     }
 
     .brand {
@@ -458,6 +614,9 @@
       margin-left: 6px;
       opacity: .9;
       animation: blink .8s steps(1) infinite;
+      will-change: opacity;
+      transform: translateZ(0);
+      /* Hardware acceleration */
     }
 
     @keyframes blink {
@@ -490,7 +649,8 @@
 
     .hero-card .kicker,
     .hero-card h1,
-    .hero-card .sub {
+    .hero-card .sub,
+    .hero-card .hero-stats {
       position: relative;
       z-index: 2;
     }
@@ -626,8 +786,18 @@
       }
 
       .sub {
-        font-size: 13px;
+        font-size: 14px;
         line-height: 1.55;
+      }
+
+      .hero-actions {
+        margin-top: 14px;
+        gap: 8px;
+      }
+
+      .hero-actions .btn {
+        flex: 1 1 160px;
+        min-height: 40px;
       }
 
       .app-float-wrap {
@@ -700,7 +870,7 @@
       width: max-content;
       gap: 48px;
       will-change: transform;
-      animation: stockMarquee var(--marquee-dur, 12s) linear infinite;
+      animation: stockMarquee var(--marquee-dur, 16s) linear infinite;
     }
 
     .stock-text {
@@ -792,9 +962,31 @@
     }
 
     .card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, .18);
-      background: rgba(255, 255, 255, .06);
+      transform: translateY(-5px);
+      border-color: rgba(117, 83, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(117, 83, 255, 0.15);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(to right,
+          transparent,
+          rgba(255, 255, 255, 0.03),
+          transparent);
+      transform: skewX(-25deg);
+      transition: 0.75s;
+    }
+
+    .card:hover::before {
+      left: 150%;
     }
 
 
@@ -979,12 +1171,12 @@
       }
 
       .tag {
-        font-size: 10px;
+        font-size: 11px;
         padding: 4px 6px;
       }
 
       .product-sub {
-        font-size: 10px;
+        font-size: 11px;
         margin-bottom: 4px;
       }
 
@@ -996,10 +1188,10 @@
       }
 
       .card p {
-        font-size: 10px;
+        font-size: 11px;
         margin-bottom: 10px;
         line-height: 1.4;
-        opacity: 0.8;
+        opacity: 0.86;
       }
 
       .price-row {
@@ -1014,7 +1206,7 @@
       }
 
       .tiny {
-        font-size: 9px;
+        font-size: 10px;
         margin-left: 0;
         display: block;
         opacity: 0.7;
@@ -1898,6 +2090,26 @@
       }
 
       /* mobile: no drift (lebih smooth) */
+
+      /* Optimize Electric & Typing together */
+      #electricWrap.on .card {
+        animation: cardElecGlowMobile 4s ease-in-out infinite !important;
+        box-shadow: 0 0 15px rgba(0, 234, 255, 0.4) !important;
+        will-change: border-color;
+        transform: translateZ(0);
+      }
+
+      @keyframes cardElecGlowMobile {
+
+        0%,
+        100% {
+          border-color: rgba(0, 234, 255, 0.4);
+        }
+
+        50% {
+          border-color: rgba(0, 234, 255, 0.9);
+        }
+      }
     }
 
     /* Reduce motion */
@@ -1928,6 +2140,8 @@
         0 18px 52px rgba(0, 0, 0, .42);
       animation: cardElecGlow 3s ease-in-out infinite;
       transition: box-shadow .4s ease, border-color .4s ease;
+      will-change: box-shadow, border-color, transform;
+      transform: translate3d(0, 0, 0);
     }
 
     #electricWrap.on .card:nth-child(2) {
@@ -2072,10 +2286,283 @@
     }
 
     /* ===== /ELECTRIC FX ===== */
+
+    .service-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 24px;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .service-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(117, 83, 255, 0.3);
+      transform: translateY(-5px);
+    }
+
+    .service-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: inline-block;
+      filter: drop-shadow(0 0 10px rgba(117, 83, 255, 0.5));
+    }
+
+    /* Testimonials */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .testi-card {
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .testi-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(0, 255, 200, 0.2);
+    }
+
+    .testi-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .testi-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #7553ff, #00ffc8);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .testi-name {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .testi-stars {
+      color: #ffb800;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .testi-text {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* ===== BRAND WALL MARQUEE ===== */
+    .brand-wall {
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin: 10px 0 20px;
+    }
+
+    .brand-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 40px;
+      animation: brandMarquee 40s linear infinite;
+    }
+
+    .brand-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+
+    .brand-item:hover {
+      opacity: 1;
+    }
+
+    .brand-item img {
+      height: 24px;
+      width: auto;
+      filter: grayscale(1);
+      transition: filter 0.3s ease;
+    }
+
+    .brand-item:hover img {
+      filter: grayscale(0);
+    }
+
+    .brand-item span {
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+    }
+
+    @keyframes brandMarquee {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ===== FLOATING NOTIFY ===== */
+    .notify-toast {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      z-index: 9999;
+      background: rgba(15, 18, 36, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 12px 16px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      transform: translateY(120%);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 320px;
+      pointer-events: none;
+    }
+
+    .notify-toast.show {
+      transform: translateY(0);
+    }
+
+    .notify-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #7553ff, #00ffc8);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      font-size: 18px;
+    }
+
+    .notify-content {
+      min-width: 0;
+    }
+
+    .notify-title {
+      font-weight: 900;
+      font-size: 13px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .notify-sub {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      .notify-toast {
+        left: 10px;
+        right: 10px;
+        bottom: 16px;
+        max-width: none;
+      }
+
+      .brand-track {
+        gap: 20px;
+      }
+
+      .brand-item img {
+        height: 18px;
+      }
+
+      .brand-item span {
+        font-size: 12px;
+      }
+    }
+
+    /* ===== SCROLL PROGRESS ===== */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, #7553ff, #00ffc8);
+      z-index: 10001;
+      transition: width 0.1s ease;
+    }
+
+    @media (max-width: 640px) {
+      .hero-stats {
+        gap: 12px;
+        margin-top: 16px;
+        justify-content: flex-start;
+      }
+
+      .stat-val {
+        font-size: 16px;
+      }
+
+      .stat-lbl {
+        font-size: 9px;
+      }
+
+      .back-to-top {
+        right: 15px;
+        bottom: 100px;
+        /* Di atas tombol WA mobile */
+        width: 44px;
+        height: 44px;
+      }
+
+      .progress-circle {
+        width: 48px;
+        height: 48px;
+      }
+
+      .progress-circle circle {
+        stroke-dasharray: 144.5;
+        stroke-dashoffset: 144.5;
+      }
+
+      .mouse-glow {
+        display: none !important;
+        /* Matikan mouse glow di mobile agar hemat baterai & CPU */
+      }
+    }
   </style>
 </head>
 
 <body>
+  <div class="mouse-glow" id="mouseGlow"></div>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
   <!-- FX overlay -->
   <div class="fx-overlay" aria-hidden="true">
     <div class="fx-shimmer"></div>
@@ -2164,9 +2651,36 @@
           </h1>
           <p class="sub">Pilih produk → isi format → lanjut pembayaran QRIS → konfirmasi sudah bayar → kirim → WhatsApp
             admin.</p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="#produk">Lihat Produk</a>
+            <a class="btn ghost" href="https://wa.me/6288221694607" target="_blank" rel="noopener noreferrer">Tanya Admin</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-val">10K+</span>
+              <span class="stat-lbl">Order Selesai</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">5 Menit</span>
+              <span class="stat-lbl">Rata-rata Proses</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">99%</span>
+              <span class="stat-lbl">Kepuasan</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
+    <!-- BRAND WALL -->
+    <div class="brand-wall reveal" style="transition-delay: 0.15s;">
+      <div class="brand-track" id="brandTrack">
+        <!-- Will be populated by JS -->
+      </div>
+    </div>
 
     <div class="stock-banner reveal" id="stockBanner" aria-label="Info stok" style="transition-delay: 0.2s;">
       <div class="stock-track" id="stockTrack">
@@ -2202,23 +2716,79 @@
     <section id="services">
       <div class="section-head reveal">
         <div>
-          <h2>Service</h2>
+          <h2>Service Eksklusif</h2>
         </div>
         <a class="btn" href="#produk">Pilih Produk</a>
       </div>
 
-      <div class="grid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="card reveal" style="transition-delay: 0.1s;">
-          <div style="font-weight:900;margin-bottom:6px;">⚙️ Instalasi & Setup</div>
-          <p>Bantuan instalasi, konfigurasi, dan optimasi agar siap dipakai.</p>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));">
+        <div class="service-card reveal" style="transition-delay: 0.1s;">
+          <span class="service-icon">⚙️</span>
+          <div style="font-weight:900;margin-bottom:6px;font-size:16px;">Instalasi & Setup</div>
+          <p style="font-size:13px;color:var(--muted);margin:0;">Bantuan instalasi, konfigurasi, dan optimasi agar
+            aplikasi langsung siap dipakai tanpa ribet.</p>
         </div>
-        <div class="card reveal" style="transition-delay: 0.2s;">
-          <div style="font-weight:900;margin-bottom:6px;">🔑 Aktivasi</div>
-          <p>Panduan aktivasi jelas dan cepat sesuai paket yang dibeli.</p>
+        <div class="service-card reveal" style="transition-delay: 0.2s;">
+          <span class="service-icon">🔑</span>
+          <div style="font-weight:900;margin-bottom:6px;font-size:16px;">Aktivasi Instan</div>
+          <p style="font-size:13px;color:var(--muted);margin:0;">Proses aktivasi yang cepat dan transparan. Kami pandu
+            sampai akun premium kamu aktif sempurna.</p>
         </div>
-        <div class="card reveal" style="transition-delay: 0.3s;">
-          <div style="font-weight:900;margin-bottom:6px;">💬 Support</div>
-          <p>Bantuan chat untuk kendala umum sesuai jam layanan.</p>
+        <div class="service-card reveal" style="transition-delay: 0.3s;">
+          <span class="service-icon">💬</span>
+          <div style="font-weight:900;margin-bottom:6px;font-size:16px;">VVIP Support</div>
+          <p style="font-size:13px;color:var(--muted);margin:0;">Layanan bantuan prioritas via chat untuk setiap kendala
+            atau pertanyaan seputar produk kami.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="section-head reveal">
+        <div>
+          <h2>Apa Kata Mereka?</h2>
+        </div>
+        <div class="kicker" style="background:rgba(0,255,200,0.05);border-color:rgba(0,255,200,0.1);color:#00ffc8">
+          <span class="dot" style="background:#00ffc8;box-shadow:0 0 10px #00ffc8"></span> 500+ Happy Customers
+        </div>
+      </div>
+
+      <div class="testi-grid">
+        <div class="testi-card reveal" style="transition-delay: 0.1s;">
+          <div class="testi-user">
+            <div class="testi-avatar">R</div>
+            <div>
+              <div class="testi-name">Reihan Pratama</div>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testi-text">"Netflix-nya awet banget, udah 1 bulan lancar jaya. Adminnya juga fast respon kalo
+            ditanya-tanya."</p>
+        </div>
+
+        <div class="testi-card reveal" style="transition-delay: 0.2s;">
+          <div class="testi-user">
+            <div class="testi-avatar">S</div>
+            <div>
+              <div class="testi-name">Siska Amalia</div>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testi-text">"Beli Canva Lifetime prosesnya cuma 5 menit. Langsung join team dan fiturnya lengkap
+            semua. Trusted!"</p>
+        </div>
+
+        <div class="testi-card reveal" style="transition-delay: 0.3s;">
+          <div class="testi-user">
+            <div class="testi-avatar">A</div>
+            <div>
+              <div class="testi-name">Andi Wijaya</div>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testi-text">"Baru kali ini nemu seller yang ramah banget. YouTube Premium-nya murah tapi kualitas
+            bintang 5."</p>
         </div>
       </div>
     </section>
@@ -2365,6 +2935,27 @@
           d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 222-99.6 222-222 0-59.3-25.2-115-67.1-156.9zM224 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.2-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-82.8 184.6-184.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z" />
       </svg>
     </a>
+
+    <!-- NOTIFY TOAST -->
+    <div id="notifyToast" class="notify-toast">
+      <div class="notify-icon">🔥</div>
+      <div class="notify-content">
+        <span class="notify-title" id="notifyTitle">Baru saja dibeli!</span>
+        <span class="notify-sub" id="notifySub">Seseorang membeli Netflix Premium</span>
+      </div>
+    </div>
+
+    <!-- BACK TO TOP -->
+    <button id="backToTop" class="back-to-top" aria-label="Kembali ke atas">
+      <svg class="progress-circle" viewBox="0 0 54 54">
+        <circle cx="27" cy="27" r="26"></circle>
+      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M18 15l-6-6-6 6" />
+      </svg>
+    </button>
+
   </main>
 
   <!-- BUY MODAL -->
@@ -2720,30 +3311,39 @@
       const el = qs("#typeTarget");
       if (!el) return;
 
-      const text = "Jual Aplikasi Premium, Aman, dan Tepercaya.";
-      if (prefersReduce) { el.textContent = text; return; }
+      const texts = [
+        "Aplikasi Premium.",
+        "Aman & Terpercaya.",
+        "Proses Super Cepat.",
+        "Full Garansi Store."
+      ];
+      if (prefersReduce) { el.textContent = texts[0]; return; }
 
-      const typeSpeed = 55;
-      const deleteSpeed = 35;
-      const holdAfterType = 1100;
-      const holdAfterDelete = 320;
+      const typeSpeed = 65;
+      const deleteSpeed = 40;
+      const holdAfterType = 1800;
+      const holdAfterDelete = 400;
 
+      let textIdx = 0;
       let i = 0;
       let deleting = false;
 
       function tick() {
+        const fullText = texts[textIdx];
+
         if (!deleting) {
           i++;
-          el.textContent = text.slice(0, i);
-          if (i >= text.length) {
+          el.textContent = fullText.slice(0, i);
+          if (i >= fullText.length) {
             deleting = true;
             setTimeout(tick, holdAfterType);
           } else setTimeout(tick, typeSpeed);
         } else {
           i--;
-          el.textContent = text.slice(0, i);
+          el.textContent = fullText.slice(0, i);
           if (i <= 0) {
             deleting = false;
+            textIdx = (textIdx + 1) % texts.length;
             setTimeout(tick, holdAfterDelete);
           } else setTimeout(tick, deleteSpeed);
         }
@@ -2907,7 +3507,7 @@
       }
 
       const gap = 48;      // sama dengan CSS gap
-      const speed = 90;    // px/detik
+      const speed = 60;    // px/detik (lebih tenang)
 
       function recalc() {
         const bw = banner.getBoundingClientRect().width;
@@ -2944,12 +3544,14 @@
       { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi 14 Hari", duration: "14 Hari", price: 15000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
       { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi 30 Hari", duration: "30 Hari", price: 20000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
       { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi Full", duration: "35 Hari", price: 23000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
+      { brand: "capcut", label: "CAPCUT", name: "CapCut Premium Private Garansi Full", duration: "42 Hari", price: 27000, stock: 20, tag: "Original", img: "img/capcut.jpg" },
 
       { brand: "chatgpt", label: "CHATGPT", name: "ChatGPT Premium Private", duration: "1 Bulan", price: 15000, stock: 20, tag: "Populer", img: "img/chatgpt.png" },
       { brand: "gemini", label: "GEMINI", name: "GEMINI PRO + GDRIVE 2TB + Veo3", duration: "1 Bulan", price: 10000, stock: 20, tag: "Populer", img: "img/gemini.png" },
 
       { brand: "canva", label: "CANVA", name: "Canva Premium Team", duration: "1 Bulan", price: 6000, stock: 50, tag: "Team", img: "img/canva.png" },
-      { brand: "canva", label: "CANVA", name: "Canva Premium Gar6b", duration: "1 Tahun", price: 15000, stock: 20, tag: "Team", img: "img/canva.png" },
+      { brand: "canva", label: "CANVA", name: "Canva Premium Via Invit", duration: "1 Tahun", price: 15000, stock: 20, tag: "Team", img: "img/canva.png" },
+      { brand: "canva", label: "CANVA", name: "Canva Premium Via join Link", duration: "Lifetime", price: 21000, stock: 20, tag: "Team", img: "img/canva.png" },
 
       { brand: "disney", label: "DISNEY+", name: "Disney Sharing 10u", duration: "1 Bulan", price: 30000, stock: 20, tag: "Populer", img: "img/disney.png" },
 
@@ -2957,9 +3559,10 @@
       { brand: "spotify", label: "SPOTIFY", name: "Spotify Premium Indplan", duration: "1 Bulan", price: 28000, stock: 10, tag: "Ready", img: "img/spotify.png" },
 
       { brand: "youtube", label: "YOUTUBE", name: "YouTube Premium Famplan", duration: "1 Bulan", price: 5000, stock: 10, tag: "Team", img: "img/youtube.png" },
-      { brand: "youtube", label: "YOUTUBE", name: "YouTube Premium Indplan", duration: "1 Bulan", price: 15000, stock: 10, tag: "Populer", img: "img/youtube.png" },
+      { brand: "youtube", label: "YOUTUBE", name: "YouTube Premium Indplan", duration: "1 Bulan", price: 16000, stock: 10, tag: "Populer", img: "img/youtube.png" },
 
       { brand: "alight", label: "ALIGHT", name: "Alight Motion Private", duration: "1 Tahun", price: 10000, stock: 100, tag: "Populer", img: "img/alightmotion.png" },
+      { brand: "alight", label: "ALIGHT", name: "Alight Motion Private Generator", duration: "1 Tahun", price: 5000, stock: 100, tag: "Populer", img: "img/alightmotion.png" },
       { brand: "tutor am", label: "TUTOR AM", name: "Tutor Alight Motion", duration: "Seumurhidup", price: 80000, stock: 100, tag: "Populer", img: "img/tutoram.png" },
       { brand: "remini", label: "REMINI", name: "Remini Premium Private", duration: "1 Bulan", price: 12000, stock: 100, tag: "Populer", img: "img/remini.png" },
 
@@ -2970,6 +3573,7 @@
 
       { brand: "bstation", label: "B-STATION", name: "Bstation Premium Sharing", duration: "1 Bulan", price: 13000, stock: 20, tag: "Populer", img: "img/bstation.png" },
       { brand: "wetv", label: "WETV", name: "Wetv Premium Sharing 8 User", duration: "1 Bulan", price: 10000, stock: 20, tag: "Original", img: "img/wetv.png" },
+      { brand: "wetv", label: "WETV", name: "Wetv Premium Sharing 5 User", duration: "1 Bulan", price: 16000, stock: 20, tag: "Original", img: "img/wetv.png" },
 
       { brand: "vidio", label: "VIDIO", name: "Vidio Premium Sharing 2 User", duration: "1 Bulan", price: 25000, stock: 20, tag: "Original", img: "img/vidio.png" },
       { brand: "vidio", label: "VIDIO", name: "Vidio Premium Sharing 2u Onlyhp", duration: "1 Bulan", price: 20000, stock: 20, tag: "Original", img: "img/vidio.png" },
@@ -2989,6 +3593,7 @@
       { brand: "lightroom", label: "LIGHTROOM", name: "Lightroom Premium Sharing", duration: "1 Tahun", price: 20000, stock: 20, tag: "Original", img: "img/lightroom.png" },
       { brand: "picsart", label: "PICSART", name: "Picsart Premium Private", duration: "1 Bulan", price: 14000, stock: 20, tag: "Original", img: "img/picsart.png" },
       { brand: "zoom", label: "ZOOM", name: "Zoom Premium Private", duration: "14 Hari", price: 15000, stock: 20, tag: "Original", img: "img/zoom.png" },
+      { brand: "zoom", label: "ZOOM", name: "Zoom Premium Private", duration: "30 Hari", price: 20000, stock: 20, tag: "Original", img: "img/zoom.png" },
     ];
 
     /* ========= Render products ========= */
@@ -3609,6 +4214,143 @@ ${basePayNote}`;
       try { if (localStorage.getItem('elec-fx') === '1') setOn(true); } catch (e) { }
     })();
     /* ========= /ELECTRIC FX ========= */
+
+    /* ========= BRAND WALL POPULATE ========= */
+    (() => {
+      const track = document.getElementById("brandTrack");
+      if (!track) return;
+
+      const items = [
+        { name: "NETFLIX", img: "img/logonet.png" },
+        { name: "CANVA", img: "img/logocan.png" },
+        { name: "SPOTIFY", img: "img/logospo.png" },
+        { name: "CAPCUT", img: "img/logocap.png" },
+        { name: "YOUTUBE", img: "img/youtube.png" },
+        { name: "ALIGHT", img: "img/logoam.png" },
+        { name: "DISNEY+", img: "img/disney.png" },
+        { name: "VIU", img: "img/viu.png" }
+      ];
+
+      // Double it for seamless loop
+      const list = [...items, ...items, ...items];
+      track.innerHTML = list.map(item => `
+        <div class="brand-item">
+          <img src="${item.img}" alt="${item.name}" onerror="this.style.display='none'">
+          <span>${item.name}</span>
+        </div>
+      `).join("");
+    })();
+
+    /* ========= FLOATING NOTIFICATION LOGIC ========= */
+    (() => {
+      const toast = document.getElementById("notifyToast");
+      const titleEl = document.getElementById("notifyTitle");
+      const subEl = document.getElementById("notifySub");
+      if (!toast || !titleEl || !subEl) return;
+      if (isMobile) return;
+
+      const randomNames = ["Budi", "Siska", "Andi", "Rina", "Dedi", "Maya", "Rizky", "Lestari", "Fajar", "Dewi"];
+      const premiumApps = ["Netflix Premium", "Canva Lifetime", "YouTube Premium", "Spotify Famplan", "CapCut Pro", "Disney+ Hotstar", "Viu Premium", "Remini Pro"];
+
+      function showRandomNotify() {
+        const name = randomNames[Math.floor(Math.random() * randomNames.length)];
+        const app = premiumApps[Math.floor(Math.random() * premiumApps.length)];
+
+        titleEl.textContent = `${name} baru saja order!`;
+        subEl.textContent = `Membeli ${app} via QRIS`;
+
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 5000);
+
+        // Schedule next notify
+        const nextDelay = Math.random() * (45000 - 25000) + 25000;
+        setTimeout(showRandomNotify, nextDelay);
+      }
+
+      // Start first notify after some delay
+      setTimeout(showRandomNotify, 12000);
+    })();
+
+    /* ========= SCROLL PROGRESS LOGIC ========= */
+    (() => {
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            if (scrollProgress) {
+              const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+              const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+              const scrolled = (winScroll / height) * 100;
+              scrollProgress.style.width = scrolled + "%";
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+
+    /* ========= DYNAMIC PAGE TITLE ========= */
+    (() => {
+      const originalTitle = document.title;
+      window.addEventListener('blur', () => {
+        document.title = "Ditunggu admin ya! 🥺 | Faxml Store";
+      });
+      window.addEventListener('focus', () => {
+        document.title = originalTitle;
+      });
+    })();
+
+    /* ========= MOUSE GLOW & HEADER SCROLL ========= */
+    (() => {
+      const glow = document.getElementById('mouseGlow');
+      const nav = document.getElementById('topNav');
+      if (isMobile) return; // Langsung skip listener mouse di mobile
+
+      let mouseTicking = false;
+      document.addEventListener('mousemove', (e) => {
+        if (!glow || mouseTicking) return;
+        mouseTicking = true;
+        requestAnimationFrame(() => {
+          glow.style.left = e.clientX + 'px';
+          glow.style.top = e.clientY + 'px';
+          mouseTicking = false;
+        });
+      }, { passive: true });
+
+      let scrollTicking = false;
+      window.addEventListener('scroll', () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+          if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+
+          const btt = document.getElementById('backToTop');
+          if (btt) {
+            const scrolled = window.scrollY;
+            btt.classList.toggle('show', scrolled > 400);
+
+            const circle = btt.querySelector('circle');
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const mobileCircum = 144.5;
+            const deskCircum = 163.36;
+            const isMob = window.innerWidth <= 640;
+            const circ = isMob ? mobileCircum : deskCircum;
+            const progress = circ - (scrolled / height) * circ;
+            circle.style.strokeDashoffset = progress;
+          }
+          scrollTicking = false;
+        });
+      }, { passive: true });
+
+      document.getElementById('backToTop')?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, { passive: true });
+    })();
 
     /* ========= Init ========= */
     // Render langsung tanpa menunggu DOMContentLoaded agar browser curi start download gambar
